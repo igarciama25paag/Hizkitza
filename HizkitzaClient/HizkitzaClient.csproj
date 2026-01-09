@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="style\font\Sixtyfour.ttf" />
+    <None Remove="style\font\Workbench.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="style\font\Sixtyfour.ttf" />
+    <Resource Include="style\font\Workbench.ttf" />
+  </ItemGroup>
+
+</Project>

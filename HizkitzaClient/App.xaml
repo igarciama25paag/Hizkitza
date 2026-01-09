@@ -1,0 +1,18 @@
+﻿<Application x:Class="HizkitzaClient.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:HizkitzaClient"
+             StartupUri="ui/window/LoginWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/style/Font.xaml"/>
+                <ResourceDictionary Source="/style/OtherStyle.xaml"/>
+                <ResourceDictionary Source="/style/TextBlockStyle.xaml"/>
+                <ResourceDictionary Source="/style/TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="/style/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="/style/listBoxStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

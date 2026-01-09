@@ -1,0 +1,35 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\page\\playerlobby.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlayerLobby.xaml",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml",
+              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml",
+              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-09T12:45:31.381Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

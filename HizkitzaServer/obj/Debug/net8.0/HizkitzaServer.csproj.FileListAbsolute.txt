@@ -1,0 +1,8 @@
+D:\PSP\2. Erronka\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.GeneratedMSBuildEditorConfig.editorconfig
+D:\PSP\2. Erronka\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.AssemblyInfoInputs.cache
+D:\PSP\2. Erronka\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.AssemblyInfo.cs
+D:\PSP\2. Erronka\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.csproj.CoreCompileInputs.cache
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.GeneratedMSBuildEditorConfig.editorconfig
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.AssemblyInfoInputs.cache
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.AssemblyInfo.cs
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.csproj.CoreCompileInputs.cache

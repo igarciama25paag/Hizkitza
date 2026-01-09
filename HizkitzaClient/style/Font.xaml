@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <FontFamily x:Key="Font.Workbench.Delicate">
+        pack://application:,,,/style/font/#Workbench Delicate
+    </FontFamily>
+    <FontFamily x:Key="Font.Workbench.Slight">
+        pack://application:,,,/style/font/#Workbench Slight
+    </FontFamily>
+    <FontFamily x:Key="Font.Workbench.Evenly">
+        pack://application:,,,/style/font/#Workbench Evenly
+    </FontFamily>
+    <FontFamily x:Key="Font.Workbench.Close">
+        pack://application:,,,/style/font/#Workbench Close
+    </FontFamily>
+
+    <FontFamily x:Key="Font.Sixtyfour.Delicate">
+        pack://application:,,,/style/font/#Sixtyfour Delicate
+    </FontFamily>
+    <FontFamily x:Key="Font.Sixtyfour.Slight">
+        pack://application:,,,/style/font/#Sixtyfour Slight
+    </FontFamily>
+    <FontFamily x:Key="Font.Sixtyfour.Evenly">
+        pack://application:,,,/style/font/#Sixtyfour Evenly
+    </FontFamily>
+    <FontFamily x:Key="Font.Sixtyfour.Close">
+        pack://application:,,,/style/font/#Sixtyfour Close
+    </FontFamily>
+</ResourceDictionary>

@@ -1,0 +1,20 @@
+﻿HizkitzaClient
+
+
+winexe
+C#
+.cs
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\
+HizkitzaClient
+none
+false
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\App.xaml
+9-1591563008
+
+6-42489491
+198-2136442823
+style\ButtonStyle.xaml;style\Font.xaml;style\ListBoxStyle.xaml;style\OtherStyle.xaml;style\TextBlockStyle.xaml;style\TextBoxStyle.xaml;ui\window\LoginWindow.xaml;ui\window\MainWindow.xaml;ui\window\page\PlayerLobby.xaml;
+
+False
+
