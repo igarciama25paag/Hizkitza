@@ -18,7 +18,7 @@
         <DockPanel Margin="10">
             <TextBlock Text="Partidak:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
             <Button Content="Partidan sartu" DockPanel.Dock="Bottom"/>
-            <ListBox BorderThickness="0" Margin="0,10"/>
+            <ListBox Margin="0,10"/>
         </DockPanel>
 
         <DockPanel Margin="10" Grid.Column="1">
