@@ -23,6 +23,20 @@ namespace HizkitzaClient.ui.window.page
         public PlayerLobby()
         {
             InitializeComponent();
+            var item1 = new ListBoxItem();
+            item1.Content = "Iker Partida";
+            var item2 = new ListBoxItem();
+            item2.Content = "Los Pulentos";
+            var item3 = new ListBoxItem();
+            item3.Content = "xX_SuperHitzak_Xx";
+
+            partidak.Items.Add(item1);
+            partidak.Items.Add(item2);
+            partidak.Items.Add(item3);
+
+            itxura_combobox.Items.Add("Itxura 1");
+            itxura_combobox.Items.Add("Itxura 2");
+            itxura_combobox.Items.Add("Itxura 3");
         }
     }
 }

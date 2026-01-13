@@ -32,8 +32,14 @@
     <Style TargetType="TextBox" BasedOn="{StaticResource BaseInputStyle}">
         <Setter Property="CaretBrush" Value="Yellow"/>
     </Style>
+    
     <Style TargetType="PasswordBox" BasedOn="{StaticResource BaseInputStyle}">
         <Setter Property="PasswordChar" Value="*"/>
         <Setter Property="CaretBrush" Value="Yellow"/>
+    </Style>
+
+    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}" x:Key="TextBox.Medium">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Workbench.Evenly}"/>
+        <Setter Property="FontSize" Value="18"/>
     </Style>
 </ResourceDictionary>

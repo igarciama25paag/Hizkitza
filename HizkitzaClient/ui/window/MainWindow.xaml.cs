@@ -25,5 +25,11 @@ namespace HizkitzaClient.ui.window
         }
 
         private void Itxi_Click(object sender, RoutedEventArgs e) => Close();
+
+        private void Saioa_Itxi_Click(object sender, RoutedEventArgs e)
+        {
+            new LoginWindow().Show();
+            Close();
+        }
     }
 }

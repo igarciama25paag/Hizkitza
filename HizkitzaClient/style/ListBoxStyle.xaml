@@ -4,7 +4,33 @@
         <Setter Property="Background" Value="#191919"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="BorderBrush" Value="White"/>
-        <Setter Property="FontFamily" Value="{StaticResource Font.Workbench.Evenly}"/>
         <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style TargetType="ListBoxItem">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Workbench.Evenly}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="border"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter x:Name="contentPresenter"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="Yellow"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="3,0,0,0"/>
+                            <Setter TargetName="border" Property="Padding" Value="10,0,0,0"/>
+                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" Value="Yellow"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="Yellow"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="3,0,0,0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

@@ -29,7 +29,10 @@ namespace HizkitzaClient.ui.window
         {
             if(user.Text == "admin")
             {
-
+                MainWindow mainWindow = new();
+                mainWindow.MainFrame.Navigate(new AdminMain());
+                mainWindow.Show();
+                Close();
             } else if (user.Text == "user")
             {
                 MainWindow mainWindow = new();

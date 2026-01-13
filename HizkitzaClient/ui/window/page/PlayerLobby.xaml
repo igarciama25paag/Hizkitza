@@ -18,20 +18,20 @@
         <DockPanel Margin="10">
             <TextBlock Text="Partidak:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
             <Button Content="Partidan sartu" DockPanel.Dock="Bottom"/>
-            <ListBox Margin="0,10"/>
+            <ListBox x:Name="partidak" Margin="0,0,0,10"/>
         </DockPanel>
 
         <DockPanel Margin="10" Grid.Column="1">
             <TextBlock Text="* Jokalari edizioa:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
-            <Border Margin="0,10,0,0">
+            <Border>
                 <StackPanel>
                     <DockPanel>
-                        <TextBlock Text="Itxura:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox Margin="10"/>
+                        <TextBlock Text="Itxura:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
+                        <ComboBox x:Name="itxura_combobox"/>
                     </DockPanel>
                     <DockPanel>
-                        <TextBlock Text="Kolorea:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox Margin="10"/>
+                        <TextBlock Text="Kolorea:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
+                        <ComboBox/>
                     </DockPanel>
                 </StackPanel>
             </Border>
@@ -40,15 +40,15 @@
         <DockPanel Margin="10" Grid.Column="2">
             <TextBlock Text="* Partida edizioa:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
             <Button Content="Partida berria" DockPanel.Dock="Bottom"/>
-            <Border Margin="0,10">
+            <Border Margin="0,0,0,10">
                 <StackPanel>
                     <DockPanel>
-                        <TextBlock Text="Mapa:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox Margin="10"/>
+                        <TextBlock Text="Mapa:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
+                        <ComboBox/>
                     </DockPanel>
                     <DockPanel>
-                        <TextBlock Text="Jokalari kopurua:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox Margin="10"/>
+                        <TextBlock Text="Jokalari kopurua:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
+                        <ComboBox/>
                     </DockPanel>
                 </StackPanel>
             </Border>
