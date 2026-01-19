@@ -1,14 +1,12 @@
 namespace HizkitzaServer.util;
 
-using System.Windows.Forms;
-
 public sealed class KeyPress
 {
     private static bool right, left, up, down, esc, m, z;
 
     // Key Events //
 
-    public static void KeyDown(KeyEventArgs e)
+    /*public static void KeyDown(KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Right) right = true;
         if (e.KeyCode == Keys.Left) left = true;
@@ -28,7 +26,7 @@ public sealed class KeyPress
         if (e.KeyCode == Keys.Escape) esc = false;
         if (e.KeyCode == Keys.M) m = false;
         if (e.KeyCode == Keys.Z) z = false;
-    }
+    }*/
 
     // Getters //
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HizkitzaClient.ui.messagebox;
+using HizkitzaClient.util.connection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,17 +21,32 @@ namespace HizkitzaClient.ui.window
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public string Usertag { get; private set; }
+        public MainWindow(string username)
         {
             InitializeComponent();
+            Usertag = username;
         }
 
-        private void Itxi_Click(object sender, RoutedEventArgs e) => Close();
-
-        private void Saioa_Itxi_Click(object sender, RoutedEventArgs e)
+        private void Itxi_Click(object sender, RoutedEventArgs e)
         {
-            new LoginWindow().Show();
-            Close();
+            var dialog = new StyledMessageBox("Irten", "Irten nahi al duzu?", "Bai", "Ez");
+            if (dialog.ShowDialog() == true)
+            {
+                Connection.Bezeroa.BezeroaItxi(null);
+                Close();
+            }
+        }
+
+        private void SaioaItxi_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new StyledMessageBox("Saioa itxi", "Saioa itxi nahi al duzu?", "Bai", "Ez");
+            if (dialog.ShowDialog() == true)
+            {
+                Connection.Bezeroa.BezeroaItxi(null);
+                new LoginWindow().Show();
+                Close();
+            }
         }
     }
 }

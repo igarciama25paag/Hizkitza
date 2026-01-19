@@ -6,3 +6,14 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.Gene
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.AssemblyInfoInputs.cache
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.AssemblyInfo.cs
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.csproj.CoreCompileInputs.cache
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.sourcelink.json
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\HizkitzaServer.exe
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\HizkitzaServer.deps.json
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\HizkitzaServer.runtimeconfig.json
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\HizkitzaServer.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\HizkitzaServer.pdb
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\refint\HizkitzaServer.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.pdb
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.genruntimeconfig.cache
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\ref\HizkitzaServer.dll

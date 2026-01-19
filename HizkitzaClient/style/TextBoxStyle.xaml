@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <ControlTemplate x:Key="BaseInputTemplate" TargetType="Control">
+    <ControlTemplate TargetType="Control" x:Key="BaseTemplate">
         <Border x:Name="border"
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
@@ -18,22 +18,28 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="BaseInputStyle" TargetType="Control">
+    <Style TargetType="Control" x:Key="BaseStyle">
         <Setter Property="FontFamily" Value="{StaticResource Font.Workbench.Slight}"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Foreground" Value="Yellow"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="Black"/>
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Padding" Value="3"/>
-        <Setter Property="Template" Value="{StaticResource BaseInputTemplate}"/>
+        <Setter Property="Template" Value="{StaticResource BaseTemplate}"/>
     </Style>
 
-    <Style TargetType="TextBox" BasedOn="{StaticResource BaseInputStyle}">
+    <Style TargetType="Control" x:Key="SpecialStyle" BasedOn="{StaticResource BaseStyle}">
+        <Setter Property="Foreground" Value="Yellow"/>
+    </Style>
+
+    <Style TargetType="TextBox" BasedOn="{StaticResource BaseStyle}"/>
+
+    <Style TargetType="TextBox" x:Key="TextBox.Special" BasedOn="{StaticResource SpecialStyle}">
         <Setter Property="CaretBrush" Value="Yellow"/>
     </Style>
-    
-    <Style TargetType="PasswordBox" BasedOn="{StaticResource BaseInputStyle}">
+
+    <Style TargetType="PasswordBox" BasedOn="{StaticResource SpecialStyle}">
         <Setter Property="PasswordChar" Value="*"/>
         <Setter Property="CaretBrush" Value="Yellow"/>
     </Style>

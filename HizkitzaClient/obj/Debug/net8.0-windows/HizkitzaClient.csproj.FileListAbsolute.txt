@@ -34,7 +34,6 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaCli
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.dll
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.pdb
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\ButtonStyle.baml
-D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\Font.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\ListBoxStyle.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\OtherStyle.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\TextBlockStyle.baml
@@ -63,3 +62,6 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaCli
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\ComboBoxStyle.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\AdminMain.g.cs
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\AdminMain.baml
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.g.cs
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.baml
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\FontStyle.baml

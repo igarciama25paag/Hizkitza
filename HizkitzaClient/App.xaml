@@ -6,7 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/style/Font.xaml"/>
+                <ResourceDictionary Source="/style/FontStyle.xaml"/>
                 <ResourceDictionary Source="/style/OtherStyle.xaml"/>
                 <ResourceDictionary Source="/style/TextBlockStyle.xaml"/>
                 <ResourceDictionary Source="/style/TextBoxStyle.xaml"/>
