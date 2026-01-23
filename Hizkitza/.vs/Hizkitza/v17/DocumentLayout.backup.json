@@ -3,22 +3,28 @@
   "WorkspaceRootPath": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\loginwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaserver\\util\\connection\\serversideclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaserver\\util\\connection\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\util\\connection\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\util\\connection\\commanddecoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\page\\adminmain.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaserver\\util\\connection\\commanddecoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaserver\\launcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaserver\\util\\db\\hizkitzadb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -28,83 +34,110 @@
       "DocumentGroups": [
         {
           "DockedWidth": 222,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\MainWindow.xaml",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\MainWindow.xaml",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-01-19T11:48:05.837Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\MainWindow.xaml.cs",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\MainWindow.xaml.cs",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T11:44:45.578Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "LoginWindow.xaml.cs",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\LoginWindow.xaml.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\LoginWindow.xaml.cs",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\LoginWindow.xaml.cs",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\LoginWindow.xaml.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAjwCoAAAAJAAAAAAAAAA==",
+              "Title": "Client.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\util\\connection\\Client.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaClient\\util\\connection\\Client.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\util\\connection\\Client.cs",
+              "RelativeToolTip": "..\\HizkitzaClient\\util\\connection\\Client.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAYwDcAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T09:47:14.189Z",
+              "WhenOpened": "2026-01-23T12:31:16.928Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Launcher.cs",
               "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\Launcher.cs",
               "RelativeDocumentMoniker": "..\\HizkitzaServer\\Launcher.cs",
               "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\Launcher.cs",
               "RelativeToolTip": "..\\HizkitzaServer\\Launcher.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T11:19:25.151Z",
+              "WhenOpened": "2026-01-23T12:22:39.855Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ServersideClient.cs",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
-              "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAowCsAAAANAAAAAAAAAA==",
+              "Title": "CommandDecoder.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\util\\connection\\CommandDecoder.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaClient\\util\\connection\\CommandDecoder.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\util\\connection\\CommandDecoder.cs",
+              "RelativeToolTip": "..\\HizkitzaClient\\util\\connection\\CommandDecoder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T09:32:49.064Z",
+              "WhenOpened": "2026-01-23T11:25:20.133Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "AdminMain.xaml.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml.cs",
+              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAgwEcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T11:32:46.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CommandDecoder.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
+              "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAADgvzcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T11:40:01.044Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Server.cs",
               "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\connection\\Server.cs",
               "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\Server.cs",
               "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\connection\\Server.cs",
               "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\Server.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwCgAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAABYAAAAAAAAAAAAgwCoAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T09:20:22.889Z",
+              "WhenOpened": "2026-01-22T09:32:54.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ServersideClient.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
+              "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAYwD4AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-22T11:22:15.814Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "HizkitzaDB.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\db\\HizkitzaDB.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\db\\HizkitzaDB.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\db\\HizkitzaDB.cs",
+              "RelativeToolTip": "..\\HizkitzaServer\\util\\db\\HizkitzaDB.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwEMAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-22T09:25:08.105Z",
               "EditorCaption": ""
             }
           ]

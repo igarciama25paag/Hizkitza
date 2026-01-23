@@ -1,4 +1,5 @@
 ﻿using HizkitzaServer.util.connection;
+using HizkitzaServer.util.db.data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,39 +13,42 @@ namespace HizkitzaServer.util.connection
 {
     public class ServersideClient
     {
-        private readonly Server Server;
-        private readonly TcpClient Client;
-        private readonly NetworkStream Stream;
-        private readonly StreamReader Reader;
-        private readonly StreamWriter Writer;
+        private readonly TcpClient? Client;
+        private readonly NetworkStream? Stream;
+        private readonly StreamReader? Reader;
+        private readonly StreamWriter? Writer;
 
-        public readonly string Izena;
-        public ConnectionType? Mota;
+        public readonly static object sendLock = new();
+
+        public Erabiltzailea Erabiltzailea;
         public bool Alive { get; private set; }
 
-        public ServersideClient(Server zerbitzari, TcpClient bezero)
+        public ServersideClient(TcpClient bezero)
         {
-            Server = zerbitzari;
             Client = bezero;
             Stream = bezero.GetStream();
             Reader = new StreamReader(Stream);
             Writer = new StreamWriter(Stream) { AutoFlush = true };
-            var command = Reader.ReadLine().Split(" ");
+            Login();
+        }
 
-            if (command[0] == "/connect" && command[1] == "admin" && command[2] == "admin")
+        public async void Login()
+        {
+            try
             {
-                Izena = "admin";
-                Mota = ConnectionType.admin;
+                await CommandDecoder.ExecuteCommand(Reader.ReadLine(), this);
                 Alive = true;
-                Server.LogBerria($"Bezero berria '{Izena}'", true);
-                Send("/connected admin");
+                Server.LogBerria($"Bezero berria '{Erabiltzailea.Izena}'", true);
+                Send("logged admin");
 
                 CreateConnectionChecker();
                 CreateReceiverThread();
-            } else
+            }
+            catch (CommandDecoder.LoginDeniedException e)
             {
-                Writer.WriteLine("/denied");
-                CloseClient($"Saio bat ezeztatu da '{command[1]}':'{command[2]}'");
+                Send("denied " + e.Message);
+                CloseClient(null);
+                throw new Exception(e.Message);
             }
         }
 
@@ -54,8 +58,8 @@ namespace HizkitzaServer.util.connection
             {
                 while (Alive)
                 {
-                    if (Client.Client.Poll(0, SelectMode.SelectRead))
-                        CloseClient($"'{Izena}' bezeroa deskonektatu da");
+                    if (Client.Client.Poll(0, SelectMode.SelectRead) && Client.Client.Available == 0)
+                        CloseClient($"'{Erabiltzailea.Izena}' bezeroa deskonektatu da");
                     Thread.Sleep(1000);
                 }
             }) { IsBackground = true }.Start();
@@ -70,18 +74,23 @@ namespace HizkitzaServer.util.connection
                     while (Alive)
                     {
                         var mezua = Reader?.ReadLine();
-                        if (mezua != null)
-                            Server.SendEveryone($"{Izena}: {mezua}");
+                        if (mezua != null) Server.MezuBerria(mezua, this);
                     }
                 }
-                catch { CloseClient($"'{Izena}' bezeroa deskonektatu da"); }
+                catch { CloseClient($"'{Erabiltzailea.Izena}' bezeroa deskonektatu da"); }
             }).Start();
         }
 
         public void Send(string mezua)
         {
-            try { Writer?.WriteLine(mezua); }
-            catch { CloseClient($"'{Izena}' bezeroa deskonektatu da"); }
+            try
+            {
+                lock (sendLock)
+                {
+                    Writer?.WriteLine(mezua);
+                }
+            }
+            catch { CloseClient($"'{Erabiltzailea.Izena}' bezeroa deskonektatu da"); }
         }
 
         public void CloseClient(string? log)
@@ -93,13 +102,12 @@ namespace HizkitzaServer.util.connection
             Writer?.Close();
             lock(Server.BezeroakLock)
             {
-                if (Mota != null)
-                    Server.GetListByType(Mota).Remove(this);
+                Server.GetListByType(Erabiltzailea.Mota).Remove(this);
             }
             Server.ClientDisconnectedEvent?.Invoke(this);
             if (log != null) Server.LogBerria(log, false);
         }
 
-        public override string? ToString() => Izena;
+        public override string? ToString() => Erabiltzailea.Izena;
     }
 }

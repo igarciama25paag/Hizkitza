@@ -33,7 +33,7 @@ namespace HizkitzaClient.ui.window
             var dialog = new StyledMessageBox("Irten", "Irten nahi al duzu?", "Bai", "Ez");
             if (dialog.ShowDialog() == true)
             {
-                Connection.Bezeroa.BezeroaItxi(null);
+                Client.BezeroaItxi(null);
                 Close();
             }
         }
@@ -43,10 +43,18 @@ namespace HizkitzaClient.ui.window
             var dialog = new StyledMessageBox("Saioa itxi", "Saioa itxi nahi al duzu?", "Bai", "Ez");
             if (dialog.ShowDialog() == true)
             {
-                Connection.Bezeroa.BezeroaItxi(null);
                 new LoginWindow().Show();
+                Client.BezeroaItxi(null);
                 Close();
             }
+        }
+
+        public void Bota()
+        {
+            var dialog = new StyledMessageBox("Konexio errorea", "Zerbitzariarekin konexioa galdu da. Aplikazioa itxi nahi al duzu?", "Bai", "Ez");
+            if (dialog.ShowDialog() == false) new LoginWindow().Show();
+            if (Client.Alive) Client.BezeroaItxi(null);
+            Close();
         }
     }
 }

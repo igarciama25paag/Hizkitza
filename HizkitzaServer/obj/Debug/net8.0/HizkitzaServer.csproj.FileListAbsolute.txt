@@ -17,3 +17,9 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\refint\HizkitzaServ
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.pdb
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.genruntimeconfig.cache
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\ref\HizkitzaServer.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\Npgsql.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\HizkitzaServer.csproj.AssemblyReference.cache
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaServer\obj\Debug\net8.0\Hizkitza.A90DF398.Up2Date

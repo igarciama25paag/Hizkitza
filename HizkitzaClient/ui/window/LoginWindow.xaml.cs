@@ -41,38 +41,35 @@ namespace HizkitzaClient.ui.window
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Connection.Bezeroa.BezeroaItxi(null);
+            Client.BezeroaItxi(null);
             Close();
         }
 
         private void SaioaHasi()
         {
-            Connection.Bezeroa.Konektatu(serverip.Text, user.Text, pass.Password);
-            if (Connection.Bezeroa.Mota == null)
-                return;
-            else
-            {
-                MainWindow mainWindow = new(user.Text);
-                switch (Connection.Bezeroa.Mota)
-                {
-                    case ConnectionType.admin:
-                        mainWindow.MainFrame.Navigate(new AdminMain());
-                        break;
-                    case ConnectionType.user:
-                        mainWindow.MainFrame.Navigate(new PlayerLobby());
-                        break;
-                }
-                mainWindow.Show();
-                Close();
-            }
-            pass.Password = string.Empty;
+            Client.Konektatu(serverip.Text, user.Text, pass.Password);
         }
 
         private void RootToWindow()
         {
-            Connection.Bezeroa.RootToWindow(
-                () => {},
-                () => {},
+            Client.RootEvents(
+                () => {
+                    MainWindow mainWindow = new(user.Text);
+                    switch (Client.Mota)
+                    {
+                        case ConnectionType.admin:
+                            mainWindow.MainFrame.Navigate(new AdminMain(mainWindow));
+                            break;
+                        case ConnectionType.user:
+                            mainWindow.MainFrame.Navigate(new PlayerLobby(mainWindow));
+                            break;
+                    }
+                    mainWindow.Show();
+                    Close();
+                },
+                () => {
+                    pass.Password = string.Empty;
+                },
                 (mes) => {},
                 (log, good) => {
                     Dispatcher.Invoke(() => {

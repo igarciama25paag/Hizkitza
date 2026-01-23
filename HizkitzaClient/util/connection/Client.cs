@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HizkitzaClient.util.connection;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,32 +9,31 @@ using System.Threading.Tasks;
 
 namespace HizkitzaClient.util.connection
 {
-    public class Client
+    public static class Client
     {
         private const int PORT = 5000;
-        private TcpClient? client;
-        private NetworkStream? Stream;
-        private StreamReader? Reader;
-        private StreamWriter? Writer;
+        private static TcpClient? client;
+        private static NetworkStream? Stream;
+        private static StreamReader? Reader;
+        private static StreamWriter? Writer;
 
         public delegate void ILogSent(string log, bool good);
-        private ILogSent? LogSentEvent;
+        private static ILogSent? LogSentEvent;
         public delegate void IMessageArrived(string mezua);
-        private IMessageArrived? MessageArrivedEvent;
+        private static IMessageArrived? MessageArrivedEvent;
         public delegate void IConnected();
-        private IConnected? ConnectedEvent;
+        private static IConnected? ConnectedEvent;
         public delegate void IDisconnected();
-        private IDisconnected? DisconnectedEvent;
+        private static IDisconnected? DisconnectedEvent;
 
-        public string? Izena;
-        public ConnectionType? Mota;
-        private bool alive = false;
+        public static string? Izena;
+        public static ConnectionType? Mota;
+        public static bool Alive { get; private set; }
 
-        public void Konektatu(string ip, string izena, string pasahitza)
+        public static void Konektatu(string ip, string izena, string pasahitza)
         {
             client = new();
-            Izena = izena;
-            alive = true;
+            Alive = true;
             try
             {
                 client.Connect(ip, PORT);
@@ -42,42 +42,49 @@ namespace HizkitzaClient.util.connection
                 Reader = new StreamReader(Stream);
                 Writer = new StreamWriter(Stream) { AutoFlush = true };
 
-                MezuaBidali($"/connect {izena} {pasahitza}");
-                var command = Reader.ReadLine().Split(" ");
-                if (command[0] == "/connected")
+                MezuaBidali($"login {izena} {pasahitza}");
+                try
                 {
-                    Mota = (ConnectionType)Enum.Parse(typeof(ConnectionType), command[1]);
+                    CommandDecoder.ExecuteCommand(Reader.ReadLine());
+                    Izena = izena;
                     LogBerria("Zerbitzarira konektatuta", true);
                     ConnectedEvent?.Invoke();
 
                     CreateConnectionChecker();
                     CreateReceiverThread();
                 }
-                else BezeroaItxi("Ezin izan da saioa hasi");
+                catch (CommandDecoder.DeniedException e)
+                {
+                    BezeroaItxi("Saioa ezeztatuta: " + e.Message);
+                }
+                catch (Exception e)
+                {
+                    BezeroaItxi("Konexio errorea: " + e.Message);
+                }
             }
             catch { BezeroaItxi("Ezin izan da zerbitzaria atzitu"); }
         }
 
-        private void CreateConnectionChecker()
+        private static void CreateConnectionChecker()
         {
             new Thread(() =>
             {
-                while (alive)
+                while (Alive)
                 {
-                    if (client.Client.Poll(0, SelectMode.SelectRead))
+                    if (client.Client.Poll(0, SelectMode.SelectRead) && client.Client.Available == 0)
                         BezeroaItxi("Konexioa amaitu da");
                     Thread.Sleep(1000);
                 }
             }).Start();
         }
 
-        private void CreateReceiverThread()
+        private static void CreateReceiverThread()
         {
             new Thread(() =>
             {
                 try
                 {
-                    while (alive)
+                    while (Alive)
                     {
                         var mezua = Reader?.ReadLine();
                         if (mezua != null)
@@ -89,17 +96,17 @@ namespace HizkitzaClient.util.connection
             { IsBackground = true }.Start();
         }
 
-        private void LogBerria(string log, bool good) => LogSentEvent?.Invoke(log, good);
+        private static void LogBerria(string log, bool good) => LogSentEvent?.Invoke(log, good);
 
-        public void MezuaBidali(string mezua)
+        public static void MezuaBidali(string mezua)
         {
             try { Writer?.WriteLine(mezua); }
             catch { BezeroaItxi("Konexioa amaitu da"); }
         }
 
-        public void BezeroaItxi(string? log)
+        public static void BezeroaItxi(string? log)
         {
-            alive = false;
+            Alive = false;
             Mota = null;
             client?.Close();
             Stream?.Close();
@@ -109,7 +116,7 @@ namespace HizkitzaClient.util.connection
             if (log != null) LogBerria(log, false);
         }
 
-        public void RootToWindow(IConnected connectedevent, IDisconnected discconnectedevent, IMessageArrived messagearrivedevent, ILogSent logsentevent)
+        public static void RootEvents(IConnected connectedevent, IDisconnected discconnectedevent, IMessageArrived messagearrivedevent, ILogSent logsentevent)
         {
             ConnectedEvent = connectedevent;
             DisconnectedEvent = discconnectedevent;

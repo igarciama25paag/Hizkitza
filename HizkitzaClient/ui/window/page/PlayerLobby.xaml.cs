@@ -20,7 +20,7 @@ namespace HizkitzaClient.ui.window.page
     /// </summary>
     public partial class PlayerLobby : Page
     {
-        public PlayerLobby()
+        public PlayerLobby(MainWindow father)
         {
             InitializeComponent();
             var item1 = new ListBoxItem();

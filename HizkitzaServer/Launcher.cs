@@ -6,30 +6,26 @@ namespace HizkitzaServer
     {
         public static void Main(string[] args)
         {
-            Server server = new()
-            {
-                MessageSentEvent = (message) => 
-                {
-                    Console.WriteLine($"[MESSAGE] {message}");
-                },
+            Server.RootEvents(
 
-                LogSentEvent = (log, good) => 
-                {
-                    string status = good ? "INFO" : "ERROR";
-                    Console.WriteLine($"[{status}] {log}");
-                },
-
-                ClientConnectedEvent = (client) => 
+                (client) => 
                 {
                     //Console.WriteLine($"[CLIENT CONNECTED] {client.Izena}");
                 },
 
-                ClientDisconnectedEvent = (client) => 
+                (client) => 
                 {
                     //Console.WriteLine($"[CLIENT DISCONNECTED] {client.Izena}");
+                },
+
+                Console.WriteLine,
+
+                (log, good) =>
+                {
+                    Console.WriteLine(log);
                 }
-            };
-            server.Piztu();
+            );
+            Server.Piztu();
         }
     } 
 }

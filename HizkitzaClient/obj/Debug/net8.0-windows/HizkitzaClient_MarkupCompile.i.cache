@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\App.xaml
 121039821567
 
-13-1857299702
+13-1940095751
 198-2136442823
 style\ButtonStyle.xaml;style\ComboBoxStyle.xaml;style\FontStyle.xaml;style\ListBoxStyle.xaml;style\OtherStyle.xaml;style\TextBlockStyle.xaml;style\TextBoxStyle.xaml;ui\messagebox\StyledMessageBox.xaml;ui\window\LoginWindow.xaml;ui\window\MainWindow.xaml;ui\window\page\AdminMain.xaml;ui\window\page\PlayerLobby.xaml;
 
-True
+False
 
