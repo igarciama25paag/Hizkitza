@@ -51,7 +51,7 @@ namespace HizkitzaClient.ui.window.page
 
         private void LogReciever()
         {
-            CommandDecoder.LogCountEvent += (n) =>
+            /*CommandDecoder.LogCountEvent += (n) =>
             {
                 Dispatcher.Invoke(() => lastLogN = n);
             };
@@ -83,7 +83,7 @@ namespace HizkitzaClient.ui.window.page
                         Thread.Sleep(500);
                     }
                 });
-            }).Start();
+            }).Start();*/
         }
     }
 }

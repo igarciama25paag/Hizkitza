@@ -1,0 +1,23 @@
+services:
+
+  db:
+    image: postgres
+    container_name: postgresql_hizkitza
+    shm_size: 128mb
+    ports:
+      - 5432:5432
+    
+    volumes:
+    - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    - ./postgresql:/var/lib/postgresql
+
+    environment:
+        POSTGRES_USER: admin 
+        POSTGRES_PASSWORD: admin
+        POSTGRES_DB: hizkitza
+
+  adminer:
+    image: adminer
+    container_name: adminer_hizkitza
+    ports:
+      - 8080:8080
