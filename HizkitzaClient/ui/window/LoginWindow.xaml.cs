@@ -71,8 +71,15 @@ namespace HizkitzaClient.ui.window
                     pass.Password = string.Empty;
                 },
                 (mes) => {},
-                (log, good) => {
+                (log, mota) => {
                     Dispatcher.Invoke(() => {
+                        message.Foreground = mota switch
+                        {
+                            Client.LogType.ERROR => Brushes.Pink,
+                            Client.LogType.INFO => Brushes.Lime,
+                            Client.LogType.WARN => Brushes.Orange,
+                            _ => Brushes.White
+                        };
                         message.Text = log;
                     });
                 }

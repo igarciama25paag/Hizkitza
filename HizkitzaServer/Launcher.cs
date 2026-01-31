@@ -18,11 +18,14 @@ namespace HizkitzaServer
                     //Console.WriteLine($"[CLIENT DISCONNECTED] {client.Izena}");
                 },
 
-                Console.WriteLine,
-
-                (log, good) =>
+                (mezua, bezero) =>
                 {
-                    Console.WriteLine(log);
+                    Console.WriteLine($"[{DateTime.Now:t}] [{bezero}] {mezua}");
+                },
+
+                (log, mota) =>
+                {
+                    Console.WriteLine($"[{DateTime.Now:t}] [{mota}] {log}");
                 }
             );
             Server.Piztu();

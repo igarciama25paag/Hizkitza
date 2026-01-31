@@ -2,6 +2,7 @@
 using HizkitzaClient.util.connection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,14 +27,20 @@ namespace HizkitzaClient.ui.window
         {
             InitializeComponent();
             Usertag = username;
+            Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object? sender, CancelEventArgs e)
+        {
+            Client.BezeroaItxi(null);
         }
 
         private void Itxi_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new StyledMessageBox("Irten", "Irten nahi al duzu?", "Bai", "Ez");
+            var dialog = new StyledMessageBox("Irten", "Aplikazioa itxi nahi al duzu?", "Bai", "Ez");
             if (dialog.ShowDialog() == true)
             {
-                Client.BezeroaItxi(null);
+                Client.RootEvents(null,null,null,null);
                 Close();
             }
         }
@@ -44,7 +51,6 @@ namespace HizkitzaClient.ui.window
             if (dialog.ShowDialog() == true)
             {
                 new LoginWindow().Show();
-                Client.BezeroaItxi(null);
                 Close();
             }
         }

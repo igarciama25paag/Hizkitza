@@ -12,22 +12,31 @@ namespace HizkitzaServer.util.connection
 
         public static readonly object BezeroakLock = new();
 
-        public delegate void ILogSent(string log, bool good);
+        public delegate void ILogSent(string log, LogType mota);
         public static ILogSent? LogSentEvent;
-        public delegate void IMessageSent(string mezua);
+        public delegate void IMessageSent(string mezua, ServersideClient bezero);
         public static IMessageSent? MessageSentEvent;
         public delegate void IClientConnected(ServersideClient bezero);
         public static IClientConnected? ClientConnectedEvent;
         public delegate void IClientDisconnected(ServersideClient bezero);
         public static IClientDisconnected? ClientDisconnectedEvent;
 
+        public enum LogType
+        {
+            INFO,
+            WARN,
+            ERROR
+        }
+
         public static readonly List<string> Logs = [];
 
-        public static readonly HashSet<ServersideClient> Users = [];
-        public static readonly HashSet<ServersideClient> Admins = [];
+        public static readonly Dictionary<ConnectionType, HashSet<ServersideClient>> Clients = new()
+        {
+            [ConnectionType.admin] = [],
+            [ConnectionType.user] = []
+        };
+
         public static readonly List<Game> Jokoak = [];
-        
-        public class ClientListNotFoundException(string message) : Exception(message);
 
         public static void Piztu()
         {
@@ -38,13 +47,13 @@ namespace HizkitzaServer.util.connection
                 {
                     listener = new(IPAddress.Any, PORT);
                     listener.Start();
-                    LogBerria($"ZERBITZARIA hasi da PORT:{PORT}", true);
+                    LogBerria($"ZERBITZARIA hasi da PORT:{PORT}", LogType.INFO);
 
                     while (Alive) BezeroBerriaItxaron(listener);
                 }
                 catch
                 {
-                    LogBerria("Zerbitzari errorea", false);
+                    LogBerria("Zerbitzari errorea", LogType.ERROR);
                     Itzali();
                 }
             }).Start();
@@ -56,11 +65,11 @@ namespace HizkitzaServer.util.connection
             lock (BezeroakLock)
             {
                 listener?.Stop();
-                var bezReference = Users.ToList();
-                foreach (var bezero in bezReference)
-                    bezero.CloseClient(null);
+                foreach (var list in Clients.Values)
+                    foreach (var bezero in list)
+                        bezero.CloseClient(null);
             }
-            LogBerria("ZERBITZARIA itzali da", false);
+            LogBerria("ZERBITZARIA itzali da", LogType.INFO);
         }
 
         private static void BezeroBerriaItxaron(TcpListener listener)
@@ -68,42 +77,30 @@ namespace HizkitzaServer.util.connection
             try
             {
                 var bezeroBerria = new ServersideClient(listener.AcceptTcpClient());
-                while (!bezeroBerria.Alive) Thread.Sleep(200);
-                lock (BezeroakLock)
-                {
-                    GetListByType(bezeroBerria.Erabiltzailea.Mota).Add(bezeroBerria);
-                    ClientConnectedEvent?.Invoke(bezeroBerria);
-                }
+                if (bezeroBerria.Erabiltzailea != null)
+                    lock (BezeroakLock)
+                    {
+                        Clients[bezeroBerria.Erabiltzailea.Mota].Add(bezeroBerria);
+                        ClientConnectedEvent?.Invoke(bezeroBerria);
+                    }
             }
             catch (SocketException) { }
-            catch (Exception e) { LogBerria("Unhandled Exception on BezeroBerriaItxaron: " + e.Message, false); }
+            catch (Exception e) { LogBerria("Unhandled Exception on BezeroBerriaItxaron: " + e.Message, LogType.ERROR); }
         }
 
-        public static void LogBerria(string log, bool good)
+        public static void LogBerria(string log, LogType mota)
         {
-            var status = good ? "INFO" : "ERROR";
-            var newLog = $"[{DateTime.Now.ToShortTimeString()}] [{status}] {log}";
-            Logs.Add(newLog);
-            LogSentEvent?.Invoke($"{newLog}", good);
+            Logs.Add($"[{DateTime.Now:t}] [{mota}] {log}");
+            LogSentEvent?.Invoke(log, mota);
         }
 
         public static async void MezuBerria(string mezua, ServersideClient bezero)
         {
             await CommandDecoder.ExecuteCommand(mezua, bezero);
-            MessageSentEvent?.Invoke($"[{DateTime.Now.ToShortTimeString()}] [{bezero.Erabiltzailea.Izena}] {mezua}");
+            MessageSentEvent?.Invoke(mezua, bezero);
         }
 
-        public static HashSet<ServersideClient> GetListByType(ConnectionType? mota)
-        {
-            return mota switch
-            {
-                ConnectionType.admin => Admins,
-                ConnectionType.user => Users,
-                _ => throw new ClientListNotFoundException("Ez da listarik aurkitu hurrengo motarentzako: " + mota)
-            };
-        }
-        
-        public static void RootEvents(IClientConnected clientConnected, IClientDisconnected clientDisconnected, IMessageSent messageSent, ILogSent logSent)
+        public static void RootEvents(IClientConnected? clientConnected, IClientDisconnected? clientDisconnected, IMessageSent? messageSent, ILogSent? logSent)
         {
             ClientConnectedEvent = clientConnected;
             ClientDisconnectedEvent = clientDisconnected;

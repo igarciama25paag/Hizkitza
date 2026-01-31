@@ -17,7 +17,7 @@ namespace HizkitzaClient.util.connection
         private static StreamReader? Reader;
         private static StreamWriter? Writer;
 
-        public delegate void ILogSent(string log, bool good);
+        public delegate void ILogSent(string log, LogType mota);
         private static ILogSent? LogSentEvent;
         public delegate void IMessageArrived(string mezua);
         private static IMessageArrived? MessageArrivedEvent;
@@ -25,6 +25,13 @@ namespace HizkitzaClient.util.connection
         private static IConnected? ConnectedEvent;
         public delegate void IDisconnected();
         private static IDisconnected? DisconnectedEvent;
+
+        public enum LogType
+        {
+            INFO,
+            WARN,
+            ERROR
+        }
 
         public static string? Izena;
         public static ConnectionType? Mota;
@@ -47,7 +54,7 @@ namespace HizkitzaClient.util.connection
                 {
                     CommandDecoder.ExecuteCommand(Reader.ReadLine());
                     Izena = izena;
-                    LogBerria("Zerbitzarira konektatuta", true);
+                    LogBerria("Zerbitzarira konektatuta", LogType.INFO);
                     ConnectedEvent?.Invoke();
 
                     CreateConnectionChecker();
@@ -71,7 +78,7 @@ namespace HizkitzaClient.util.connection
             {
                 while (Alive)
                 {
-                    if (client.Client.Poll(0, SelectMode.SelectRead) && client.Client.Available == 0)
+                    if (client!.Client.Poll(0, SelectMode.SelectRead) && client.Client.Available == 0)
                         BezeroaItxi("Konexioa amaitu da");
                     Thread.Sleep(1000);
                 }
@@ -88,7 +95,10 @@ namespace HizkitzaClient.util.connection
                     {
                         var mezua = Reader?.ReadLine();
                         if (mezua != null)
+                        {
+                            CommandDecoder.ExecuteCommand(mezua);
                             MessageArrivedEvent?.Invoke(mezua);
+                        }
                     }
                 }
                 catch { BezeroaItxi("Konexioa amaitu da"); }
@@ -96,7 +106,7 @@ namespace HizkitzaClient.util.connection
             { IsBackground = true }.Start();
         }
 
-        private static void LogBerria(string log, bool good) => LogSentEvent?.Invoke(log, good);
+        private static void LogBerria(string log, LogType mota) => LogSentEvent?.Invoke(log, mota);
 
         public static void MezuaBidali(string mezua)
         {
@@ -108,15 +118,16 @@ namespace HizkitzaClient.util.connection
         {
             Alive = false;
             Mota = null;
+            Izena = null;
             client?.Close();
             Stream?.Close();
             Reader?.Close();
             Writer?.Close();
             DisconnectedEvent?.Invoke();
-            if (log != null) LogBerria(log, false);
+            if (log != null) LogBerria(log, LogType.ERROR);
         }
 
-        public static void RootEvents(IConnected connectedevent, IDisconnected discconnectedevent, IMessageArrived messagearrivedevent, ILogSent logsentevent)
+        public static void RootEvents(IConnected? connectedevent, IDisconnected? discconnectedevent, IMessageArrived? messagearrivedevent, ILogSent? logsentevent)
         {
             ConnectedEvent = connectedevent;
             DisconnectedEvent = discconnectedevent;

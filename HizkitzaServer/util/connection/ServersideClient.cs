@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static HizkitzaServer.util.connection.Server;
 
 namespace HizkitzaServer.util.connection
 {
@@ -20,7 +21,7 @@ namespace HizkitzaServer.util.connection
 
         public readonly static object sendLock = new();
 
-        public Erabiltzailea Erabiltzailea;
+        public Erabiltzailea? Erabiltzailea;
         public bool Alive { get; private set; }
 
         public ServersideClient(TcpClient bezero)
@@ -36,19 +37,23 @@ namespace HizkitzaServer.util.connection
         {
             try
             {
-                await CommandDecoder.ExecuteCommand(Reader.ReadLine(), this);
-                Alive = true;
-                Server.LogBerria($"Bezero berria '{Erabiltzailea.Izena}'", true);
-                Send("logged admin");
+                await CommandDecoder.ExecuteCommand(Reader!.ReadLine(), this);
+                if (Erabiltzailea != null)
+                {
+                    Alive = true;
+                    Server.Clients[Erabiltzailea.Mota].Add(this);
+                    Server.LogBerria($"Bezero berria '{this}'", LogType.INFO);
+                    Send($"logged {Erabiltzailea.Mota}");
 
-                CreateConnectionChecker();
-                CreateReceiverThread();
+                    CreateConnectionChecker();
+                    CreateReceiverThread();
+                } else Send("denied Erabiltzailea null");
             }
-            catch (CommandDecoder.LoginDeniedException e)
+            catch (CommandDecoder.DeniedException e)
             {
                 Send("denied " + e.Message);
                 CloseClient(null);
-                throw new Exception(e.Message);
+                Server.LogBerria($"{e.Message}", LogType.WARN);
             }
         }
 
@@ -58,11 +63,12 @@ namespace HizkitzaServer.util.connection
             {
                 while (Alive)
                 {
-                    if (Client.Client.Poll(0, SelectMode.SelectRead) && Client.Client.Available == 0)
-                        CloseClient($"'{Erabiltzailea.Izena}' bezeroa deskonektatu da");
+                    if (Client!.Client.Poll(0, SelectMode.SelectRead) && Client.Client.Available == 0)
+                        CloseClient($"'{this}' bezeroa deskonektatu da");
                     Thread.Sleep(1000);
                 }
-            }) { IsBackground = true }.Start();
+            })
+            { IsBackground = true }.Start();
         }
 
         private void CreateReceiverThread()
@@ -77,7 +83,7 @@ namespace HizkitzaServer.util.connection
                         if (mezua != null) Server.MezuBerria(mezua, this);
                     }
                 }
-                catch { CloseClient($"'{Erabiltzailea.Izena}' bezeroa deskonektatu da"); }
+                catch { CloseClient($"'{this}' bezeroa deskonektatu da"); }
             }).Start();
         }
 
@@ -90,7 +96,7 @@ namespace HizkitzaServer.util.connection
                     Writer?.WriteLine(mezua);
                 }
             }
-            catch { CloseClient($"'{Erabiltzailea.Izena}' bezeroa deskonektatu da"); }
+            catch { CloseClient($"'{this}' bezeroa deskonektatu da"); }
         }
 
         public void CloseClient(string? log)
@@ -100,14 +106,15 @@ namespace HizkitzaServer.util.connection
             Stream?.Close();
             Reader?.Close();
             Writer?.Close();
-            lock(Server.BezeroakLock)
+            lock (Server.BezeroakLock)
             {
-                Server.GetListByType(Erabiltzailea.Mota).Remove(this);
+                if (Erabiltzailea != null)
+                    Server.Clients[Erabiltzailea.Mota].Remove(this);
             }
             Server.ClientDisconnectedEvent?.Invoke(this);
-            if (log != null) Server.LogBerria(log, false);
+            if (log != null) Server.LogBerria(log, LogType.WARN);
         }
 
-        public override string? ToString() => Erabiltzailea.Izena;
+        public override string? ToString() => Erabiltzailea?.Izena ?? "null";
     }
 }

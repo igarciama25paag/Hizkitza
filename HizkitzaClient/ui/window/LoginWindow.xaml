@@ -23,7 +23,7 @@
         <TextBlock Text="Pasahitza" Width="200" Margin="0,10,0,0" Style="{StaticResource Text.Basic}"/>
         <PasswordBox x:Name="pass" Width="200" KeyDown="SaioaHasi_KeyDown"/>
         
-        <TextBlock x:Name="message" Margin="0,10,0,0" TextAlignment="Center" Style="{StaticResource Text.Small.Negative}"/>
+        <TextBlock x:Name="message" Margin="0,10,0,0" TextAlignment="Center" Style="{StaticResource Text.Small}"/>
 
         <StackPanel Orientation="Horizontal" Margin="0,15,0,0" HorizontalAlignment="Center">
             <Button Click="SaioaHasi_Click" Content="Saioa hasi" Margin="0,0,10,0"/>

@@ -65,3 +65,40 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\p
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.g.cs
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\FontStyle.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.exe
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.deps.json
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.runtimeconfig.json
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.dll
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.pdb
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\ButtonStyle.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\ComboBoxStyle.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\FontStyle.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\ListBoxStyle.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\OtherStyle.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\TextBlockStyle.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\TextBoxStyle.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\LoginWindow.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\MainWindow.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\AdminMain.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\PlayerLobby.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient_MarkupCompile.cache
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient_MarkupCompile.lref
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\App.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\LoginWindow.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\MainWindow.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\AdminMain.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\PlayerLobby.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.g.resources
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.AssemblyInfo.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.sourcelink.json
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.dll
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\refint\HizkitzaClient.dll
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.pdb
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.genruntimeconfig.cache
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ref\HizkitzaClient.dll

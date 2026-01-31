@@ -1,4 +1,5 @@
 using HizkitzaClient.util.db;
+using HizkitzaServer.util.db.data;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -9,28 +10,36 @@ public static class CommandDecoder
     private static Dictionary<string, ICommand> Commands = new()
     {
         ["login"] = new LoginCommand(),
-        ["getlogcount"] = new GetLogCountCommand()
+        ["getlogcount"] = new GetLogCountCommand(),
+        ["getlogs"] = new GetLogsCommand()
     };
 
     public class UnexistingCommandException(string message) : Exception(message);
     public class WrongCommandFormatException(string message) : Exception(message);
-    public class LoginDeniedException(string message) : Exception(message);
+    public class DeniedException(string message) : Exception(message);
 
-    public static async Task ExecuteCommand(string command, ServersideClient client)
+    public static async Task ExecuteCommand(string? command, ServersideClient client)
     {
-        var splitCommand = command.Split(" ");
-        var args = splitCommand.ToList();
-        args.RemoveAt(0);
-        try
+        if (command != null)
         {
-            await Commands[splitCommand[0]].Execute(args.ToArray(), client);
-        }
-        catch (KeyNotFoundException)
-        {
-            throw new UnexistingCommandException($"'{splitCommand[0]}' commandoa ez da existitzen");
+            var splitCommand = command.Split(" ");
+            var args = splitCommand.ToList();
+            args.RemoveAt(0);
+            try
+            {
+                await Commands[splitCommand[0]].Execute(args.ToArray(), client);
+            }
+            catch (KeyNotFoundException)
+            {
+                client.Send($"'{splitCommand[0]}' comandoa ez da existitzen");
+            }
+            catch (WrongCommandFormatException e)
+            {
+                client.Send($"Formatu okerra '{splitCommand[0]}' comandoarentzat: {e.Message}");
+            }
         }
     }
-    
+
     private interface ICommand
     {
         Task Execute(string[] args, ServersideClient client);
@@ -40,18 +49,22 @@ public static class CommandDecoder
     {
         public async Task Execute(string[] args, ServersideClient client)
         {
-            if (Server.Admins.Any(admin => admin.Erabiltzailea.Izena == args[0])
-                || Server.Users.Any(user => user.Erabiltzailea.Izena == args[0]))
-                throw new LoginDeniedException("Login in use");
+            foreach (var list in Server.Clients.Values)
+                if (list.Any(c => c.ToString() == args[0]))
+                    throw new DeniedException($"'{args[0]}' saioa okupatuta");
 
             try
             {
-                client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
-                Server.Admins.Add(client);
+                //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
+                if (args[0] == "admin" && args[1] == "admin")
+                    client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin);
+                else if (args[0] == "user" && args[1] == "user")
+                    client.Erabiltzailea = new Erabiltzailea(0, "user", "user", ConnectionType.user);
+                else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
             }
             catch (InvalidOperationException)
             {
-                throw new LoginDeniedException("Login denied");
+                throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
             }
         }
     }
@@ -68,9 +81,16 @@ public static class CommandDecoder
     {
         public async Task Execute(string[] args, ServersideClient client)
         {
-            var n = int.Parse(args[0]);
-            for (var i = n; n < Server.Logs.Count; i++)
-                client.Send($"newlog {Server.Logs[i]}");
+            try
+            {
+                var n = int.Parse(args[0]);
+                for (var i = n; i < Server.Logs.Count; i++)
+                    client.Send($"newlog {Server.Logs[i]}");
+            }
+            catch (FormatException)
+            {
+                throw new WrongCommandFormatException(args[0]);
+            }
         }
     }
 }

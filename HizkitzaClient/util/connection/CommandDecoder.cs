@@ -18,18 +18,21 @@ public static class CommandDecoder
     public class WrongCommandFormatException(string message) : Exception(message);
     public class DeniedException(string message) : Exception(message);
 
-    public static void ExecuteCommand(string command)
+    public static void ExecuteCommand(string? command)
     {
-        var splitCommand = command.Split(" ");
-        var args = splitCommand.ToList();
-        args.RemoveAt(0);
-        try
+        if (command != null)
         {
-            Commands[splitCommand[0]].Execute(args.ToArray());
-        }
-        catch (KeyNotFoundException)
-        {
-            throw new UnexistingCommandException($"'{splitCommand[0]}' commandoa ez da existitzen");
+            var splitCommand = command.Split(" ");
+            var args = splitCommand.ToList();
+            args.RemoveAt(0);
+            try
+            {
+                Commands[splitCommand[0]].Execute(args.ToArray());
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new UnexistingCommandException($"'{splitCommand[0]}' commandoa ez da existitzen");
+            }
         }
     }
 
@@ -38,7 +41,7 @@ public static class CommandDecoder
         LogCountEvent = null;
         NewLogEvent = null;
     }
-    
+
     private interface ICommand
     {
         void Execute(string[] args);
