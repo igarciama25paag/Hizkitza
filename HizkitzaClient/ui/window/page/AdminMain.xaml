@@ -11,8 +11,7 @@
     <Grid Margin="50,30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel>
@@ -27,13 +26,12 @@
 
         <DockPanel Grid.Column="1" Margin="10">
             <TextBlock Text="Zerbitzaria:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
-            <TextBox DockPanel.Dock="Bottom" Style="{StaticResource TextBox.Medium}"/>
-            <ListBox x:Name="LogList" ItemsSource="{Binding logList}" Margin="0,0,0,10"/>
+            <DockPanel DockPanel.Dock="Bottom">
+                <Button Click="Bidali_Click" DockPanel.Dock="Right" Content="Bidali"/>
+                <TextBox x:Name="command" KeyDown="Command_KeyDown" Style="{StaticResource TextBox.Medium}" VerticalContentAlignment="Center" Width="auto"/>
+            </DockPanel>
+            <ListBox x:Name="LogList" Margin="0,0,0,10"/>
         </DockPanel>
-
-        <DockPanel Grid.Column="2" Margin="10">
-            <Button DockPanel.Dock="Bottom" Content="Bidali"/>
-            <TextBlock Text="Zerbitzariarentzako komandoak:" Style="{StaticResource Text.Small}"/>
-        </DockPanel>
+        
     </Grid>
 </Page>

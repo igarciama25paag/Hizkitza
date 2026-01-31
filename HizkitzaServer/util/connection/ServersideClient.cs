@@ -53,7 +53,7 @@ namespace HizkitzaServer.util.connection
             {
                 Send("denied " + e.Message);
                 CloseClient(null);
-                Server.LogBerria($"{e.Message}", LogType.WARN);
+                Server.LogBerria($"{e.Message}", LogType.ERROR);
             }
         }
 

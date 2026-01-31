@@ -17,14 +17,9 @@ using System.Windows.Shapes;
 
 namespace HizkitzaClient.ui.window.page
 {
-    /// <summary>
-    /// Interaction logic for AdminMain.xaml
-    /// </summary>
     public partial class AdminMain : Page
     {
         private readonly MainWindow FatherWindow;
-        private readonly ObservableCollection<string> logList = [];
-        private int lastLogN = 0;
         private readonly object logLock = new();
 
         public AdminMain(MainWindow father)
@@ -51,39 +46,58 @@ namespace HizkitzaClient.ui.window.page
 
         private void LogReciever()
         {
-            /*CommandDecoder.LogCountEvent += (n) =>
+            var logcountLock = new object();
+            var lastLogN = 0;
+            CommandDecoder.LogCountEvent = (n) =>
             {
                 Dispatcher.Invoke(() => lastLogN = n);
             };
             Client.MezuaBidali("getlogcount");
 
-            CommandDecoder.NewLogEvent += (log) =>
+            CommandDecoder.NewLogEvent = (log) =>
             {
                 Dispatcher.Invoke(() =>
                 {
                     lock (logLock)
-                    { 
-                        logList.Add(log);
-                        LogList.ScrollIntoView(logList.Last());
-                        lastLogN++;
+                    {
+                        var item = new ListBoxItem
+                        {
+                            Content = log
+                        };
+                        LogList.Items.Add(item);
+                        LogList.ScrollIntoView(item);
                     }
                 });
             };
-
+            
             new Thread(() =>
             {
-                Dispatcher.Invoke(() =>
+                Thread.Sleep(5000);
+                var alive = true;
+                while (alive)
                 {
-                    while (IsLoaded)
+                    lock (logLock)
                     {
-                        lock (logLock)
-                        {
-                            Client.MezuaBidali($"getlogs {lastLogN}");
-                        }
-                        Thread.Sleep(500);
+                        Client.MezuaBidali($"getlogs {lastLogN + LogList.Items.Count}");
                     }
-                });
-            }).Start();*/
+                    Thread.Sleep(5000);
+                    Dispatcher.Invoke(() => alive = IsLoaded);
+                }
+            }).Start();
+        }
+
+        private void Bidali_Click(object sender, RoutedEventArgs e) => SendCommand();
+
+        private void Command_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                SendCommand();
+        }
+
+        private void SendCommand()
+        {
+            Client.MezuaBidali(command.Text);
+            command.Text = null;
         }
     }
 }

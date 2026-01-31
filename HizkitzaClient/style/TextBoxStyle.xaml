@@ -33,15 +33,19 @@
         <Setter Property="Foreground" Value="Yellow"/>
     </Style>
 
-    <Style TargetType="TextBox" BasedOn="{StaticResource BaseStyle}"/>
+    <Style TargetType="TextBox" BasedOn="{StaticResource BaseStyle}">
+        <Setter Property="SelectionBrush" Value="DarkGray"/>
+    </Style>
 
     <Style TargetType="TextBox" x:Key="TextBox.Special" BasedOn="{StaticResource SpecialStyle}">
         <Setter Property="CaretBrush" Value="Yellow"/>
+        <Setter Property="SelectionBrush" Value="DarkGray"/>
     </Style>
 
     <Style TargetType="PasswordBox" BasedOn="{StaticResource SpecialStyle}">
         <Setter Property="PasswordChar" Value="*"/>
         <Setter Property="CaretBrush" Value="Yellow"/>
+        <Setter Property="SelectionBrush" Value="DarkGray"/>
     </Style>
 
     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}" x:Key="TextBox.Medium">

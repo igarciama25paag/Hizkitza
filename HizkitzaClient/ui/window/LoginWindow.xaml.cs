@@ -54,7 +54,7 @@ namespace HizkitzaClient.ui.window
         {
             Client.RootEvents(
                 () => {
-                    MainWindow mainWindow = new(user.Text);
+                    MainWindow mainWindow = new();
                     switch (Client.Mota)
                     {
                         case ConnectionType.admin:
@@ -68,7 +68,7 @@ namespace HizkitzaClient.ui.window
                     Close();
                 },
                 () => {
-                    pass.Password = string.Empty;
+                    pass.Password = null;
                 },
                 (mes) => {},
                 (log, mota) => {

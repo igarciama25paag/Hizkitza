@@ -96,8 +96,14 @@ namespace HizkitzaServer.util.connection
 
         public static async void MezuBerria(string mezua, ServersideClient bezero)
         {
-            await CommandDecoder.ExecuteCommand(mezua, bezero);
-            MessageSentEvent?.Invoke(mezua, bezero);
+            try
+            {
+                MessageSentEvent?.Invoke(mezua, bezero);
+                await CommandDecoder.ExecuteCommand(mezua, bezero);
+            } catch (Exception e)
+            {
+                LogBerria(e.Message, LogType.ERROR);
+            }
         }
 
         public static void RootEvents(IClientConnected? clientConnected, IClientDisconnected? clientDisconnected, IMessageSent? messageSent, ILogSent? logSent)

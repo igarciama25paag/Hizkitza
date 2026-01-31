@@ -96,14 +96,20 @@ namespace HizkitzaClient.util.connection
                         var mezua = Reader?.ReadLine();
                         if (mezua != null)
                         {
-                            CommandDecoder.ExecuteCommand(mezua);
-                            MessageArrivedEvent?.Invoke(mezua);
+                            try
+                            {
+                                MessageArrivedEvent?.Invoke(mezua);
+                                CommandDecoder.ExecuteCommand(mezua);
+                            }
+                            catch (Exception e)
+                            {
+                                LogBerria(e.Message, LogType.ERROR);
+                            }
                         }
                     }
                 }
                 catch { BezeroaItxi("Konexioa amaitu da"); }
-            })
-            { IsBackground = true }.Start();
+            }).Start();
         }
 
         private static void LogBerria(string log, LogType mota) => LogSentEvent?.Invoke(log, mota);

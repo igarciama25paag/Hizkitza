@@ -22,11 +22,10 @@ namespace HizkitzaClient.ui.window
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string Usertag { get; private set; }
-        public MainWindow(string username)
+        public MainWindow()
         {
             InitializeComponent();
-            Usertag = username;
+            Username.Text = Client.Izena ?? "null";
             Closing += MainWindow_Closing;
         }
 

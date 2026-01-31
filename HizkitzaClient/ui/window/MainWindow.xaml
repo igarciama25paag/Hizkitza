@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <TextBlock x:Name="Username" Text="{Binding Usertag}" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
+            <TextBlock x:Name="Username" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
             <Button Click="SaioaItxi_Click" Content="Saioa Itxi" Margin="20,0,0,0" Style="{StaticResource Button.Negative}" Width="120"/>
             <Button Click="Itxi_Click" Content="Itxi" Margin="10,0,0,0" Style="{StaticResource Button.Negative}" Width="80"/>
         </StackPanel>
