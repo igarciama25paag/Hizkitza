@@ -3,10 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\user\\source\\repos\\Hizkitza\\Hizkitza\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaclient\\ui\\window\\page\\adminmain.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\launcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaclient\\ui\\window\\page\\adminmain.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\util\\connection\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -16,31 +16,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 222,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AdminMain.xaml",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-01-31T22:03:57.931Z",
+              "DocumentIndex": 0,
+              "Title": "Launcher.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\Launcher.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaServer\\Launcher.cs",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\Launcher.cs",
+              "RelativeToolTip": "..\\HizkitzaServer\\Launcher.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBcAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-01T15:59:03.446Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AdminMain.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml.cs",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml.cs",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml.cs",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAgwFoAAABDAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Server.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\Server.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\Server.cs",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\Server.cs",
+              "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\Server.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAAwHEAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-31T21:34:19.928Z",
+              "WhenOpened": "2026-02-01T15:47:40.082Z",
               "EditorCaption": ""
             }
           ]

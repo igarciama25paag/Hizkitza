@@ -12,14 +12,19 @@ namespace HizkitzaServer.util.connection
 
         public static readonly object BezeroakLock = new();
 
-        public delegate void ILogSent(string log, LogType mota);
-        public static ILogSent? LogSentEvent;
         public delegate void IMessageSent(string mezua, ServersideClient bezero);
         public static IMessageSent? MessageSentEvent;
         public delegate void IClientConnected(ServersideClient bezero);
         public static IClientConnected? ClientConnectedEvent;
         public delegate void IClientDisconnected(ServersideClient bezero);
         public static IClientDisconnected? ClientDisconnectedEvent;
+
+        public static event EventHandler<LogSentEventArgs>? LogSentEvent;
+        public class LogSentEventArgs : EventArgs
+        {
+            public required string Log { get; set; }
+            public required LogType Mota { get; set; }
+        }
 
         public enum LogType
         {
@@ -91,7 +96,11 @@ namespace HizkitzaServer.util.connection
         public static void LogBerria(string log, LogType mota)
         {
             Logs.Add($"[{DateTime.Now:t}] [{mota}] {log}");
-            LogSentEvent?.Invoke(log, mota);
+            LogSentEvent?.Invoke(null, new()
+            {
+                Log = log,
+                Mota = mota
+            });
         }
 
         public static async void MezuBerria(string mezua, ServersideClient bezero)
@@ -106,12 +115,11 @@ namespace HizkitzaServer.util.connection
             }
         }
 
-        public static void RootEvents(IClientConnected? clientConnected, IClientDisconnected? clientDisconnected, IMessageSent? messageSent, ILogSent? logSent)
+        public static void RootEvents(IClientConnected? clientConnected, IClientDisconnected? clientDisconnected, IMessageSent? messageSent)
         {
             ClientConnectedEvent = clientConnected;
             ClientDisconnectedEvent = clientDisconnected;
             MessageSentEvent = messageSent;
-            LogSentEvent = logSent;
         }
     }
 }

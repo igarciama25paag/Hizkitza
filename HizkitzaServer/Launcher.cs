@@ -21,13 +21,12 @@ namespace HizkitzaServer
                 (mezua, bezero) =>
                 {
                     Console.WriteLine($"[{DateTime.Now:t}] [{bezero}] {mezua}");
-                },
-
-                (log, mota) =>
-                {
-                    Console.WriteLine($"[{DateTime.Now:t}] [{mota}] {log}");
-                }
+                }                
             );
+            Server.LogSentEvent += (sender, args) =>
+            {
+                Console.WriteLine($"[{DateTime.Now:t}] [{args.Mota}] {args.Log}");
+            };
             Server.Piztu();
         }
     } 
