@@ -19,11 +19,11 @@
     </Style>
     
     <Style TargetType="TextBlock" x:Key="Text.Basic.Negative" BasedOn="{StaticResource Text.Basic}">
-        <Setter Property="Foreground" Value="Red"/>
+        <Setter Property="Foreground" Value="Pink"/>
     </Style>
 
     <Style TargetType="TextBlock" x:Key="Text.Small.Negative" BasedOn="{StaticResource Text.Small}">
-        <Setter Property="Foreground" Value="Red"/>
+        <Setter Property="Foreground" Value="Pink"/>
     </Style>
     
 </ResourceDictionary>

@@ -6,23 +6,10 @@ namespace HizkitzaServer
     {
         public static void Main(string[] args)
         {
-            Server.RootEvents(
-
-                (client) => 
-                {
-                    //Console.WriteLine($"[CLIENT CONNECTED] {client.Izena}");
-                },
-
-                (client) => 
-                {
-                    //Console.WriteLine($"[CLIENT DISCONNECTED] {client.Izena}");
-                },
-
-                (mezua, bezero) =>
-                {
-                    Console.WriteLine($"[{DateTime.Now:t}] [{bezero}] {mezua}");
-                }                
-            );
+            Server.MessageSentEvent += (sender, args) =>
+            {
+                Server.LogBerria($"{args.Client}: {args.Mezua}", Server.LogType.INFO);
+            };
             Server.LogSentEvent += (sender, args) =>
             {
                 Console.WriteLine($"[{DateTime.Now:t}] [{args.Mota}] {args.Log}");

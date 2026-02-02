@@ -1,17 +1,20 @@
 using HizkitzaClient.util.connection;
+using HizkitzaClient.util.game;
 using System.Windows.Input;
+using static HizkitzaClient.util.connection.Client;
 using static HizkitzaClient.util.connection.CommandDecoder;
 
 namespace HizkitzaClient.util.connection;
 
 public static class CommandDecoder
 {
-    private static Dictionary<string, ICommand> Commands = new()
+    private readonly static Dictionary<string, ICommand> Commands = new()
     {
-        ["logged"] = new LoggedCommand(),
-        ["denied"] = new DeniedCommand(),
-        ["logcount"] = new LogCountCommand(),
-        ["newlog"] = new NewLogCommand()
+        ["Logged"] = new LoggedCommand(),
+        ["Denied"] = new DeniedCommand(),
+        ["NewLog"] = new NewLogCommand(),
+        ["NewGame"] = new NewGameCommand(),
+        ["RemoveGame"] = new RemoveGameCommand()
     };
 
     public class UnexistingCommandException(string message) : Exception(message);
@@ -22,23 +25,29 @@ public static class CommandDecoder
     {
         if (command != null)
         {
-            var splitCommand = command.Split(" ");
+            var splitCommand = command.Trim().Split(" ");
+            var commandName = splitCommand[0];
             var args = splitCommand.ToList();
             args.RemoveAt(0);
             try
             {
-                Commands[splitCommand[0]].Execute(args.ToArray());
+                Commands[commandName].Execute(args.ToArray());
             }
             catch (KeyNotFoundException)
             {
-                throw new UnexistingCommandException($"'{splitCommand[0]}' commandoa ez da existitzen");
+                var msg = $"'{commandName}' comandoa ez da existitzen";
+                throw new UnexistingCommandException(msg);
+            }
+            catch (WrongCommandFormatException e)
+            {
+                var msg = $"Formatu okerra '{commandName}' comandoarentzat: {e.Message}";
+                throw new UnexistingCommandException(msg);
             }
         }
     }
 
     public static void ClearEvents()
     {
-        LogCountEvent = null;
         NewLogEvent = null;
     }
 
@@ -54,11 +63,13 @@ public static class CommandDecoder
             try { Client.Mota = (ConnectionType)Enum.Parse(typeof(ConnectionType), args[0]); }
             catch
             {
-                throw new WrongCommandFormatException("Wrong 'logged' command format");
+                throw new WrongCommandFormatException("Logged <ConnectionType>");
             }
         }
     }
 
+
+    // Komando ezeztatutako kom
     private class DeniedCommand : ICommand
     {
         public void Execute(string[] args)
@@ -67,23 +78,53 @@ public static class CommandDecoder
         }
     }
 
-    public delegate void ILogCount(int count);
-    public static ILogCount? LogCountEvent;
-    private class LogCountCommand : ICommand
-    {
-        public void Execute(string[] args)
-        {
-            LogCountEvent?.Invoke(int.Parse(args[0]));
-        }
-    }
 
-    public delegate void INewLog(string log);
-    public static INewLog? NewLogEvent;
+    // Log berria iritsi den komandoa eta gertaera
+    public static event EventHandler<NewLogEventArgs>? NewLogEvent;
+    public class NewLogEventArgs : EventArgs
+    {
+        public required string Log { get; set; }
+    }
     private class NewLogCommand : ICommand
     {
         public void Execute(string[] args)
         {
-            NewLogEvent?.Invoke(string.Join(" ", args));
+            NewLogEvent?.Invoke(null, new()
+            {
+                Log = string.Join(" ", args)
+            });
+        }
+    }
+
+
+    // Partida gehitzeko komandoa eta gertaera
+    public static event EventHandler<GameEventArgs>? NewGameEvent;
+    public class GameEventArgs : EventArgs
+    {
+        public required Game Game { get; set; }
+    }
+    private class NewGameCommand : ICommand
+    {
+        public void Execute(string[] args)
+        {
+            NewGameEvent?.Invoke(null, new()
+            {
+                Game = new(args[0], args[1])
+            });
+        }
+    }
+
+
+    // Partida ezabatzeko komandoa eta gertaera
+    public static event EventHandler<GameEventArgs>? RemoveGameEvent;
+    private class RemoveGameCommand : ICommand
+    {
+        public void Execute(string[] args)
+        {
+            RemoveGameEvent?.Invoke(null, new()
+            {
+                Game = new(args[0], args[1])
+            });
         }
     }
 }

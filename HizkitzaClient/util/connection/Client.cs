@@ -49,7 +49,7 @@ namespace HizkitzaClient.util.connection
                 Reader = new StreamReader(Stream);
                 Writer = new StreamWriter(Stream) { AutoFlush = true };
 
-                MezuaBidali($"login {izena} {pasahitza}");
+                MezuaBidali($"Login {izena} {pasahitza}");
                 try
                 {
                     CommandDecoder.ExecuteCommand(Reader.ReadLine());

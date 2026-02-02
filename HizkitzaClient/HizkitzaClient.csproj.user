@@ -2,7 +2,10 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="ui\messagebox\StyledMessageBox.xaml.cs">
+    <Compile Update="ui\messagebox\HizkitzaInfoMessageBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ui\messagebox\HizkitzaBooleanMessageBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="ui\window\LoginWindow.xaml.cs">

@@ -43,15 +43,15 @@ namespace HizkitzaServer.util.connection
                     Alive = true;
                     Server.Clients[Erabiltzailea.Mota].Add(this);
                     Server.LogBerria($"Bezero berria '{this}'", LogType.INFO);
-                    Send($"logged {Erabiltzailea.Mota}");
+                    Send($"Logged {Erabiltzailea.Mota}");
 
                     CreateConnectionChecker();
                     CreateReceiverThread();
-                } else Send("denied Erabiltzailea null");
+                } else Send("Denied Erabiltzailea null");
             }
             catch (CommandDecoder.DeniedException e)
             {
-                Send("denied " + e.Message);
+                Send("Denied " + e.Message);
                 CloseClient(null);
                 Server.LogBerria($"{e.Message}", LogType.ERROR);
             }
@@ -106,13 +106,8 @@ namespace HizkitzaServer.util.connection
             Stream?.Close();
             Reader?.Close();
             Writer?.Close();
-            lock (Server.BezeroakLock)
-            {
-                if (Erabiltzailea != null)
-                    Server.Clients[Erabiltzailea.Mota].Remove(this);
-            }
-            Server.ClientDisconnectedEvent?.Invoke(this);
-            if (log != null) Server.LogBerria(log, LogType.WARN);
+            Server.ClientDisconnect(this);
+            if (log != null) Server.LogBerria(log, LogType.INFO);
         }
 
         public override string? ToString() => Erabiltzailea?.Izena ?? "null";

@@ -6,19 +6,40 @@ namespace HizkitzaServer;
 
 public class Game
 {
-    List<ServersideClient> players = [];
-    private Timer timer;
+    public readonly string Izena;
+    public readonly string Mapa;
+    public readonly List<ServersideClient> Players = [];
+    //private Timer timer;
     
-    public Game()
+    public Game(string izena, string mapa)
     {
-        SetUpTimer();
+        Izena = izena;
+        Mapa = mapa;
+        /*SetUpTimer();
         new Thread(() =>
         {
             
-        }).Start();
+        }).Start();*/
     }
 
-    private void SetUpTimer()
+    override public string ToString()
+    {
+        return Izena;
+    }
+
+    override public bool Equals(object? obj)
+    {
+        if (obj is Game g)
+            return g.Izena == Izena;
+        return false;
+    }
+
+    override public int GetHashCode()
+    {
+        return Izena.GetHashCode();
+    }
+
+    /*private void SetUpTimer()
     {
         timer = new Timer(50);
         timer.AutoReset = true;
@@ -29,5 +50,5 @@ public class Game
     private void TimerAction(object sender, ElapsedEventArgs e)
     {
 
-    }
+    }*/
 }

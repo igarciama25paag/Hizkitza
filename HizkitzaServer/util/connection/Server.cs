@@ -1,6 +1,7 @@
-﻿using System.Net;
+﻿using HizkitzaServer.game;
+using HizkitzaServer.util.db.data;
+using System.Net;
 using System.Net.Sockets;
-using HizkitzaServer.game;
 
 namespace HizkitzaServer.util.connection
 {
@@ -12,18 +13,32 @@ namespace HizkitzaServer.util.connection
 
         public static readonly object BezeroakLock = new();
 
-        public delegate void IMessageSent(string mezua, ServersideClient bezero);
-        public static IMessageSent? MessageSentEvent;
-        public delegate void IClientConnected(ServersideClient bezero);
-        public static IClientConnected? ClientConnectedEvent;
-        public delegate void IClientDisconnected(ServersideClient bezero);
-        public static IClientDisconnected? ClientDisconnectedEvent;
-
+        public static event EventHandler<ClientConnectedEventArgs>? ClientConnectedEvent;
+        public class ClientConnectedEventArgs : EventArgs
+        {
+            public required ServersideClient Client { get; set; }
+        }
+        public static event EventHandler<ClientDisconnectedEventArgs>? ClientDisconnectedEvent;
+        public class ClientDisconnectedEventArgs : EventArgs
+        {
+            public required ServersideClient Client { get; set; }
+        }
         public static event EventHandler<LogSentEventArgs>? LogSentEvent;
         public class LogSentEventArgs : EventArgs
         {
             public required string Log { get; set; }
             public required LogType Mota { get; set; }
+        }
+        public static event EventHandler<MessageSentEventArgs>? MessageSentEvent;
+        public class MessageSentEventArgs : EventArgs
+        {
+            public required ServersideClient Client { get; set; }
+            public required string Mezua { get; set; }
+        }
+        public static event EventHandler<GamesUpdateEventArgs>? GamesUpdateEvent;
+        public class GamesUpdateEventArgs : EventArgs
+        {
+            public required Game Game { get; set; }
         }
 
         public enum LogType
@@ -41,7 +56,7 @@ namespace HizkitzaServer.util.connection
             [ConnectionType.user] = []
         };
 
-        public static readonly List<Game> Jokoak = [];
+        public static readonly List<Game> Partidak = [];
 
         public static void Piztu()
         {
@@ -86,7 +101,10 @@ namespace HizkitzaServer.util.connection
                     lock (BezeroakLock)
                     {
                         Clients[bezeroBerria.Erabiltzailea.Mota].Add(bezeroBerria);
-                        ClientConnectedEvent?.Invoke(bezeroBerria);
+                        ClientConnectedEvent?.Invoke(null, new()
+                        {
+                            Client = bezeroBerria
+                        });
                     }
             }
             catch (SocketException) { }
@@ -107,19 +125,48 @@ namespace HizkitzaServer.util.connection
         {
             try
             {
-                MessageSentEvent?.Invoke(mezua, bezero);
+                MessageSentEvent?.Invoke(null, new()
+                {
+                    Client = bezero,
+                    Mezua = mezua
+                });
                 await CommandDecoder.ExecuteCommand(mezua, bezero);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 LogBerria(e.Message, LogType.ERROR);
             }
         }
 
-        public static void RootEvents(IClientConnected? clientConnected, IClientDisconnected? clientDisconnected, IMessageSent? messageSent)
+        public static void ClientDisconnect(ServersideClient Client)
         {
-            ClientConnectedEvent = clientConnected;
-            ClientDisconnectedEvent = clientDisconnected;
-            MessageSentEvent = messageSent;
+            lock (BezeroakLock)
+            {
+                if (Client.Erabiltzailea != null)
+                    Server.Clients[Client.Erabiltzailea.Mota].Remove(Client);
+            }
+            ClientDisconnectedEvent?.Invoke(null, new()
+            {
+                Client = Client
+            });
+        }
+
+        public static void NewGame(Game game)
+        {
+            Partidak.Add(game);
+            GamesUpdateEvent?.Invoke(null, new()
+            {
+                Game = game
+            });
+        }
+
+        public static void RemoveGame(Game game)
+        {
+            Partidak.Remove(game);
+            GamesUpdateEvent?.Invoke(null, new()
+            {
+                Game = game
+            });
         }
     }
 }

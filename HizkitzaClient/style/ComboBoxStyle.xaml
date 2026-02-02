@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="ComboBox">
         <Setter Property="Background" Value="#191919"/>
-        <Setter Property="Foreground" Value="Yellow"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Margin" Value="10"/>
@@ -19,7 +19,7 @@
                                 <ContentPresenter x:Name="ContentSite"
                                               Content="{TemplateBinding SelectionBoxItem}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                              Margin="0,5"
+                                              Margin="5,5,0,5"
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Left"/>
                                 <ToggleButton x:Name="ToggleButton"
@@ -75,16 +75,16 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBoxItem">
                     <Border Background="{TemplateBinding Background}"
-                        BorderBrush="Transparent"
-                        BorderThickness="1">
-                        <ContentPresenter/>
+                             x:Name="border"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter Margin="5,5,0,5"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="Yellow"/>
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="Yellow"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="Yellow"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="2,0,0,0"/>
+                            <Setter TargetName="border" Property="Padding" Value="5,0,0,0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

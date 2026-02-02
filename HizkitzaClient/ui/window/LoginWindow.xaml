@@ -18,7 +18,7 @@
         <TextBox x:Name="serverip" Width="200" KeyDown="SaioaHasi_KeyDown" Style="{StaticResource TextBox.Special}" Text="127.0.0.1"/>
 
         <TextBlock Text="Erabiltzailea" Width="200" Margin="0,10,0,0" Style="{StaticResource Text.Basic}"/>
-        <TextBox x:Name="user" Width="200" KeyDown="SaioaHasi_KeyDown" Style="{StaticResource TextBox.Special}" Text="admin"/>
+        <TextBox x:Name="user" Width="200" KeyDown="SaioaHasi_KeyDown" Style="{StaticResource TextBox.Special}" Text="user"/>
 
         <TextBlock Text="Pasahitza" Width="200" Margin="0,10,0,0" Style="{StaticResource Text.Basic}"/>
         <PasswordBox x:Name="pass" Width="200" KeyDown="SaioaHasi_KeyDown"/>

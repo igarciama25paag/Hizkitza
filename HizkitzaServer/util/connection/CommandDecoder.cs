@@ -2,16 +2,20 @@ using HizkitzaClient.util.db;
 using HizkitzaServer.util.db.data;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static HizkitzaServer.util.connection.Server;
 
 namespace HizkitzaServer.util.connection;
 
 public static class CommandDecoder
 {
-    private static Dictionary<string, ICommand> Commands = new()
+    private readonly static Dictionary<string, ICommand> Commands = new()
     {
-        ["login"] = new LoginCommand(),
-        ["getlogcount"] = new GetLogCountCommand(),
-        ["getlogs"] = new GetLogsCommand()
+        ["Login"] = new LoginCommand(),
+        ["ActivateLogSender"] = new ActivateLogSenderCommand(),
+        ["DeactivateLogSender"] = new DeactivateLogSenderCommand(),
+        ["NewGame"] = new NewGameCommand(),
+        ["ActivateGameUpdater"] = new ActivateGameUpdaterCommand(),
+        ["DeactivateGameUpdater"] = new DeactivateGameUpdaterCommand()
     };
 
     public class UnexistingCommandException(string message) : Exception(message);
@@ -22,20 +26,25 @@ public static class CommandDecoder
     {
         if (command != null)
         {
-            var splitCommand = command.Split(" ");
+            var splitCommand = command.Trim().Split(" ");
+            var commandName = splitCommand[0];
             var args = splitCommand.ToList();
             args.RemoveAt(0);
             try
             {
-                await Commands[splitCommand[0]].Execute(args.ToArray(), client);
+                await Commands[commandName].Execute(args.ToArray(), client);
             }
             catch (KeyNotFoundException)
             {
-                client.Send($"'{splitCommand[0]}' comandoa ez da existitzen");
+                var msg = $"'{commandName}' comandoa ez da existitzen";
+                client.Send(msg);
+                throw new UnexistingCommandException(msg);
             }
             catch (WrongCommandFormatException e)
             {
-                client.Send($"Formatu okerra '{splitCommand[0]}' comandoarentzat: {e.Message}");
+                var msg = $"Formatu okerra '{commandName}' comandoarentzat: {e.Message}";
+                client.Send(msg);
+                throw new UnexistingCommandException(msg);
             }
         }
     }
@@ -45,52 +54,171 @@ public static class CommandDecoder
         Task Execute(string[] args, ServersideClient client);
     }
 
+
+    // Saioa hasteko komandoa
     private class LoginCommand : ICommand
     {
         public async Task Execute(string[] args, ServersideClient client)
         {
-            foreach (var list in Server.Clients.Values)
-                if (list.Any(c => c.ToString() == args[0]))
-                    throw new DeniedException($"'{args[0]}' saioa okupatuta");
-
             try
             {
-                //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
-                if (args[0] == "admin" && args[1] == "admin")
-                    client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin);
-                else if (args[0] == "user" && args[1] == "user")
-                    client.Erabiltzailea = new Erabiltzailea(0, "user", "user", ConnectionType.user);
-                else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                if (args.Length > 2) throw new IndexOutOfRangeException();
+
+                foreach (var list in Server.Clients.Values)
+                    if (list.Any(c => c.ToString() == args[0]))
+                        throw new DeniedException($"'{args[0]}' saioa okupatuta");
+
+                try
+                {
+                    //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
+                    if (args[0] == "admin" && args[1] == "admin")
+                        client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin);
+                    else if (args[0] == "user" && args[1] == "user")
+                        client.Erabiltzailea = new Erabiltzailea(0, "user", "user", ConnectionType.user);
+                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                }
+                catch (InvalidOperationException)
+                {
+                    throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                }
             }
-            catch (InvalidOperationException)
+            catch (IndexOutOfRangeException)
             {
-                throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                throw new WrongCommandFormatException("Login <erabiltzailea> <pasahitza>");
             }
         }
     }
 
-    private class GetLogCountCommand : ICommand
+
+    // Log bidalketa gaitzeko komandoa
+    private class ActivateLogSenderCommand : ICommand
     {
+        private readonly List<ServersideClient> Clients = [];
+        private bool Subscribed = false;
+
         public async Task Execute(string[] args, ServersideClient client)
         {
-            client.Send($"logcount {Server.Logs.Count}");
+            Clients.Add(client);
+            if (!Subscribed)
+            {
+                Server.LogSentEvent += SendLog;
+                Server.ClientDisconnectedEvent += ClientDisconnected;
+                CommandDecoder.DeactivateLogSenderEvent += DeactivateLogs;
+                Subscribed = true;
+            }
+        }
+
+        private void SendLog(object? sender, Server.LogSentEventArgs e)
+        {
+            foreach (var client in Clients)
+                client.Send($"NewLog [{DateTime.Now:t}] [{e.Mota}] {e.Log}");
+        }
+
+        private void DeactivateLogs(object? sender, CommandDecoder.DeactivateLogSenderEventArgs e)
+        {
+            Clients.Remove(e.Client);
+        }
+
+        private void ClientDisconnected(object? sender, Server.ClientDisconnectedEventArgs e)
+        {
+            Clients.Remove(e.Client);
         }
     }
 
-    private class GetLogsCommand : ICommand
+
+    // Log bidalketa gelditzeko komandoa eta gertaera
+    public static event EventHandler<DeactivateLogSenderEventArgs>? DeactivateLogSenderEvent;
+    public class DeactivateLogSenderEventArgs : EventArgs
+    {
+        public required ServersideClient Client { get; set; }
+    }
+    private class DeactivateLogSenderCommand : ICommand
+    {
+        public async Task Execute(string[] args, ServersideClient client)
+        {
+            DeactivateLogSenderEvent?.Invoke(null, new()
+            {
+                Client = client
+            });
+        }
+    }
+
+
+    // Partida berria sortzeko komandoa
+    private class NewGameCommand : ICommand
     {
         public async Task Execute(string[] args, ServersideClient client)
         {
             try
             {
-                var n = int.Parse(args[0]);
-                for (var i = n; i < Server.Logs.Count; i++)
-                    client.Send($"newlog {Server.Logs[i]}");
+                if (args.Length > 2) throw new IndexOutOfRangeException();
+                var newGame = new Game(args[0], args[1]);
+                if (Server.Partidak.Contains(newGame)) throw new DeniedException($"'{args[0]}' izena okupatuta");
+                Server.NewGame(newGame);
             }
-            catch (FormatException)
+            catch (IndexOutOfRangeException)
             {
-                throw new WrongCommandFormatException(args[0]);
+                throw new WrongCommandFormatException("NewGame <izena> <mapa>");
             }
+        }
+    }
+
+
+    // Partida bidalketa gaitzeko komandoa
+    private class ActivateGameUpdaterCommand : ICommand
+    {
+        private readonly List<ServersideClient> Clients = [];
+        private bool Subscribed = false;
+
+        public async Task Execute(string[] args, ServersideClient client)
+        {
+            Clients.Add(client);
+            if (!Subscribed)
+            {
+                Server.GamesUpdateEvent += GamesUpdate;
+                Server.ClientDisconnectedEvent += ClientDisconnected;
+                CommandDecoder.DeactivateGameUpdaterEvent += DeactivateGames;
+                Subscribed = true;
+            }
+        }
+
+        private void GamesUpdate(object? sender, Server.GamesUpdateEventArgs e)
+        {
+            var game = e.Game;
+            if (!Server.Partidak.Contains(game))
+                foreach (var client in Clients)
+                    client.Send($"RemoveGame {game}");
+            else
+                foreach (var client in Clients)
+                    client.Send($"NewGame {game}");
+        }
+
+        private void DeactivateGames(object? sender, CommandDecoder.DeactivateGameUpdaterEventArgs e)
+        {
+            Clients.Remove(e.Client);
+        }
+
+        private void ClientDisconnected(object? sender, Server.ClientDisconnectedEventArgs e)
+        {
+            Clients.Remove(e.Client);
+        }
+    }
+
+
+    // Partida bidalketa gelditzeko komandoa eta gertaera
+    public static event EventHandler<DeactivateGameUpdaterEventArgs>? DeactivateGameUpdaterEvent;
+    public class DeactivateGameUpdaterEventArgs : EventArgs
+    {
+        public required ServersideClient Client { get; set; }
+    }
+    private class DeactivateGameUpdaterCommand : ICommand
+    {
+        public async Task Execute(string[] args, ServersideClient client)
+        {
+            DeactivateLogSenderEvent?.Invoke(null, new()
+            {
+                Client = client
+            });
         }
     }
 }

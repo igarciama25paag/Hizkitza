@@ -1,0 +1,49 @@
+﻿<Window x:Class="HizkitzaClient.ui.messagebox.HizkitzaInfoMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Height="150" Width="400"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        BorderThickness="2"
+        BorderBrush="White"
+        Background="Black"
+        ResizeMode="NoResize">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Mezua -->
+        <StackPanel Margin="10" Orientation="Horizontal">
+            
+            <TextBlock Text="!"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="50"
+                       Width="50"
+                       Style="{StaticResource Text.Basic.Negative}"/>
+            
+            <TextBlock Grid.Row="0"
+                       VerticalAlignment="Center"
+                       Text="{Binding Message}"
+                       Style="{StaticResource Text.Basic}"
+                       TextWrapping="WrapWithOverflow"/>
+        </StackPanel>
+
+        <!-- Botoia -->
+        <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center"
+                    Margin="10">
+            <Button Content="Ok"
+                    Width="80"
+                    Style="{StaticResource Button.Negative}"
+                    Command="{Binding OkCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

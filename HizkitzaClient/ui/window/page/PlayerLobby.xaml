@@ -27,11 +27,11 @@
                 <StackPanel>
                     <DockPanel>
                         <TextBlock Text="Itxura:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox x:Name="itxura_combobox"/>
+                        <ComboBox x:Name="itxura"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock Text="Kolorea:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox/>
+                        <ComboBox x:Name="kolorea"/>
                     </DockPanel>
                 </StackPanel>
             </Border>
@@ -39,16 +39,16 @@
 
         <DockPanel Margin="10" Grid.Column="2">
             <TextBlock Text="* Partida edizioa:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
-            <Button Content="Partida berria" DockPanel.Dock="Bottom"/>
+            <Button Click="PartidaBerria_Click" Content="Partida berria" DockPanel.Dock="Bottom"/>
             <Border Margin="0,0,0,10">
                 <StackPanel>
                     <DockPanel>
-                        <TextBlock Text="Mapa:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox/>
+                        <TextBlock Text="Izena:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
+                        <TextBox x:Name="izena" Margin="10"/>
                     </DockPanel>
                     <DockPanel>
-                        <TextBlock Text="Jokalari kopurua:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox/>
+                        <TextBlock Text="Mapa:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
+                        <ComboBox x:Name="mapa"/>
                     </DockPanel>
                 </StackPanel>
             </Border>

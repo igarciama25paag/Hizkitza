@@ -62,8 +62,6 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaCli
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\ComboBoxStyle.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\AdminMain.g.cs
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\AdminMain.baml
-D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.g.cs
-D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\style\FontStyle.baml
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.exe
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\bin\Debug\net8.0-windows\HizkitzaClient.deps.json
@@ -102,3 +100,7 @@ C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\refi
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.pdb
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient.genruntimeconfig.cache
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ref\HizkitzaClient.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaInfoMessageBox.baml
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaBooleanMessageBox.g.cs
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaInfoMessageBox.g.cs
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaBooleanMessageBox.baml

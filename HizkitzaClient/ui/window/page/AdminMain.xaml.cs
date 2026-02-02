@@ -27,13 +27,20 @@ namespace HizkitzaClient.ui.window.page
             FatherWindow = father;
             CommandDecoder.ClearEvents();
             InitializeComponent();
+            Unloaded += Page_Unloaded;
             RootClient();
             LogReciever();
         }
 
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (Client.Alive)
+                Client.MezuaBidali("DeactivateLogSender");
+            CommandDecoder.NewLogEvent -= NewLog;
+        }
+
         private void RootClient()
         {
-            Application.Current.MainWindow.Close();
             Client.RootEvents(
                 () => { },
                 () => {
@@ -46,44 +53,24 @@ namespace HizkitzaClient.ui.window.page
 
         private void LogReciever()
         {
-            var logcountLock = new object();
-            var lastLogN = 0;
-            CommandDecoder.LogCountEvent = (n) =>
-            {
-                Dispatcher.Invoke(() => lastLogN = n);
-            };
-            Client.MezuaBidali("getlogcount");
+            CommandDecoder.NewLogEvent += NewLog;
+            Client.MezuaBidali("ActivateLogSender");
+        }
 
-            CommandDecoder.NewLogEvent = (log) =>
+        private void NewLog(object? sender, CommandDecoder.NewLogEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
             {
-                Dispatcher.Invoke(() =>
+                lock (logLock)
                 {
-                    lock (logLock)
+                    var item = new ListBoxItem
                     {
-                        var item = new ListBoxItem
-                        {
-                            Content = log
-                        };
-                        LogList.Items.Add(item);
-                        LogList.ScrollIntoView(item);
-                    }
-                });
-            };
-            
-            new Thread(() =>
-            {
-                Thread.Sleep(5000);
-                var alive = true;
-                while (alive)
-                {
-                    lock (logLock)
-                    {
-                        Client.MezuaBidali($"getlogs {lastLogN + LogList.Items.Count}");
-                    }
-                    Thread.Sleep(5000);
-                    Dispatcher.Invoke(() => alive = IsLoaded);
+                        Content = e.Log
+                    };
+                    LogList.Items.Add(item);
+                    LogList.ScrollIntoView(item);
                 }
-            }).Start();
+            });
         }
 
         private void Bidali_Click(object sender, RoutedEventArgs e) => SendCommand();
@@ -96,7 +83,9 @@ namespace HizkitzaClient.ui.window.page
 
         private void SendCommand()
         {
-            Client.MezuaBidali(command.Text);
+            var msg = command.Text;
+            if (msg != null && msg == string.Empty)
+                Client.MezuaBidali(command.Text);
             command.Text = null;
         }
     }
