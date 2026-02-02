@@ -29,5 +29,10 @@ namespace HizkitzaClient.ui.messagebox
             public string Message { get; set; } = message;
             public ICommand OkCommand { get; } = new RelayCommand(window.Close);
         }
+
+        public static void ShowDialog(string msg)
+        {
+            new HizkitzaInfoMessageBox(msg).ShowDialog();
+        }
     }
 }

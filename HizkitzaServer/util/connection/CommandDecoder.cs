@@ -37,14 +37,14 @@ public static class CommandDecoder
             catch (KeyNotFoundException)
             {
                 var msg = $"'{commandName}' comandoa ez da existitzen";
-                client.Send(msg);
+                client.Send($"Denied {msg}");
                 throw new UnexistingCommandException(msg);
             }
             catch (WrongCommandFormatException e)
             {
                 var msg = $"Formatu okerra '{commandName}' comandoarentzat: {e.Message}";
-                client.Send(msg);
-                throw new UnexistingCommandException(msg);
+                client.Send($"Denied {msg}");
+                throw new WrongCommandFormatException(msg);
             }
         }
     }
@@ -62,8 +62,6 @@ public static class CommandDecoder
         {
             try
             {
-                if (args.Length > 2) throw new IndexOutOfRangeException();
-
                 foreach (var list in Server.Clients.Values)
                     if (list.Any(c => c.ToString() == args[0]))
                         throw new DeniedException($"'{args[0]}' saioa okupatuta");
@@ -84,7 +82,10 @@ public static class CommandDecoder
             }
             catch (IndexOutOfRangeException)
             {
-                throw new WrongCommandFormatException("Login <erabiltzailea> <pasahitza>");
+                if (args.Length > 2)
+                    throw new WrongCommandFormatException("Login <erabiltzailea> <pasahitza>");
+                else
+                    throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
             }
         }
     }
@@ -93,35 +94,35 @@ public static class CommandDecoder
     // Log bidalketa gaitzeko komandoa
     private class ActivateLogSenderCommand : ICommand
     {
-        private readonly List<ServersideClient> Clients = [];
-        private bool Subscribed = false;
+        private readonly List<ServersideClient> clients = [];
+        private bool subscribed = false;
 
         public async Task Execute(string[] args, ServersideClient client)
         {
-            Clients.Add(client);
-            if (!Subscribed)
+            clients.Add(client);
+            if (!subscribed)
             {
                 Server.LogSentEvent += SendLog;
                 Server.ClientDisconnectedEvent += ClientDisconnected;
                 CommandDecoder.DeactivateLogSenderEvent += DeactivateLogs;
-                Subscribed = true;
+                subscribed = true;
             }
         }
 
         private void SendLog(object? sender, Server.LogSentEventArgs e)
         {
-            foreach (var client in Clients)
+            foreach (var client in clients)
                 client.Send($"NewLog [{DateTime.Now:t}] [{e.Mota}] {e.Log}");
         }
 
         private void DeactivateLogs(object? sender, CommandDecoder.DeactivateLogSenderEventArgs e)
         {
-            Clients.Remove(e.Client);
+            clients.Remove(e.Client);
         }
 
         private void ClientDisconnected(object? sender, Server.ClientDisconnectedEventArgs e)
         {
-            Clients.Remove(e.Client);
+            clients.Remove(e.Client);
         }
     }
 
@@ -167,40 +168,42 @@ public static class CommandDecoder
     // Partida bidalketa gaitzeko komandoa
     private class ActivateGameUpdaterCommand : ICommand
     {
-        private readonly List<ServersideClient> Clients = [];
-        private bool Subscribed = false;
+        private readonly List<ServersideClient> clients = [];
+        private bool subscribed = false;
 
         public async Task Execute(string[] args, ServersideClient client)
         {
-            Clients.Add(client);
-            if (!Subscribed)
+            clients.Add(client);
+            if (!subscribed)
             {
                 Server.GamesUpdateEvent += GamesUpdate;
                 Server.ClientDisconnectedEvent += ClientDisconnected;
                 CommandDecoder.DeactivateGameUpdaterEvent += DeactivateGames;
-                Subscribed = true;
+                subscribed = true;
             }
+            string games = "";
+            foreach (var item in Server.Partidak)
+                games += item.ToString() + " ";
+            client.Send($"Games {games}");
         }
 
-        private void GamesUpdate(object? sender, Server.GamesUpdateEventArgs e)
+        private void GamesUpdate(object? sender, EventArgs e)
         {
-            var game = e.Game;
-            if (!Server.Partidak.Contains(game))
-                foreach (var client in Clients)
-                    client.Send($"RemoveGame {game}");
-            else
-                foreach (var client in Clients)
-                    client.Send($"NewGame {game}");
+            string games = "";
+            foreach (var item in Server.Partidak)
+                games += item.ToString() + " ";
+            foreach (var client in clients)
+                client.Send($"Games {games.Trim()}");
         }
 
         private void DeactivateGames(object? sender, CommandDecoder.DeactivateGameUpdaterEventArgs e)
         {
-            Clients.Remove(e.Client);
+            clients.Remove(e.Client);
         }
 
         private void ClientDisconnected(object? sender, Server.ClientDisconnectedEventArgs e)
         {
-            Clients.Remove(e.Client);
+            clients.Remove(e.Client);
         }
     }
 

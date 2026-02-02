@@ -1,3 +1,4 @@
+using HizkitzaClient.ui.messagebox;
 using HizkitzaClient.util.connection;
 using HizkitzaClient.util.game;
 using System.Windows.Input;
@@ -13,8 +14,7 @@ public static class CommandDecoder
         ["Logged"] = new LoggedCommand(),
         ["Denied"] = new DeniedCommand(),
         ["NewLog"] = new NewLogCommand(),
-        ["NewGame"] = new NewGameCommand(),
-        ["RemoveGame"] = new RemoveGameCommand()
+        ["Games"] = new GamesCommand()
     };
 
     public class UnexistingCommandException(string message) : Exception(message);
@@ -26,9 +26,11 @@ public static class CommandDecoder
         if (command != null)
         {
             var splitCommand = command.Trim().Split(" ");
+            HizkitzaInfoMessageBox.ShowDialog($"Command: {command}");
             var commandName = splitCommand[0];
             var args = splitCommand.ToList();
             args.RemoveAt(0);
+
             try
             {
                 Commands[commandName].Execute(args.ToArray());
@@ -41,7 +43,7 @@ public static class CommandDecoder
             catch (WrongCommandFormatException e)
             {
                 var msg = $"Formatu okerra '{commandName}' comandoarentzat: {e.Message}";
-                throw new UnexistingCommandException(msg);
+                throw new WrongCommandFormatException(msg);
             }
         }
     }
@@ -98,32 +100,18 @@ public static class CommandDecoder
 
 
     // Partida gehitzeko komandoa eta gertaera
-    public static event EventHandler<GameEventArgs>? NewGameEvent;
+    public static event EventHandler<GameEventArgs>? GamesEvent;
     public class GameEventArgs : EventArgs
     {
-        public required Game Game { get; set; }
+        public required string[] Games { get; set; }
     }
-    private class NewGameCommand : ICommand
+    private class GamesCommand : ICommand
     {
         public void Execute(string[] args)
         {
-            NewGameEvent?.Invoke(null, new()
+            GamesEvent?.Invoke(null, new()
             {
-                Game = new(args[0], args[1])
-            });
-        }
-    }
-
-
-    // Partida ezabatzeko komandoa eta gertaera
-    public static event EventHandler<GameEventArgs>? RemoveGameEvent;
-    private class RemoveGameCommand : ICommand
-    {
-        public void Execute(string[] args)
-        {
-            RemoveGameEvent?.Invoke(null, new()
-            {
-                Game = new(args[0], args[1])
+                Games = args
             });
         }
     }

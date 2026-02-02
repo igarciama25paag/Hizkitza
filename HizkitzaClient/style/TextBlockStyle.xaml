@@ -12,7 +12,12 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.Sixtyfour.Evenly}"/>
         <Setter Property="FontSize" Value="28"/>
     </Style>
-    
+
+    <Style TargetType="TextBlock" x:Key="Text.Huge" BasedOn="{StaticResource Text.Basic}">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Workbench.Close}"/>
+        <Setter Property="FontSize" Value="40"/>
+    </Style>
+
     <Style TargetType="TextBlock" x:Key="Text.Small" BasedOn="{StaticResource Text.Basic}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Workbench.Slight}"/>
         <Setter Property="FontSize" Value="14"/>
@@ -20,6 +25,14 @@
     
     <Style TargetType="TextBlock" x:Key="Text.Basic.Negative" BasedOn="{StaticResource Text.Basic}">
         <Setter Property="Foreground" Value="Pink"/>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="Text.Huge.Negative" BasedOn="{StaticResource Text.Huge}">
+        <Setter Property="Foreground" Value="Pink"/>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="Text.Huge.Positive" BasedOn="{StaticResource Text.Huge}">
+        <Setter Property="Foreground" Value="PaleGreen"/>
     </Style>
 
     <Style TargetType="TextBlock" x:Key="Text.Small.Negative" BasedOn="{StaticResource Text.Small}">

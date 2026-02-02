@@ -36,8 +36,8 @@ namespace HizkitzaClient.ui.window
 
         private void Itxi_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new HizkitzaBooleanMessageBox("Aplikazioa itxi nahi al duzu?", "Bai", "Ez");
-            if (dialog.ShowDialog() == true)
+            var dialog = HizkitzaBooleanMessageBox.ShowDialog("Aplikazioa itxi nahi al duzu?");
+            if (dialog.DialogResult == true)
             {
                 Client.RootEvents(null,null,null,null);
                 Close();
@@ -46,8 +46,8 @@ namespace HizkitzaClient.ui.window
 
         private void SaioaItxi_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new HizkitzaBooleanMessageBox("Saioa itxi nahi al duzu?", "Bai", "Ez");
-            if (dialog.ShowDialog() == true)
+            var dialog = HizkitzaBooleanMessageBox.ShowDialog("Saioa itxi nahi al duzu?");
+            if (dialog.DialogResult == true)
             {
                 new LoginWindow().Show();
                 Close();
@@ -56,8 +56,8 @@ namespace HizkitzaClient.ui.window
 
         public void Bota()
         {
-            var dialog = new HizkitzaBooleanMessageBox("Zerbitzariarekin konexioa galdu da. Aplikazioa itxi nahi al duzu?", "Bai", "Ez");
-            if (dialog.ShowDialog() == false) new LoginWindow().Show();
+            var dialog = HizkitzaBooleanMessageBox.ShowDialog("Zerbitzariarekin konexioa galdu da. Aplikazioa itxi nahi al duzu?");
+            if (dialog.DialogResult == false) new LoginWindow().Show();
             if (Client.Alive) Client.BezeroaItxi(null);
             Close();
         }

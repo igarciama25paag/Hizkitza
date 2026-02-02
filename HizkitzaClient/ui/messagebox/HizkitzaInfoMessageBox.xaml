@@ -19,21 +19,21 @@
         </Grid.RowDefinitions>
 
         <!-- Mezua -->
-        <StackPanel Margin="10" Orientation="Horizontal">
+        <DockPanel Margin="20,10,20,0">
             
-            <TextBlock Text="!"
+            <TextBlock DockPanel.Dock="Left"
+                       Text="(!)"
                        TextAlignment="Center"
                        VerticalAlignment="Center"
-                       FontSize="50"
-                       Width="50"
-                       Style="{StaticResource Text.Basic.Negative}"/>
+                       Width="80"
+                       Style="{StaticResource Text.Huge.Negative}"/>
             
             <TextBlock Grid.Row="0"
                        VerticalAlignment="Center"
                        Text="{Binding Message}"
                        Style="{StaticResource Text.Basic}"
-                       TextWrapping="WrapWithOverflow"/>
-        </StackPanel>
+                       TextWrapping="Wrap"/>
+        </DockPanel>
 
         <!-- Botoia -->
         <StackPanel Grid.Row="1" 

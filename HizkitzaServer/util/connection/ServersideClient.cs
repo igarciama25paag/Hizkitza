@@ -55,6 +55,12 @@ namespace HizkitzaServer.util.connection
                 CloseClient(null);
                 Server.LogBerria($"{e.Message}", LogType.ERROR);
             }
+            catch (CommandDecoder.WrongCommandFormatException e)
+            {
+                Send("Denied " + e.Message);
+                CloseClient(null);
+                Server.LogBerria($"{e.Message}", LogType.ERROR);
+            }
         }
 
         private void CreateConnectionChecker()
@@ -94,6 +100,7 @@ namespace HizkitzaServer.util.connection
                 lock (sendLock)
                 {
                     Writer?.WriteLine(mezua);
+                    Console.WriteLine($"Sent to ({Erabiltzailea?.Izena}): {mezua}");
                 }
             }
             catch { CloseClient($"'{this}' bezeroa deskonektatu da"); }

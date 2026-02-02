@@ -35,11 +35,7 @@ namespace HizkitzaServer.util.connection
             public required ServersideClient Client { get; set; }
             public required string Mezua { get; set; }
         }
-        public static event EventHandler<GamesUpdateEventArgs>? GamesUpdateEvent;
-        public class GamesUpdateEventArgs : EventArgs
-        {
-            public required Game Game { get; set; }
-        }
+        public static event EventHandler<EventArgs>? GamesUpdateEvent;
 
         public enum LogType
         {
@@ -154,19 +150,13 @@ namespace HizkitzaServer.util.connection
         public static void NewGame(Game game)
         {
             Partidak.Add(game);
-            GamesUpdateEvent?.Invoke(null, new()
-            {
-                Game = game
-            });
+            GamesUpdateEvent?.Invoke(null, new());
         }
 
         public static void RemoveGame(Game game)
         {
             Partidak.Remove(game);
-            GamesUpdateEvent?.Invoke(null, new()
-            {
-                Game = game
-            });
+            GamesUpdateEvent?.Invoke(null, new());
         }
     }
 }

@@ -75,7 +75,6 @@ C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\styl
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\OtherStyle.baml
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\TextBlockStyle.baml
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\style\TextBoxStyle.baml
-C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.g.cs
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\LoginWindow.g.cs
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\MainWindow.g.cs
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\AdminMain.g.cs
@@ -84,7 +83,6 @@ C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\App.
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient_MarkupCompile.cache
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient_MarkupCompile.lref
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\App.baml
-C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\StyledMessageBox.baml
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\LoginWindow.baml
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\MainWindow.baml
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\AdminMain.baml
@@ -104,3 +102,7 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messageb
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaBooleanMessageBox.g.cs
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaInfoMessageBox.g.cs
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaBooleanMessageBox.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaInfoMessageBox.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaBooleanMessageBox.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaInfoMessageBox.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaBooleanMessageBox.baml

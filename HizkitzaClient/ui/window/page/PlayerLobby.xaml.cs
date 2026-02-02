@@ -48,16 +48,13 @@ namespace HizkitzaClient.ui.window.page
 
             foreach (var item in Itxurak)
                 itxura.Items.Add(item);
-
-            new HizkitzaInfoMessageBox("Mezu berria, eta sinbolotxo bat dauka, ziutatzeko ulertzen duzula, hi babua haizela!").ShowDialog();
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             if (Client.Alive)
                 Client.MezuaBidali("DeactivateGameUpdater");
-            CommandDecoder.NewGameEvent -= NewGame;
-            CommandDecoder.RemoveGameEvent -= RemoveGame;
+            CommandDecoder.GamesEvent -= Games;
         }
 
         private void RootClient()
@@ -74,19 +71,18 @@ namespace HizkitzaClient.ui.window.page
 
         private void GameReciever()
         {
-            CommandDecoder.NewGameEvent += NewGame;
-            CommandDecoder.RemoveGameEvent += RemoveGame;
+            CommandDecoder.GamesEvent += Games;
             Client.MezuaBidali("ActivateGameUpdater");
         }
 
-        private void NewGame(object? sender, CommandDecoder.GameEventArgs e)
+        private void Games(object? sender, CommandDecoder.GameEventArgs e)
         {
-            partidak.Items.Add(e.Game.Izena);
-        }
-
-        private void RemoveGame(object? sender, CommandDecoder.GameEventArgs e)
-        {
-            partidak.Items.Remove(e.Game.Izena);
+            partidak.Items.Clear();
+            foreach (var item in e.Games)
+                partidak.Items.Add(new ListBoxItem() {
+                    Content = item
+                });
+            new HizkitzaInfoMessageBox("Partidak: " + e.Games).ShowDialog();
         }
 
         private void PartidaBerria_Click(object sender, RoutedEventArgs e)

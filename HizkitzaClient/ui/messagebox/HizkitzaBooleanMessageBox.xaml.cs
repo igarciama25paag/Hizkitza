@@ -53,5 +53,12 @@ namespace HizkitzaClient.ui.messagebox
             public void Execute(object parameter) => _execute();
             public event EventHandler CanExecuteChanged;
         }
+
+        public static HizkitzaBooleanMessageBox ShowDialog(string msg)
+        {
+            var msgbox = new HizkitzaBooleanMessageBox(msg, "Bai", "Ez");
+            msgbox.ShowDialog();
+            return msgbox;
+        }
     }
 }
