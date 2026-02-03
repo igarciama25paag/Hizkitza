@@ -3,7 +3,9 @@ using HizkitzaClient.util.connection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,22 +28,50 @@ namespace HizkitzaClient.ui.window
         {
             InitializeComponent();
             Username.Text = Client.Izena ?? "null";
-            Closing += MainWindow_Closing;
+            Closing += Window_Closing;
+            Client.DisconnectedEvent += Disconnected;
+            //Client.LogSentEvent += LogSent;
+            //Client.MessageArrivedEvent += MessageArrived;
         }
 
-        private void MainWindow_Closing(object? sender, CancelEventArgs e)
+        private void Window_Closing(object? sender, CancelEventArgs e)
         {
-            Client.BezeroaItxi(null);
+            Client.DisconnectedEvent -= Disconnected;
+            Client.LogSentEvent -= LogSent;
+            Client.MessageArrivedEvent -= MessageArrived;
+            if (Client.Alive) Client.BezeroaItxi(null);
+        }
+
+        public void Disconnected(object? sender, EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var dialog = HizkitzaBooleanMessageBox.ShowDialog("Zerbitzariarekin konexioa galdu da. Aplikazioa itxi nahi al duzu?");
+                if (dialog.DialogResult == false) new LoginWindow().Show();
+                Close();
+            });
+        }
+
+        public void LogSent(object? sender, Client.LogSentEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                HizkitzaInfoMessageBox.ShowDialog($"[{e.Mota}] {e.Log}");
+            });
+        }
+
+        private void MessageArrived(object? sender, Client.MessageArrivedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                HizkitzaInfoMessageBox.ShowDialog($"(MSG) {e.Mezua}");
+            });
         }
 
         private void Itxi_Click(object sender, RoutedEventArgs e)
         {
             var dialog = HizkitzaBooleanMessageBox.ShowDialog("Aplikazioa itxi nahi al duzu?");
-            if (dialog.DialogResult == true)
-            {
-                Client.RootEvents(null,null,null,null);
-                Close();
-            }
+            if (dialog.DialogResult == true) Close();
         }
 
         private void SaioaItxi_Click(object sender, RoutedEventArgs e)
@@ -52,14 +82,6 @@ namespace HizkitzaClient.ui.window
                 new LoginWindow().Show();
                 Close();
             }
-        }
-
-        public void Bota()
-        {
-            var dialog = HizkitzaBooleanMessageBox.ShowDialog("Zerbitzariarekin konexioa galdu da. Aplikazioa itxi nahi al duzu?");
-            if (dialog.DialogResult == false) new LoginWindow().Show();
-            if (Client.Alive) Client.BezeroaItxi(null);
-            Close();
         }
     }
 }

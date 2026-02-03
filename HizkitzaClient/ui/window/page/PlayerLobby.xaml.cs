@@ -2,6 +2,7 @@
 using HizkitzaClient.util.connection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,8 +20,6 @@ namespace HizkitzaClient.ui.window.page
 {
     public partial class PlayerLobby : Page
     {
-        private readonly MainWindow FatherWindow;
-
         private readonly List<string> Itxurak = ["@", "G", "Q", "Ç", "C"];
         private readonly List<ComboBoxItem> Koloreak =
         [
@@ -33,12 +32,14 @@ namespace HizkitzaClient.ui.window.page
         ];
         private readonly List<string> Mapak = ["Bunker", "Mansioa", "Camping"];
 
-        public PlayerLobby(MainWindow father)
+        public PlayerLobby()
         {
             InitializeComponent();
-            FatherWindow = father;
-            RootClient();
-            GameReciever();
+            CommandDecoder.GamesEvent += Games;
+            Client.MezuaBidali("ActivateGameUpdater");
+            Client.LogSentEvent += LogSent;
+
+            //Window.GetWindow(this).Closing += Window_Closing;
 
             foreach (var item in Mapak)
                 mapa.Items.Add(item);
@@ -50,39 +51,34 @@ namespace HizkitzaClient.ui.window.page
                 itxura.Items.Add(item);
         }
 
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        private void Window_Closing(object? sender, CancelEventArgs e) => Close();
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e) => Close();
+
+        private void Close()
         {
             if (Client.Alive)
                 Client.MezuaBidali("DeactivateGameUpdater");
             CommandDecoder.GamesEvent -= Games;
+            Client.LogSentEvent -= LogSent;
         }
 
-        private void RootClient()
+        private void LogSent(object? sender, Client.LogSentEventArgs e)
         {
-            Client.RootEvents(
-                () => { },
-                () => {
-                    Dispatcher.Invoke(() => FatherWindow.Bota());
-                },
-                (mes) => { },
-                (log, good) => { }
-            );
-        }
-
-        private void GameReciever()
-        {
-            CommandDecoder.GamesEvent += Games;
-            Client.MezuaBidali("ActivateGameUpdater");
+            Dispatcher?.Invoke(() => new HizkitzaInfoMessageBox($"{e.Mota} {e.Log}").ShowDialog());
         }
 
         private void Games(object? sender, CommandDecoder.GameEventArgs e)
         {
-            partidak.Items.Clear();
-            foreach (var item in e.Games)
-                partidak.Items.Add(new ListBoxItem() {
-                    Content = item
-                });
-            new HizkitzaInfoMessageBox("Partidak: " + e.Games).ShowDialog();
+            Dispatcher?.Invoke(() =>
+            {
+                partidak.Items.Clear();
+                foreach (var item in e.Games)
+                    partidak.Items.Add(new ListBoxItem()
+                    {
+                        Content = item
+                    });
+            });
         }
 
         private void PartidaBerria_Click(object sender, RoutedEventArgs e)

@@ -2,6 +2,8 @@
 using HizkitzaClient.util.connection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,15 +18,58 @@ using System.Windows.Shapes;
 
 namespace HizkitzaClient.ui.window
 {
-    /// <summary>
-    /// Interaction logic for LoginWindow.xaml
-    /// </summary>
     public partial class LoginWindow : Window
     {
         public LoginWindow()
         {
             InitializeComponent();
-            RootToWindow();
+            Closing += Window_Closing;
+            Client.ConnectedEvent += Connected;
+            Client.DisconnectedEvent += Disconnected;
+            Client.LogSentEvent += LogSent;
+        }
+
+        private void Window_Closing(object? sender, CancelEventArgs e)
+        {
+            Client.ConnectedEvent -= Connected;
+            Client.DisconnectedEvent -= Disconnected;
+            Client.LogSentEvent -= LogSent;
+        }
+
+        private void Connected(object? sender, EventArgs e)
+        {
+            MainWindow mainWindow = new();
+            switch (Client.Mota)
+            {
+                case ConnectionType.admin:
+                    mainWindow.MainFrame.Navigate(new AdminMain());
+                    break;
+                case ConnectionType.user:
+                    mainWindow.MainFrame.Navigate(new PlayerLobby());
+                    break;
+            }
+            mainWindow.Show();
+            Close();
+        }
+
+        private void Disconnected(object? sender, EventArgs e)
+        {
+            pass.Password = null;
+        }
+
+        private void LogSent(object? sender, Client.LogSentEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                message.Foreground = e.Mota switch
+                {
+                    Client.LogType.ERROR => Brushes.Pink,
+                    Client.LogType.INFO => Brushes.Lime,
+                    Client.LogType.WARN => Brushes.Orange,
+                    _ => Brushes.White
+                };
+                message.Text = e.Log;
+            });
         }
 
         private void SaioaHasi_Click(object sender, RoutedEventArgs e) => SaioaHasi();
@@ -48,42 +93,6 @@ namespace HizkitzaClient.ui.window
         private void SaioaHasi()
         {
             Client.Konektatu(serverip.Text, user.Text, pass.Password);
-        }
-
-        private void RootToWindow()
-        {
-            Client.RootEvents(
-                () => {
-                    MainWindow mainWindow = new();
-                    switch (Client.Mota)
-                    {
-                        case ConnectionType.admin:
-                            mainWindow.MainFrame.Navigate(new AdminMain(mainWindow));
-                            break;
-                        case ConnectionType.user:
-                            mainWindow.MainFrame.Navigate(new PlayerLobby(mainWindow));
-                            break;
-                    }
-                    mainWindow.Show();
-                    Close();
-                },
-                () => {
-                    pass.Password = null;
-                },
-                (mes) => {},
-                (log, mota) => {
-                    Dispatcher.Invoke(() => {
-                        message.Foreground = mota switch
-                        {
-                            Client.LogType.ERROR => Brushes.Pink,
-                            Client.LogType.INFO => Brushes.Lime,
-                            Client.LogType.WARN => Brushes.Orange,
-                            _ => Brushes.White
-                        };
-                        message.Text = log;
-                    });
-                }
-            );
         }
     }
 }

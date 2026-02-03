@@ -8,6 +8,8 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         Background="Black"
+        BorderThickness="2"
+        BorderBrush="White"
         ResizeMode="NoResize"
         Title="Hizkitza" Height="500" Width="800">
     <Grid>
@@ -23,7 +25,7 @@
         </StackPanel>
         
         <Frame x:Name="MainFrame"
-                Grid.Row="1"
-                NavigationUIVisibility="Hidden"/>
+               Grid.Row="1"
+               NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

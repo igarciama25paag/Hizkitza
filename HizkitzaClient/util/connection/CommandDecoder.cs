@@ -1,7 +1,9 @@
 using HizkitzaClient.ui.messagebox;
 using HizkitzaClient.util.connection;
 using HizkitzaClient.util.game;
+using System.Diagnostics;
 using System.Windows.Input;
+using System.Windows.Markup;
 using static HizkitzaClient.util.connection.Client;
 using static HizkitzaClient.util.connection.CommandDecoder;
 
@@ -26,7 +28,6 @@ public static class CommandDecoder
         if (command != null)
         {
             var splitCommand = command.Trim().Split(" ");
-            HizkitzaInfoMessageBox.ShowDialog($"Command: {command}");
             var commandName = splitCommand[0];
             var args = splitCommand.ToList();
             args.RemoveAt(0);
@@ -34,6 +35,7 @@ public static class CommandDecoder
             try
             {
                 Commands[commandName].Execute(args.ToArray());
+                Debug.WriteLine($"Command: '{commandName}' with args: '{string.Join(" ", args)}'");
             }
             catch (KeyNotFoundException)
             {

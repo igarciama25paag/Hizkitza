@@ -100,7 +100,7 @@ namespace HizkitzaServer.util.connection
                 lock (sendLock)
                 {
                     Writer?.WriteLine(mezua);
-                    Console.WriteLine($"Sent to ({Erabiltzailea?.Izena}): {mezua}");
+                    //Console.WriteLine($"Sent to ({Erabiltzailea?.Izena}): {mezua}");
                 }
             }
             catch { CloseClient($"'{this}' bezeroa deskonektatu da"); }

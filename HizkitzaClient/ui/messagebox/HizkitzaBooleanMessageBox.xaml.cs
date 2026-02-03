@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace HizkitzaClient.ui.messagebox
 {
-    /// <summary>
-    /// Interaction logic for StyledMessageBox.xaml
-    /// </summary>
     public partial class HizkitzaBooleanMessageBox : Window
     {
         public HizkitzaBooleanMessageBox(string message, string positive, string negative)

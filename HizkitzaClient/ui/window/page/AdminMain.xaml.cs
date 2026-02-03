@@ -1,7 +1,9 @@
-﻿using HizkitzaClient.util.connection;
+﻿using HizkitzaClient.ui.messagebox;
+using HizkitzaClient.util.connection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,42 +21,27 @@ namespace HizkitzaClient.ui.window.page
 {
     public partial class AdminMain : Page
     {
-        private readonly MainWindow FatherWindow;
         private readonly object logLock = new();
 
-        public AdminMain(MainWindow father)
+        public AdminMain()
         {
-            FatherWindow = father;
             CommandDecoder.ClearEvents();
             InitializeComponent();
             Unloaded += Page_Unloaded;
-            RootClient();
-            LogReciever();
+            //Window.GetWindow(this).Closing += Window_Closing;
+            CommandDecoder.NewLogEvent += NewLog;
+            Client.MezuaBidali("ActivateLogSender");
         }
 
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        private void Window_Closing(object? sender, CancelEventArgs e) => Close();
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e) => Close();
+
+        private void Close()
         {
             if (Client.Alive)
                 Client.MezuaBidali("DeactivateLogSender");
             CommandDecoder.NewLogEvent -= NewLog;
-        }
-
-        private void RootClient()
-        {
-            Client.RootEvents(
-                () => { },
-                () => {
-                    Dispatcher.Invoke(() => FatherWindow.Bota());
-                },
-                (mes) => { },
-                (log, good) => { }
-            );
-        }
-
-        private void LogReciever()
-        {
-            CommandDecoder.NewLogEvent += NewLog;
-            Client.MezuaBidali("ActivateLogSender");
         }
 
         private void NewLog(object? sender, CommandDecoder.NewLogEventArgs e)
@@ -83,10 +70,13 @@ namespace HizkitzaClient.ui.window.page
 
         private void SendCommand()
         {
-            var msg = command.Text;
-            if (msg != null && msg == string.Empty)
-                Client.MezuaBidali(command.Text);
-            command.Text = null;
+            Dispatcher.Invoke(() =>
+            {
+                var msg = command.Text;
+                if (msg != null && msg != string.Empty)
+                    Client.MezuaBidali(command.Text);
+                command.Text = null;
+            });
         }
     }
 }

@@ -63,7 +63,8 @@ namespace HizkitzaServer.util.connection
                 {
                     listener = new(IPAddress.Any, PORT);
                     listener.Start();
-                    LogBerria($"ZERBITZARIA hasi da PORT:{PORT}", LogType.INFO);
+                    var host = Dns.GetHostEntry(Dns.GetHostName());
+                    LogBerria($"ZERBITZARIA hasi da {host.AddressList[^1]}:{PORT}", LogType.INFO);
 
                     while (Alive) BezeroBerriaItxaron(listener);
                 }
@@ -130,6 +131,7 @@ namespace HizkitzaServer.util.connection
             }
             catch (Exception e)
             {
+                bezero.Send("Denied " + e.Message);
                 LogBerria(e.Message, LogType.ERROR);
             }
         }

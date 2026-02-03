@@ -9,6 +9,8 @@
         ResizeMode="NoResize"
         WindowStyle="None"
         Background="Black"
+        BorderThickness="2"
+        BorderBrush="White"
         Title="Saio hasi" Height="400" Width="400">
     
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">

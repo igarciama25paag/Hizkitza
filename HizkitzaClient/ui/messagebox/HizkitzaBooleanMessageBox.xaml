@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HizkitzaClient.ui.messagebox"
         mc:Ignorable="d"
-        Height="150" Width="400"
+        Height="200" Width="400"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         BorderThickness="2"
@@ -36,11 +36,11 @@
             
         </DockPanel>
 
-            <!-- Botoiak -->
+        <!-- Botoiak -->
         <StackPanel Grid.Row="1" 
                     Orientation="Horizontal" 
                     HorizontalAlignment="Center"
-                    Margin="10">
+                    Margin="0,10,0,20">
             <Button Content="{Binding PositiveText}" Margin="0,0,10,0"
                     Style="{StaticResource Button.Positive}"
                     Command="{Binding AcceptCommand}"/>

@@ -42,7 +42,7 @@ public static class CommandDecoder
             }
             catch (WrongCommandFormatException e)
             {
-                var msg = $"Formatu okerra '{commandName}' comandoarentzat: {e.Message}";
+                var msg = $"'{commandName}' formatu okerra: {e.Message}";
                 client.Send($"Denied {msg}");
                 throw new WrongCommandFormatException(msg);
             }
@@ -62,6 +62,8 @@ public static class CommandDecoder
         {
             try
             {
+                if (args.Length != 2) throw new WrongCommandFormatException("Login <erabiltzailea> <pasahitza>");
+
                 foreach (var list in Server.Clients.Values)
                     if (list.Any(c => c.ToString() == args[0]))
                         throw new DeniedException($"'{args[0]}' saioa okupatuta");
@@ -82,10 +84,7 @@ public static class CommandDecoder
             }
             catch (IndexOutOfRangeException)
             {
-                if (args.Length > 2)
-                    throw new WrongCommandFormatException("Login <erabiltzailea> <pasahitza>");
-                else
-                    throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
             }
         }
     }
@@ -181,19 +180,13 @@ public static class CommandDecoder
                 CommandDecoder.DeactivateGameUpdaterEvent += DeactivateGames;
                 subscribed = true;
             }
-            string games = "";
-            foreach (var item in Server.Partidak)
-                games += item.ToString() + " ";
-            client.Send($"Games {games}");
+            client.Send($"Games {string.Join(" ", Server.Partidak)}");
         }
 
         private void GamesUpdate(object? sender, EventArgs e)
         {
-            string games = "";
-            foreach (var item in Server.Partidak)
-                games += item.ToString() + " ";
             foreach (var client in clients)
-                client.Send($"Games {games.Trim()}");
+                client.Send($"Games {string.Join(" ", Server.Partidak)}");
         }
 
         private void DeactivateGames(object? sender, CommandDecoder.DeactivateGameUpdaterEventArgs e)

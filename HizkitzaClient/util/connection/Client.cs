@@ -1,4 +1,5 @@
-﻿using HizkitzaClient.util.connection;
+﻿using HizkitzaClient.ui.messagebox;
+using HizkitzaClient.util.connection;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,14 +18,19 @@ namespace HizkitzaClient.util.connection
         private static StreamReader? Reader;
         private static StreamWriter? Writer;
 
-        public delegate void ILogSent(string log, LogType mota);
-        private static ILogSent? LogSentEvent;
-        public delegate void IMessageArrived(string mezua);
-        private static IMessageArrived? MessageArrivedEvent;
-        public delegate void IConnected();
-        private static IConnected? ConnectedEvent;
-        public delegate void IDisconnected();
-        private static IDisconnected? DisconnectedEvent;
+        public static event EventHandler<EventArgs>? ConnectedEvent;
+        public static event EventHandler<EventArgs>? DisconnectedEvent;
+        public static event EventHandler<LogSentEventArgs>? LogSentEvent;
+        public class LogSentEventArgs : EventArgs
+        {
+            public required string Log { get; set; }
+            public required LogType Mota { get; set; }
+        }
+        public static event EventHandler<MessageArrivedEventArgs>? MessageArrivedEvent;
+        public class MessageArrivedEventArgs : EventArgs
+        {
+            public required string Mezua { get; set; }
+        }
 
         public enum LogType
         {
@@ -55,7 +61,7 @@ namespace HizkitzaClient.util.connection
                     CommandDecoder.ExecuteCommand(Reader.ReadLine());
                     Izena = izena;
                     LogBerria("Zerbitzarira konektatuta", LogType.INFO);
-                    ConnectedEvent?.Invoke();
+                    ConnectedEvent?.Invoke(null, new());
 
                     CreateConnectionChecker();
                     CreateReceiverThread();
@@ -98,7 +104,10 @@ namespace HizkitzaClient.util.connection
                         {
                             try
                             {
-                                MessageArrivedEvent?.Invoke(mezua);
+                                MessageArrivedEvent?.Invoke(null, new()
+                                {
+                                    Mezua = mezua
+                                });
                                 CommandDecoder.ExecuteCommand(mezua);
                             }
                             catch (Exception e)
@@ -112,7 +121,14 @@ namespace HizkitzaClient.util.connection
             }).Start();
         }
 
-        private static void LogBerria(string log, LogType mota) => LogSentEvent?.Invoke(log, mota);
+        private static void LogBerria(string log, LogType mota)
+        {
+            LogSentEvent?.Invoke(null, new()
+            {
+                Log = log,
+                Mota = mota
+            });
+        }
 
         public static void MezuaBidali(string mezua)
         {
@@ -129,16 +145,8 @@ namespace HizkitzaClient.util.connection
             Stream?.Close();
             Reader?.Close();
             Writer?.Close();
-            DisconnectedEvent?.Invoke();
+            DisconnectedEvent?.Invoke(null, new());
             if (log != null) LogBerria(log, LogType.ERROR);
-        }
-
-        public static void RootEvents(IConnected? connectedevent, IDisconnected? discconnectedevent, IMessageArrived? messagearrivedevent, ILogSent? logsentevent)
-        {
-            ConnectedEvent = connectedevent;
-            DisconnectedEvent = discconnectedevent;
-            MessageArrivedEvent = messagearrivedevent;
-            LogSentEvent = logsentevent;
         }
     }
 }
