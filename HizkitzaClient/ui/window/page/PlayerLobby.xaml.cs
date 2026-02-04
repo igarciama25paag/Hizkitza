@@ -20,6 +20,7 @@ namespace HizkitzaClient.ui.window.page
 {
     public partial class PlayerLobby : Page
     {
+        private readonly object gamesLock = new();
         private readonly List<string> Itxurak = ["@", "G", "Q", "Ç", "C"];
         private readonly List<ComboBoxItem> Koloreak =
         [
@@ -35,11 +36,10 @@ namespace HizkitzaClient.ui.window.page
         public PlayerLobby()
         {
             InitializeComponent();
+            Loaded += Page_Loaded;
+            Unloaded += Page_Unloaded;
             CommandDecoder.GamesEvent += Games;
-            Client.MezuaBidali("ActivateGameUpdater");
-            Client.LogSentEvent += LogSent;
-
-            //Window.GetWindow(this).Closing += Window_Closing;
+            CommandDecoder.DeniedEvent += Denied;
 
             foreach (var item in Mapak)
                 mapa.Items.Add(item);
@@ -49,36 +49,43 @@ namespace HizkitzaClient.ui.window.page
 
             foreach (var item in Itxurak)
                 itxura.Items.Add(item);
+
+            Client.MezuaBidali("ActivateGameUpdater");
         }
 
-        private void Window_Closing(object? sender, CancelEventArgs e) => Close();
+        private void Page_Loaded(object sender, RoutedEventArgs e) => Window.GetWindow(this).Closing += Window_Closing;
 
         private void Page_Unloaded(object sender, RoutedEventArgs e) => Close();
 
-        private void Close()
-        {
-            if (Client.Alive)
-                Client.MezuaBidali("DeactivateGameUpdater");
-            CommandDecoder.GamesEvent -= Games;
-            Client.LogSentEvent -= LogSent;
-        }
+        private void Window_Closing(object? sender, CancelEventArgs e) => Close();
 
-        private void LogSent(object? sender, Client.LogSentEventArgs e)
+        private void Denied(object? sender, CommandDecoder.DeniedEventArgs e)
         {
-            Dispatcher?.Invoke(() => new HizkitzaInfoMessageBox($"{e.Mota} {e.Log}").ShowDialog());
+            Dispatcher?.Invoke(() => new HizkitzaInfoMessageBox($"DENIED {e.Reason}").ShowDialog());
         }
 
         private void Games(object? sender, CommandDecoder.GameEventArgs e)
         {
             Dispatcher?.Invoke(() =>
             {
-                partidak.Items.Clear();
-                foreach (var item in e.Games)
-                    partidak.Items.Add(new ListBoxItem()
-                    {
-                        Content = item
-                    });
+                lock (gamesLock)
+                {
+                    partidak.Items.Clear();
+                    foreach (var item in e.Games)
+                        partidak.Items.Add(new ListBoxItem()
+                        {
+                            Content = item
+                        });
+                }
             });
+        }
+
+        private void Close()
+        {
+            if (Client.Alive)
+                Client.MezuaBidali("DeactivateGameUpdater");
+            CommandDecoder.GamesEvent -= Games;
+            CommandDecoder.DeniedEvent -= Denied;
         }
 
         private void PartidaBerria_Click(object sender, RoutedEventArgs e)

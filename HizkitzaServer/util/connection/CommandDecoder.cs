@@ -8,6 +8,7 @@ namespace HizkitzaServer.util.connection;
 
 public static class CommandDecoder
 {
+    // Komando zerrenda
     private readonly static Dictionary<string, ICommand> Commands = new()
     {
         ["Login"] = new LoginCommand(),
@@ -18,10 +19,16 @@ public static class CommandDecoder
         ["DeactivateGameUpdater"] = new DeactivateGameUpdaterCommand()
     };
 
+    // Komandoa ez dela existzen salbuespena
     public class UnexistingCommandException(string message) : Exception(message);
+
+    // Komandoaren formatu okerra salbuespena
     public class WrongCommandFormatException(string message) : Exception(message);
+
+    // Ukatua salbuespena
     public class DeniedException(string message) : Exception(message);
 
+    // Komandoa prozesatu eta exekutatu
     public static async Task ExecuteCommand(string? command, ServersideClient client)
     {
         if (command != null)
@@ -49,11 +56,16 @@ public static class CommandDecoder
         }
     }
 
+    // Komando interfaze orokorra
     private interface ICommand
     {
         Task Execute(string[] args, ServersideClient client);
     }
 
+    private static void CheckCommandFormat(string[] args, string format)
+    {
+        if (args.Length != format.Split(' ').Length - 1) throw new WrongCommandFormatException(format);
+    }
 
     // Saioa hasteko komandoa
     private class LoginCommand : ICommand
@@ -62,14 +74,17 @@ public static class CommandDecoder
         {
             try
             {
-                if (args.Length != 2) throw new WrongCommandFormatException("Login <erabiltzailea> <pasahitza>");
+                // Komandoaren formatua egiaztatu
+                CheckCommandFormat(args, "Login <erabiltzailea> <pasahitza>");
 
+                // Erabiltzailea dagoeneko saio batean dagoen egiaztatu
                 foreach (var list in Server.Clients.Values)
                     if (list.Any(c => c.ToString() == args[0]))
                         throw new DeniedException($"'{args[0]}' saioa okupatuta");
 
                 try
                 {
+                    // Kredentzialak egiaztatu eta erabiltzailea sortu
                     //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
                     if (args[0] == "admin" && args[1] == "admin")
                         client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin);
@@ -93,12 +108,18 @@ public static class CommandDecoder
     // Log bidalketa gaitzeko komandoa
     private class ActivateLogSenderCommand : ICommand
     {
+        // Gertaerari suskribatutako bezeroak
         private readonly List<ServersideClient> clients = [];
         private bool subscribed = false;
 
         public async Task Execute(string[] args, ServersideClient client)
         {
+            // Komandoaren formatua egiaztatu
+            CheckCommandFormat(args, "ActivateLogSender");
+
             clients.Add(client);
+
+            // Gertaerei suskribatu lehen aldiz exekutatzerakoan
             if (!subscribed)
             {
                 Server.LogSentEvent += SendLog;
@@ -108,21 +129,18 @@ public static class CommandDecoder
             }
         }
 
+        // Bezeroei log berriak bidali
         private void SendLog(object? sender, Server.LogSentEventArgs e)
         {
             foreach (var client in clients)
                 client.Send($"NewLog [{DateTime.Now:t}] [{e.Mota}] {e.Log}");
         }
 
-        private void DeactivateLogs(object? sender, CommandDecoder.DeactivateLogSenderEventArgs e)
-        {
-            clients.Remove(e.Client);
-        }
+        // Bezeroa log bidalketa desgaitzen denean desuskribatu
+        private void DeactivateLogs(object? sender, CommandDecoder.DeactivateLogSenderEventArgs e) => clients.Remove(e.Client);
 
-        private void ClientDisconnected(object? sender, Server.ClientDisconnectedEventArgs e)
-        {
-            clients.Remove(e.Client);
-        }
+        // Bezeroa deskonektatzen denean desuskribatu
+        private void ClientDisconnected(object? sender, Server.ClientEventArgs e) => clients.Remove(e.Client);
     }
 
 
@@ -136,6 +154,9 @@ public static class CommandDecoder
     {
         public async Task Execute(string[] args, ServersideClient client)
         {
+            // Komandoaren formatua egiaztatu
+            CheckCommandFormat(args, "DeactivateLogSender");
+
             DeactivateLogSenderEvent?.Invoke(null, new()
             {
                 Client = client
@@ -149,17 +170,13 @@ public static class CommandDecoder
     {
         public async Task Execute(string[] args, ServersideClient client)
         {
-            try
-            {
-                if (args.Length > 2) throw new IndexOutOfRangeException();
-                var newGame = new Game(args[0], args[1]);
-                if (Server.Partidak.Contains(newGame)) throw new DeniedException($"'{args[0]}' izena okupatuta");
-                Server.NewGame(newGame);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                throw new WrongCommandFormatException("NewGame <izena> <mapa>");
-            }
+            // Komandoaren formatua egiaztatu
+            CheckCommandFormat(args, "NewGame <izena> <mapa>");
+
+            if (args.Length > 2) throw new IndexOutOfRangeException();
+            var newGame = new Game(args[0], args[1]);
+            if (Server.Partidak.Contains(newGame)) throw new DeniedException($"'{args[0]}' izena okupatuta");
+            Server.NewGame(newGame);
         }
     }
 
@@ -167,12 +184,18 @@ public static class CommandDecoder
     // Partida bidalketa gaitzeko komandoa
     private class ActivateGameUpdaterCommand : ICommand
     {
+        // Gertaerari suskribatutako bezeroak
         private readonly List<ServersideClient> clients = [];
         private bool subscribed = false;
 
         public async Task Execute(string[] args, ServersideClient client)
         {
+            // Komandoaren formatua egiaztatu
+            CheckCommandFormat(args, "ActivateGameUpdater");
+
             clients.Add(client);
+
+            // Gertaerei suskribatu lehen aldiz exekutatzerakoan
             if (!subscribed)
             {
                 Server.GamesUpdateEvent += GamesUpdate;
@@ -183,21 +206,18 @@ public static class CommandDecoder
             client.Send($"Games {string.Join(" ", Server.Partidak)}");
         }
 
+        // Bezeroei partida zerrenda bidali
         private void GamesUpdate(object? sender, EventArgs e)
         {
             foreach (var client in clients)
                 client.Send($"Games {string.Join(" ", Server.Partidak)}");
         }
 
-        private void DeactivateGames(object? sender, CommandDecoder.DeactivateGameUpdaterEventArgs e)
-        {
-            clients.Remove(e.Client);
-        }
+        // Bezeroa partida eguneraketa desgaitzen denean desuskribatu
+        private void DeactivateGames(object? sender, CommandDecoder.DeactivateGameUpdaterEventArgs e) => clients.Remove(e.Client);
 
-        private void ClientDisconnected(object? sender, Server.ClientDisconnectedEventArgs e)
-        {
-            clients.Remove(e.Client);
-        }
+        // Bezeroa deskonektatzen denean desuskribatu
+        private void ClientDisconnected(object? sender, Server.ClientEventArgs e) => clients.Remove(e.Client);
     }
 
 
@@ -211,6 +231,9 @@ public static class CommandDecoder
     {
         public async Task Execute(string[] args, ServersideClient client)
         {
+            // Komandoaren formatua egiaztatu
+            CheckCommandFormat(args, "DeactivateGameUpdater");
+
             DeactivateLogSenderEvent?.Invoke(null, new()
             {
                 Client = client

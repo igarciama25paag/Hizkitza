@@ -28,20 +28,22 @@ namespace HizkitzaClient.ui.window.page
             CommandDecoder.ClearEvents();
             InitializeComponent();
             Unloaded += Page_Unloaded;
-            //Window.GetWindow(this).Closing += Window_Closing;
+            Loaded += Page_Loaded;
             CommandDecoder.NewLogEvent += NewLog;
+            CommandDecoder.DeniedEvent += Denied;
+
             Client.MezuaBidali("ActivateLogSender");
         }
 
-        private void Window_Closing(object? sender, CancelEventArgs e) => Close();
+        private void Page_Loaded(object sender, RoutedEventArgs e) => Window.GetWindow(this).Closing += Window_Closing;
 
         private void Page_Unloaded(object sender, RoutedEventArgs e) => Close();
 
-        private void Close()
+        private void Window_Closing(object? sender, CancelEventArgs e) => Close();
+
+        private void Denied(object? sender, CommandDecoder.DeniedEventArgs e)
         {
-            if (Client.Alive)
-                Client.MezuaBidali("DeactivateLogSender");
-            CommandDecoder.NewLogEvent -= NewLog;
+            Dispatcher?.Invoke(() => new HizkitzaInfoMessageBox($"DENIED {e.Reason}").ShowDialog());
         }
 
         private void NewLog(object? sender, CommandDecoder.NewLogEventArgs e)
@@ -58,6 +60,14 @@ namespace HizkitzaClient.ui.window.page
                     LogList.ScrollIntoView(item);
                 }
             });
+        }
+
+        private void Close()
+        {
+            if (Client.Alive)
+                Client.MezuaBidali("DeactivateLogSender");
+            CommandDecoder.NewLogEvent -= NewLog;
+            CommandDecoder.DeniedEvent -= Denied;
         }
 
         private void Bidali_Click(object sender, RoutedEventArgs e) => SendCommand();

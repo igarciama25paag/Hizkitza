@@ -1,80 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\page\\playerlobby.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\page\\adminmain.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaclient\\ui\\window\\loginwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 222,
-          "SelectedChildIndex": 1,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PlayerLobby.xaml",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-02-03T11:28:20.277Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\MainWindow.xaml",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\MainWindow.xaml",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-02-03T11:27:26.148Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AdminMain.xaml",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\page\\AdminMain.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-02-03T11:24:53.131Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "LoginWindow.xaml",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\LoginWindow.xaml",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\LoginWindow.xaml",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaClient\\ui\\window\\LoginWindow.xaml",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\LoginWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-02-03T11:24:43.266Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }

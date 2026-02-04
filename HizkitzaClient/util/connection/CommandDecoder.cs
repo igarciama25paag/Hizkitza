@@ -73,11 +73,20 @@ public static class CommandDecoder
     }
 
 
-    // Komando ezeztatutako kom
+    // Komando ezeztatutako komamdoa eta gertaera
+    public static event EventHandler<DeniedEventArgs>? DeniedEvent;
+    public class DeniedEventArgs : EventArgs
+    {
+        public required string Reason { get; set; }
+    }
     private class DeniedCommand : ICommand
     {
         public void Execute(string[] args)
         {
+            DeniedEvent?.Invoke(null, new()
+            {
+                Reason = string.Join(" ", args)
+            });
             throw new DeniedException(string.Join(" ", args));
         }
     }

@@ -12,26 +12,44 @@ namespace HizkitzaClient.util.connection
 {
     public static class Client
     {
+        // Portua
         private const int PORT = 5000;
+
+        // Bezero objektuak
         private static TcpClient? client;
         private static NetworkStream? Stream;
         private static StreamReader? Reader;
         private static StreamWriter? Writer;
 
+        // Bezeroa funtzionatzen ari den
+        public static bool Alive { get; private set; }
+
+        // Bezeroaren izena eta mota
+        public static string? Izena;
+        public static ConnectionType? Mota;
+
+        // Konektatuta gertara
         public static event EventHandler<EventArgs>? ConnectedEvent;
+
+        // Deskonektatuta gertaera
         public static event EventHandler<EventArgs>? DisconnectedEvent;
+
+        // Log berria gertaera
         public static event EventHandler<LogSentEventArgs>? LogSentEvent;
         public class LogSentEventArgs : EventArgs
         {
             public required string Log { get; set; }
             public required LogType Mota { get; set; }
         }
+
+        // Mezu berria gertaera
         public static event EventHandler<MessageArrivedEventArgs>? MessageArrivedEvent;
         public class MessageArrivedEventArgs : EventArgs
         {
             public required string Mezua { get; set; }
         }
 
+        // Log motak
         public enum LogType
         {
             INFO,
@@ -39,10 +57,7 @@ namespace HizkitzaClient.util.connection
             ERROR
         }
 
-        public static string? Izena;
-        public static ConnectionType? Mota;
-        public static bool Alive { get; private set; }
-
+        // Bezeroa zerbitzarira konektatu eta saioa hasten saiatu
         public static void Konektatu(string ip, string izena, string pasahitza)
         {
             client = new();
@@ -78,6 +93,7 @@ namespace HizkitzaClient.util.connection
             catch { BezeroaItxi("Ezin izan da zerbitzaria atzitu"); }
         }
 
+        // 
         private static void CreateConnectionChecker()
         {
             new Thread(() =>

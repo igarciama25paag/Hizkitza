@@ -24,6 +24,7 @@ namespace HizkitzaServer.util.connection
         public Erabiltzailea? Erabiltzailea;
         public bool Alive { get; private set; }
 
+        // Bezero bakoitzaren kudeatzailea sortu
         public ServersideClient(TcpClient bezero)
         {
             Client = bezero;
@@ -33,6 +34,7 @@ namespace HizkitzaServer.util.connection
             Login();
         }
 
+        // Login komandoa itxaron eta bezeroa autentikatu
         public async void Login()
         {
             try
@@ -63,6 +65,7 @@ namespace HizkitzaServer.util.connection
             }
         }
 
+        // Bezeroarekin konexioa dabilela segunduro egiaztatzen duen haria, deskonektatuta badago bezeroa itxi
         private void CreateConnectionChecker()
         {
             new Thread(() =>
@@ -77,6 +80,7 @@ namespace HizkitzaServer.util.connection
             { IsBackground = true }.Start();
         }
 
+        // Bezeroaren mezuak entzun eta zerbitzariari pasatzen dizkion haria
         private void CreateReceiverThread()
         {
             new Thread(() =>
@@ -93,6 +97,7 @@ namespace HizkitzaServer.util.connection
             }).Start();
         }
 
+        // Bezeroari mezua bidali
         public void Send(string mezua)
         {
             try
@@ -106,6 +111,7 @@ namespace HizkitzaServer.util.connection
             catch { CloseClient($"'{this}' bezeroa deskonektatu da"); }
         }
 
+        // Bezeroa itxi eta bezero zerrendetatik kendu
         public void CloseClient(string? log)
         {
             Alive = false;

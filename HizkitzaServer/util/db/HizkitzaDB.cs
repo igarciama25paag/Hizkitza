@@ -12,6 +12,7 @@ namespace HizkitzaClient.util.db
 {
     static class HizkitzaDB
     {
+        // PostgreSQL datu base parametroak
         private const string HOST = "localhost";
         private const string PORT = "5432";
         private const string USERNAME = "admin";
@@ -25,8 +26,7 @@ namespace HizkitzaClient.util.db
                 $"Password={PASSWORD};" +
                 $"Database={DATABASE}";
 
-        // Trace.WriteLine(); for logs
-
+        // Datu baseari komando bat bidali bueltan ezer itxaron gabe
         private static void DBDispatch(string query)
         {
             _ = Task.Run(async () =>
@@ -43,7 +43,10 @@ namespace HizkitzaClient.util.db
             });
         }
 
+        // Eskaera prozesua atributu bezala
         private delegate Task<T> Request<T>(NpgsqlDataSource dataSource);
+
+        // Datu baseari komando bat bidali eta bueltan emaitza itxaron
         private static async Task<T> DBRequest<T>(Request<T> request)
         {
             try
@@ -62,6 +65,7 @@ namespace HizkitzaClient.util.db
          * LOGIN
          * **/
 
+        // Datu baseari erabiltzailea eta pasahitza bidali eta erabiltzailea bueltatu
         public static async Task<Erabiltzailea> GetErabiltzailea(string user, string pass)
         {
             return await DBRequest(async dataSource => {

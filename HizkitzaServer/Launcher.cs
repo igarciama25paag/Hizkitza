@@ -6,7 +6,7 @@ namespace HizkitzaServer
     {
         public static void Main(string[] args)
         {
-            Server.MessageSentEvent += (sender, args) =>
+            Server.MessageArrivedEvent += (sender, args) =>
             {
                 Server.LogBerria($"{args.Client}: {args.Mezua}", Server.LogType.INFO);
             };
