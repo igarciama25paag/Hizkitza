@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HizkitzaTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72974deeb03c5f1b32614676075e7348820f3229")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0378e4bf86f8b8a962050b264bd9d11c75b41993")]
 [assembly: System.Reflection.AssemblyProductAttribute("HizkitzaTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HizkitzaTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
