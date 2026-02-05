@@ -1,5 +1,5 @@
 ﻿using HizkitzaServer.util.connection;
-using HizkitzaServer.util.db.data;
+using HizkitzaServer.util.data;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HizkitzaClient.util.db
+namespace HizkitzaServer.util.db
 {
     static class HizkitzaDB
     {
@@ -63,7 +63,7 @@ namespace HizkitzaClient.util.db
 
         /**
          * LOGIN
-         * **/
+         * */
 
         // Datu baseari erabiltzailea eta pasahitza bidali eta erabiltzailea bueltatu
         public static async Task<Erabiltzailea> GetErabiltzailea(string user, string pass)
@@ -84,6 +84,67 @@ namespace HizkitzaClient.util.db
                         reader.GetString(2).Trim(),
                         Enum.Parse<ConnectionType>(reader.GetString(3).Trim())
                         );
+                }
+            });
+        }
+
+        /**
+         * TXOSTENAK
+         * */
+
+        // Erabiltziale baten partida famatuena datu baseari eskaera
+        public static async Task<PartidaStats> ErabiltzailePartidaFamatua(string user)
+        {
+            return await DBRequest(async dataSource => {
+                await using var cmd = dataSource.CreateCommand(
+                    "SELECT * FROM \"PartidakStats\" " +
+                    $"WHERE erabiltzailea_id = ( " +
+                    $"  SELECT erabiltzaile_id " +
+                    $"  FROM \"Erabiltzaileak\" " +
+                    $"  WHERE izena = {user} )" +
+                    $"ORDER BY erabiltzaile_max DESC LIMIT 1"
+                    );
+                await using var reader = await cmd.ExecuteReaderAsync();
+                {
+                    await reader.ReadAsync();
+
+                    return new PartidaStats(
+                        reader.GetInt16(0),
+                        reader.GetInt16(1),
+                        reader.GetString(2).Trim(),
+                        reader.GetString(3).Trim(),
+                        reader.GetInt16(4),
+                        reader.GetString(5).Trim(),
+                        reader.GetString(6).Trim()
+                        );
+                }
+            });
+        }
+
+        // Top 10 partida famatuenak datu baseari eskaera
+        public static async Task<List<PartidaStats>> Top10Partidak(string user)
+        {
+            return await DBRequest(async dataSource => {
+                await using var cmd = dataSource.CreateCommand(
+                    "SELECT * FROM \"PartidakStats\" " +
+                    $"ORDER BY erabiltzaile_max DESC LIMIT 10"
+                    );
+                await using var reader = await cmd.ExecuteReaderAsync();
+                {
+                    var list = new List<PartidaStats>();
+
+                    while (await reader.ReadAsync())
+                        list.Add(new(
+                            reader.GetInt16(0),
+                            reader.GetInt16(1),
+                            reader.GetString(2).Trim(),
+                            reader.GetString(3).Trim(),
+                            reader.GetInt16(4),
+                            reader.GetString(5).Trim(),
+                            reader.GetString(6).Trim()
+                            ));
+
+                    return list;
                 }
             });
         }

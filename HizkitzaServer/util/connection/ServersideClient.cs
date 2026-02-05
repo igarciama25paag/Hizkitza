@@ -1,5 +1,5 @@
 ﻿using HizkitzaServer.util.connection;
-using HizkitzaServer.util.db.data;
+using HizkitzaServer.util.data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +14,7 @@ namespace HizkitzaServer.util.connection
 {
     public class ServersideClient
     {
+        // Bezero Tcp objektuak
         private readonly TcpClient? Client;
         private readonly NetworkStream? Stream;
         private readonly StreamReader? Reader;
@@ -21,7 +22,10 @@ namespace HizkitzaServer.util.connection
 
         public readonly static object sendLock = new();
 
+        // Erabiltzaile parametroak
         public Erabiltzailea? Erabiltzailea;
+
+        // Bezeroa funtzionatzen dabilen
         public bool Alive { get; private set; }
 
         // Bezero bakoitzaren kudeatzailea sortu
@@ -37,31 +41,21 @@ namespace HizkitzaServer.util.connection
         // Login komandoa itxaron eta bezeroa autentikatu
         public async void Login()
         {
-            try
+            var result = await MezuaItxaron();
+            if (result == null && Erabiltzailea != null)
             {
-                await CommandDecoder.ExecuteCommand(Reader!.ReadLine(), this);
-                if (Erabiltzailea != null)
-                {
-                    Alive = true;
-                    Server.Clients[Erabiltzailea.Mota].Add(this);
-                    Server.LogBerria($"Bezero berria '{this}'", LogType.INFO);
-                    Send($"Logged {Erabiltzailea.Mota}");
+                Alive = true;
+                Server.Clients[Erabiltzailea.Mota].Add(this);
+                Server.LogBerria($"Bezero berria {this}", LogType.INFO);
+                Send($"Logged {Erabiltzailea.Mota}");
 
-                    CreateConnectionChecker();
-                    CreateReceiverThread();
-                } else Send("Denied Erabiltzailea null");
+                CreateConnectionChecker();
+                CreateReceiverThread();
             }
-            catch (CommandDecoder.DeniedException e)
+            else
             {
-                Send("Denied " + e.Message);
-                CloseClient(null);
-                Server.LogBerria($"{e.Message}", LogType.ERROR);
-            }
-            catch (CommandDecoder.WrongCommandFormatException e)
-            {
-                Send("Denied " + e.Message);
-                CloseClient(null);
-                Server.LogBerria($"{e.Message}", LogType.ERROR);
+                Send($"Denied {result?.Message ?? "Erabiltzaile null"}");
+                CloseClient(false);
             }
         }
 
@@ -73,7 +67,7 @@ namespace HizkitzaServer.util.connection
                 while (Alive)
                 {
                     if (Client!.Client.Poll(0, SelectMode.SelectRead) && Client.Client.Available == 0)
-                        CloseClient($"'{this}' bezeroa deskonektatu da");
+                        CloseClient(true);
                     Thread.Sleep(1000);
                 }
             })
@@ -83,18 +77,27 @@ namespace HizkitzaServer.util.connection
         // Bezeroaren mezuak entzun eta zerbitzariari pasatzen dizkion haria
         private void CreateReceiverThread()
         {
-            new Thread(() =>
+            new Thread(async () =>
             {
-                try
-                {
-                    while (Alive)
-                    {
-                        var mezua = Reader?.ReadLine();
-                        if (mezua != null) Server.MezuBerria(mezua, this);
-                    }
-                }
-                catch { CloseClient($"'{this}' bezeroa deskonektatu da"); }
+                while (Alive) await MezuaItxaron();
             }).Start();
+        }
+
+        // Bezeroko mezu bat itxaron eta erroreren bat egon den itxaron.
+        private async Task<Exception?> MezuaItxaron()
+        {
+            try
+            {
+                var mezua = Reader?.ReadLine();
+                if (mezua != null) await Server.MezuBerria(mezua, this);
+                return null;
+            }
+            catch (Exception e)
+            {
+                Send("Denied " + e.Message);
+                LogBerria(e.Message, LogType.ERROR);
+                return e;
+            }
         }
 
         // Bezeroari mezua bidali
@@ -105,14 +108,13 @@ namespace HizkitzaServer.util.connection
                 lock (sendLock)
                 {
                     Writer?.WriteLine(mezua);
-                    //Console.WriteLine($"Sent to ({Erabiltzailea?.Izena}): {mezua}");
                 }
             }
-            catch { CloseClient($"'{this}' bezeroa deskonektatu da"); }
+            catch { CloseClient(true); }
         }
 
         // Bezeroa itxi eta bezero zerrendetatik kendu
-        public void CloseClient(string? log)
+        public void CloseClient(bool msg)
         {
             Alive = false;
             Client?.Close();
@@ -120,9 +122,9 @@ namespace HizkitzaServer.util.connection
             Reader?.Close();
             Writer?.Close();
             Server.ClientDisconnect(this);
-            if (log != null) Server.LogBerria(log, LogType.INFO);
+            if (msg) Server.LogBerria($"{this} bezeroa deskonektatu da", LogType.INFO);
         }
 
-        public override string? ToString() => Erabiltzailea?.Izena ?? "null";
+        public override string? ToString() => $"({Erabiltzailea?.Izena ?? "anonymous"})";
     }
 }

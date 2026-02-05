@@ -11,6 +11,7 @@ namespace HizkitzaClient.util.connection;
 
 public static class CommandDecoder
 {
+    // Komando zerrenda
     private readonly static Dictionary<string, ICommand> Commands = new()
     {
         ["Logged"] = new LoggedCommand(),
@@ -19,10 +20,16 @@ public static class CommandDecoder
         ["Games"] = new GamesCommand()
     };
 
+    // Komandoa ez dela existzen salbuespena
     public class UnexistingCommandException(string message) : Exception(message);
+
+    // Komandoaren formatu okerra salbuespena
     public class WrongCommandFormatException(string message) : Exception(message);
+
+    // Ukatua salbuespena
     public class DeniedException(string message) : Exception(message);
 
+    // Komandoa prozesatu eta exekutatu
     public static void ExecuteCommand(string? command)
     {
         if (command != null)
@@ -59,11 +66,21 @@ public static class CommandDecoder
     {
         void Execute(string[] args);
     }
+    
+    // Komandoaren formatua ondo dagoela baieztatzeko
+    private static void CheckCommandFormat(string[] args, string format)
+    {
+        if (args.Length != format.Split(' ').Length - 1) throw new WrongCommandFormatException(format);
+    }
 
+    // Saioa ondo hasita komandoa
     private class LoggedCommand : ICommand
     {
         public void Execute(string[] args)
         {
+            // Komandoaren formatua egiaztatu
+            CheckCommandFormat(args, "Logged <mota>");
+
             try { Client.Mota = (ConnectionType)Enum.Parse(typeof(ConnectionType), args[0]); }
             catch
             {
@@ -73,7 +90,7 @@ public static class CommandDecoder
     }
 
 
-    // Komando ezeztatutako komamdoa eta gertaera
+    // Ukatuta komandoa eta gertaera
     public static event EventHandler<DeniedEventArgs>? DeniedEvent;
     public class DeniedEventArgs : EventArgs
     {

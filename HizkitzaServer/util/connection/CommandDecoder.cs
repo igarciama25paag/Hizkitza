@@ -1,5 +1,6 @@
-using HizkitzaClient.util.db;
-using HizkitzaServer.util.db.data;
+using HizkitzaServer.util.data;
+using HizkitzaServer.util.db;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using static HizkitzaServer.util.connection.Server;
@@ -19,6 +20,16 @@ public static class CommandDecoder
         ["DeactivateGameUpdater"] = new DeactivateGameUpdaterCommand()
     };
 
+    // Komando baimenak
+    private readonly static Dictionary<string, Collection<ConnectionType>> Perms = new()
+    {
+        ["ActivateLogSender"] = [ConnectionType.admin],
+        ["DeactivateLogSender"] = [ConnectionType.admin],
+        ["NewGame"] = [ConnectionType.admin, ConnectionType.user],
+        ["ActivateGameUpdater"] = [ConnectionType.admin, ConnectionType.user],
+        ["DeactivateGameUpdater"] = [ConnectionType.admin, ConnectionType.user]
+    };
+
     // Komandoa ez dela existzen salbuespena
     public class UnexistingCommandException(string message) : Exception(message);
 
@@ -33,25 +44,30 @@ public static class CommandDecoder
     {
         if (command != null)
         {
+            // Komandoa lortu
             var splitCommand = command.Trim().Split(" ");
             var commandName = splitCommand[0];
+
+            // Komandoaren baimenak ikusi
+            if (Perms.TryGetValue(commandName, out Collection<ConnectionType>? value) &&
+                (client.Erabiltzailea == null || !value.Contains(client.Erabiltzailea.Mota)))
+                throw new DeniedException("Baimenik gabe");
+
+            // Komandoaren argumentuak lortu
             var args = splitCommand.ToList();
             args.RemoveAt(0);
             try
             {
-                await Commands[commandName].Execute(args.ToArray(), client);
+                // Komandoa exekutatu
+                await Commands[commandName].Execute([.. args], client);
             }
             catch (KeyNotFoundException)
             {
-                var msg = $"'{commandName}' comandoa ez da existitzen";
-                client.Send($"Denied {msg}");
-                throw new UnexistingCommandException(msg);
+                throw new UnexistingCommandException($"'{commandName}' comandoa ez da existitzen");
             }
             catch (WrongCommandFormatException e)
             {
-                var msg = $"'{commandName}' formatu okerra: {e.Message}";
-                client.Send($"Denied {msg}");
-                throw new WrongCommandFormatException(msg);
+                throw new WrongCommandFormatException($"'{commandName}' formatu okerra: {e.Message}");
             }
         }
     }
@@ -62,6 +78,7 @@ public static class CommandDecoder
         Task Execute(string[] args, ServersideClient client);
     }
 
+    // Komandoaren formatua ondo dagoela egiaztatzeko
     private static void CheckCommandFormat(string[] args, string format)
     {
         if (args.Length != format.Split(' ').Length - 1) throw new WrongCommandFormatException(format);
@@ -82,22 +99,15 @@ public static class CommandDecoder
                     if (list.Any(c => c.ToString() == args[0]))
                         throw new DeniedException($"'{args[0]}' saioa okupatuta");
 
-                try
-                {
-                    // Kredentzialak egiaztatu eta erabiltzailea sortu
-                    client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
-                    /*if (args[0] == "admin" && args[1] == "admin")
-                        client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin);
-                    else if (args[0] == "user" && args[1] == "user")
-                        client.Erabiltzailea = new Erabiltzailea(0, "user", "user", ConnectionType.user);
-                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");*/
-                }
-                catch (InvalidOperationException)
-                {
-                    throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
-                }
+                // Kredentzialak egiaztatu eta erabiltzailea sortu
+                //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
+                if (args[0] == "admin" && args[1] == "admin")
+                    client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin);
+                else if (args[0] == "user" && args[1] == "user")
+                    client.Erabiltzailea = new Erabiltzailea(0, "user", "user", ConnectionType.user);
+                else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
             }
-            catch (IndexOutOfRangeException)
+            catch (Exception e) when (e is IndexOutOfRangeException || e is InvalidOperationException)
             {
                 throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
             }

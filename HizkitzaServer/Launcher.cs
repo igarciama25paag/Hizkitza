@@ -8,7 +8,7 @@ namespace HizkitzaServer
         {
             Server.MessageArrivedEvent += (sender, args) =>
             {
-                Server.LogBerria($"{args.Client}: {args.Mezua}", Server.LogType.INFO);
+                Server.LogBerria($"{args.Client} {args.Mezua}", Server.LogType.INFO);
             };
             Server.LogSentEvent += (sender, args) =>
             {

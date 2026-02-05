@@ -1,5 +1,4 @@
 ﻿using HizkitzaServer.game;
-using HizkitzaServer.util.db.data;
 using System.Net;
 using System.Net.Sockets;
 
@@ -78,8 +77,14 @@ namespace HizkitzaServer.util.connection
                 {
                     listener = new(IPAddress.Any, PORT);
                     listener.Start();
-                    var host = Dns.GetHostEntry(Dns.GetHostName());
-                    LogBerria($"ZERBITZARIA hasi da {host.AddressList[^1]}:{PORT}", LogType.INFO);
+                    var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
+                    var ipAddress = hostEntry.AddressList.FirstOrDefault(
+                        ip => ip.AddressFamily == AddressFamily.InterNetwork
+                        ) ?? hostEntry.AddressList.FirstOrDefault(
+                            ip => ip.AddressFamily == AddressFamily.InterNetworkV6
+                            );
+
+                    LogBerria($"ZERBITZARIA hasi da {ipAddress?.ToString() ?? "null"}:{PORT}", LogType.INFO);
 
                     while (Alive) BezeroBerriaItxaron(listener);
                 }
@@ -120,7 +125,7 @@ namespace HizkitzaServer.util.connection
                 listener?.Stop();
                 foreach (var list in Clients.Values)
                     foreach (var bezero in list)
-                        bezero.CloseClient(null);
+                        bezero.CloseClient(false);
             }
             LogBerria("ZERBITZARIA itzali da", LogType.INFO);
         }
@@ -137,22 +142,14 @@ namespace HizkitzaServer.util.connection
         }
 
         // Mezu berria gertaera deitu eta CommnandDecoder-en bidez prozesatu
-        public static async void MezuBerria(string mezua, ServersideClient bezero)
+        public static async Task MezuBerria(string mezua, ServersideClient bezero)
         {
-            try
+            MessageArrivedEvent?.Invoke(null, new()
             {
-                MessageArrivedEvent?.Invoke(null, new()
-                {
-                    Client = bezero,
-                    Mezua = mezua
-                });
-                await CommandDecoder.ExecuteCommand(mezua, bezero);
-            }
-            catch (Exception e)
-            {
-                bezero.Send("Denied " + e.Message);
-                LogBerria(e.Message, LogType.ERROR);
-            }
+                Client = bezero,
+                Mezua = mezua
+            });
+            await CommandDecoder.ExecuteCommand(mezua, bezero);
         }
 
         // Deskonektatutako bezeroa bezeroen zerrendatik kendu eta gertaera deitu

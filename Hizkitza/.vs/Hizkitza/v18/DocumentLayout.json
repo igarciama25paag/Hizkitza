@@ -3,22 +3,13 @@
   "WorkspaceRootPath": "C:\\Users\\user\\source\\repos\\Hizkitza\\Hizkitza\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaclient\\util\\connection\\commanddecoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\util\\connection\\serversideclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\util\\connection\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaclient\\util\\connection\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\util\\connection\\commanddecoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaclient\\ui\\window\\page\\playerlobby.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\util\\connection\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -28,21 +19,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 222,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ServersideClient.cs",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
-              "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
-              "ViewState": "AgIAAFgAAAAAAAAAAAAcwG0AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T17:14:30.273Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
@@ -51,61 +29,35 @@
               "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\Server.cs",
               "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\Server.cs",
               "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\Server.cs",
-              "ViewState": "AgIAAGoAAAAAAAAAAAAYwIQAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T17:11:19.681Z",
+              "WhenOpened": "2026-02-05T20:22:53.071Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "CommandDecoder.cs",
               "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
               "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
               "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
               "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
-              "ViewState": "AgIAAJ4AAAAAAAAAAAAswL4AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACIAAAAAAAAAAAAgwDQAAABdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T15:58:50.236Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Client.cs",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\util\\connection\\Client.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\util\\connection\\Client.cs",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\util\\connection\\Client.cs",
-              "RelativeToolTip": "..\\HizkitzaClient\\util\\connection\\Client.cs",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAswHYAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T17:17:08.983Z",
+              "WhenOpened": "2026-02-05T16:38:30.298Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CommandDecoder.cs",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\util\\connection\\CommandDecoder.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\util\\connection\\CommandDecoder.cs",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\util\\connection\\CommandDecoder.cs",
-              "RelativeToolTip": "..\\HizkitzaClient\\util\\connection\\CommandDecoder.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAA1wDAAAAAFAAAAAAAAAA==",
+              "Title": "ServersideClient.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
+              "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\ServersideClient.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAmwBcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T15:58:45.72Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "PlayerLobby.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml.cs",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml.cs",
-              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAgwCgAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T15:54:46.667Z",
+              "WhenOpened": "2026-02-05T16:38:11.485Z",
               "EditorCaption": ""
             }
           ]
