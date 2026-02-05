@@ -27,11 +27,11 @@
                 <StackPanel>
                     <DockPanel>
                         <TextBlock Text="Itxura:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox x:Name="itxura"/>
+                        <ComboBox x:Name="itxura" ItemsSource="{Binding ItxurakList}"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock Text="Kolorea:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox x:Name="kolorea"/>
+                        <ComboBox x:Name="kolorea" ItemsSource="{Binding KoloreakList}" SelectionChanged="Kolorea_SelectionChanged"/>
                     </DockPanel>
                 </StackPanel>
             </Border>
@@ -48,7 +48,7 @@
                     </DockPanel>
                     <DockPanel>
                         <TextBlock Text="Mapa:" Margin="10" DockPanel.Dock="Left" MaxWidth="90" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
-                        <ComboBox x:Name="mapa"/>
+                        <ComboBox x:Name="mapa" ItemsSource="{Binding MapakList}"/>
                     </DockPanel>
                 </StackPanel>
             </Border>

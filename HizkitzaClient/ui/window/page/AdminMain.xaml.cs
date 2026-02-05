@@ -22,9 +22,11 @@ namespace HizkitzaClient.ui.window.page
     public partial class AdminMain : Page
     {
         private readonly object logLock = new();
+        public ObservableCollection<string> Logs { get; set; } = [];
 
         public AdminMain()
         {
+            DataContext = this;
             CommandDecoder.ClearEvents();
             InitializeComponent();
             Unloaded += Page_Unloaded;
@@ -52,12 +54,8 @@ namespace HizkitzaClient.ui.window.page
             {
                 lock (logLock)
                 {
-                    var item = new ListBoxItem
-                    {
-                        Content = e.Log
-                    };
-                    LogList.Items.Add(item);
-                    LogList.ScrollIntoView(item);
+                    Logs.Add(e.Log);
+                    logs.ScrollIntoView(logs.Items[^1]);
                 }
             });
         }

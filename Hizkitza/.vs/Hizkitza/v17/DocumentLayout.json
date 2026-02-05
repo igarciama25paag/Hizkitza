@@ -1,12 +1,37 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{264C1536-55AA-42A1-B395-1D098839E8AF}|HizkitzaTests\\HizkitzaTests.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitza\\hizkitzatests\\unittests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{264C1536-55AA-42A1-B395-1D098839E8AF}|HizkitzaTests\\HizkitzaTests.csproj|solutionrelative:hizkitzatests\\unittests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 222,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UnitTests.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\UnitTests.cs",
+              "RelativeDocumentMoniker": "HizkitzaTests\\UnitTests.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\UnitTests.cs",
+              "RelativeToolTip": "HizkitzaTests\\UnitTests.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T11:34:39.138Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -30,7 +30,7 @@
                 <Button Click="Bidali_Click" DockPanel.Dock="Right" Content="Bidali"/>
                 <TextBox x:Name="command" KeyDown="Command_KeyDown" Style="{StaticResource TextBox.Medium}" VerticalContentAlignment="Center" Width="auto"/>
             </DockPanel>
-            <ListBox x:Name="LogList" Margin="0,0,0,10"/>
+            <ListBox x:Name="logs" ItemsSource="{Binding Logs}" Margin="0,0,0,10"/>
         </DockPanel>
         
     </Grid>

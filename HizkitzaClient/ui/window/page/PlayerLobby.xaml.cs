@@ -21,8 +21,16 @@ namespace HizkitzaClient.ui.window.page
     public partial class PlayerLobby : Page
     {
         private readonly object gamesLock = new();
-        private readonly List<string> Itxurak = ["@", "G", "Q", "Ç", "C"];
-        private readonly List<ComboBoxItem> Koloreak =
+
+        public List<ComboBoxItem> ItxurakList { get; } =
+        [
+            new ComboBoxItem() { Content = "@" },
+            new ComboBoxItem() { Content = "Q" },
+            new ComboBoxItem() { Content = "G" },
+            new ComboBoxItem() { Content = "C" },
+            new ComboBoxItem() { Content = "Ç" }
+        ];
+        public List<ComboBoxItem> KoloreakList { get; } =
         [
             new ComboBoxItem() { Content = "Horia", Foreground = Brushes.Yellow },
             new ComboBoxItem() { Content = "Laranja", Foreground = Brushes.Orange },
@@ -31,24 +39,16 @@ namespace HizkitzaClient.ui.window.page
             new ComboBoxItem() { Content = "Urdina", Foreground = Brushes.Turquoise },
             new ComboBoxItem() { Content = "Berdea", Foreground = Brushes.LimeGreen }
         ];
-        private readonly List<string> Mapak = ["Bunker", "Mansioa", "Camping"];
+        public List<string> MapakList { get; } = ["Bunker", "Mansioa", "Camping"];
 
         public PlayerLobby()
         {
+            DataContext = this;
             InitializeComponent();
             Loaded += Page_Loaded;
             Unloaded += Page_Unloaded;
             CommandDecoder.GamesEvent += Games;
             CommandDecoder.DeniedEvent += Denied;
-
-            foreach (var item in Mapak)
-                mapa.Items.Add(item);
-
-            foreach (var item in Koloreak)
-                kolorea.Items.Add(item);
-
-            foreach (var item in Itxurak)
-                itxura.Items.Add(item);
 
             Client.MezuaBidali("ActivateGameUpdater");
         }
@@ -96,6 +96,15 @@ namespace HizkitzaClient.ui.window.page
                 new HizkitzaInfoMessageBox("Partidak mapa bat behar du").ShowDialog();
             else
                 Client.MezuaBidali($"NewGame {izena.Text.Trim()} {mapa.Text.Trim()}");
+        }
+
+        private void Kolorea_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var col = ((ComboBoxItem)kolorea.SelectedItem).Foreground ?? Brushes.White;
+            itxura.Foreground = col;
+            kolorea.Foreground = col;
+            foreach (var item in itxura.Items)
+                ((ComboBoxItem)item).Foreground = col;
         }
     }
 }

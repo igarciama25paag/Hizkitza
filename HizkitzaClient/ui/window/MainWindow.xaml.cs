@@ -24,10 +24,11 @@ namespace HizkitzaClient.ui.window
     /// </summary>
     public partial class MainWindow : Window
     {
+        public string Username { get; set; } = Client.Izena ?? "null";
         public MainWindow()
         {
+            DataContext = this;
             InitializeComponent();
-            Username.Text = Client.Izena ?? "null";
             Closing += Window_Closing;
             Client.DisconnectedEvent += Disconnected;
             //Client.LogSentEvent += LogSent;
