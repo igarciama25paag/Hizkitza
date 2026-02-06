@@ -27,15 +27,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "HizkitzaTests",
+              "Title": "HizkitzaTests.csproj",
               "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\HizkitzaTests.csproj",
               "RelativeDocumentMoniker": "HizkitzaTests\\HizkitzaTests.csproj",
               "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\HizkitzaTests.csproj",
               "RelativeToolTip": "HizkitzaTests\\HizkitzaTests.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-02-06T09:16:14.908Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-06T09:16:14.908Z"
             },
             {
               "$type": "Document",
@@ -45,7 +44,7 @@
               "RelativeDocumentMoniker": "HizkitzaTests\\UnitTests.cs",
               "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\UnitTests.cs",
               "RelativeToolTip": "HizkitzaTests\\UnitTests.cs",
-              "ViewState": "AgIAAHkAAAAAAAAAAAAwwJkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAHkAAAAAAAAAAAAwwI0AAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-06T08:48:49.515Z",
               "EditorCaption": ""
