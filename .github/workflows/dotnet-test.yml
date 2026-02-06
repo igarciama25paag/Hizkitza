@@ -6,76 +6,32 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
-  # Set to 'true' in workflow_dispatch or repository secrets to run integration tests
-  RUN_INTEGRATION: 'false'
-  # Set to 'true' to collect code coverage (uses XPlat Code Coverage collector)
-  COLLECT_COVERAGE: 'false'
+name: .NET CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build-and-test:
     runs-on: windows-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
 
-      - name: Restore
-        run: dotnet restore Hizkitza/Hizkitza.sln
+    - name: Restore dependencies
+      run: dotnet restore Hizkitza/Hizkitza.sln
 
-      - name: Build (Release)
-        run: dotnet build -c Release --no-restore
+    - name: Build solution
+      run: dotnet build Hizkitza/Hizkitza.sln --configuration Release --no-restore
 
-      - name: Run unit tests (exclude Integration)
-        id: unit_tests
-        run: |
-          echo "Running unit tests (Type != Integration)"
-          dotnet test ./HizkitzaTests/HizkitzaTests.csproj \
-            --no-build -c Release \
-            --logger "trx;LogFileName=UnitTestResults.trx" \
-            --filter "Type != Integration"
-        continue-on-error: false
-
-      - name: Upload unit test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: UnitTestResults.trx
-          path: HizkitzaTests/UnitTestResults.trx
-
-      - name: Run integration tests (optional)
-        if: ${{ env.RUN_INTEGRATION == 'true' }}
-        id: integration_tests
-        run: |
-          echo "RUN_INTEGRATION=true -> running integration tests (Type = Integration)"
-          # Make sure any required secrets (DB connection string) are provided via repository secrets
-          dotnet test ./HizkitzaTests/HizkitzaTests.csproj \
-            --no-build -c Release \
-            --logger "trx;LogFileName=IntegrationTestResults.trx" \
-            --filter "Type = Integration"
-
-      - name: Upload integration test results (optional)
-        if: ${{ env.RUN_INTEGRATION == 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: IntegrationTestResults.trx
-          path: HizkitzaTests/IntegrationTestResults.trx
-
-      - name: Collect code coverage (optional)
-        if: ${{ env.COLLECT_COVERAGE == 'true' }}
-        run: |
-          echo "COLLECT_COVERAGE=true -> running tests with coverage collection"
-          dotnet test ./HizkitzaTests/HizkitzaTests.csproj \
-            --no-build -c Release \
-            --collect:"XPlat Code Coverage" \
-            --results-directory ./HizkitzaTests/TestResults
-      - name: Upload coverage report (optional)
-        if: ${{ env.COLLECT_COVERAGE == 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: CodeCoverage
-          path: HizkitzaTests/TestResults/**/coverage.cobertura.xml
+    - name: Run tests
+      run: dotnet test Hizkitza/Hizkitza.sln --no-build --verbosity normal --configuration Release
