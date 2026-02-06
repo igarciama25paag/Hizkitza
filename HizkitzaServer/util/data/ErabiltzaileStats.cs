@@ -13,5 +13,11 @@ namespace HizkitzaServer.util.data
         int Partida_sartu_n,
         string Partida_t_max,
         string Azken_sartu_partida
-        );
+        )
+    {
+        public override string ToString()
+        {
+            return $"{Erabiltzaile_id} {Azken_itxura} {Azken_kolorea} {Partida_sartu_n} {Partida_t_max} {Azken_sartu_partida}";
+        }
+    }
 }

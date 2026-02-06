@@ -77,12 +77,12 @@ namespace HizkitzaServer.util.db
                 await using var reader = await cmd.ExecuteReaderAsync();
                 {
                     await reader.ReadAsync();
-
                     return new Erabiltzailea(
                         reader.GetInt16(0),
                         reader.GetString(1).Trim(),
                         reader.GetString(2).Trim(),
-                        Enum.Parse<ConnectionType>(reader.GetString(3).Trim())
+                        Enum.Parse<ConnectionType>(reader.GetString(3).Trim()),
+                        reader.GetDateTime(5).ToString()
                         );
                 }
             });
@@ -92,22 +92,47 @@ namespace HizkitzaServer.util.db
          * TXOSTENAK
          * */
 
+        // Erabiltzaile estatistikak datu baseari eskaera
+        public static async Task<ErabiltzaileStats> ErabiltzaileStats(string user)
+        {
+            return await DBRequest(async dataSource => {
+                await using var cmd = dataSource.CreateCommand(
+                    "SELECT * FROM \"ErabiltzaileakStats\" " +
+                    "WHERE erabiltzaile_id = ( " +
+                    "  SELECT id " +
+                    "  FROM \"Erabiltzaileak\" " +
+                    $" WHERE izena = '{user}' )"
+                    );
+                await using var reader = await cmd.ExecuteReaderAsync();
+                {
+                    await reader.ReadAsync();
+                    return new ErabiltzaileStats(
+                        reader.GetInt16(0),
+                        reader.GetChar(1),
+                        reader.GetString(2).Trim(),
+                        reader.GetInt16(3),
+                        reader.GetString(4).Trim(),
+                        reader.GetDateTime(5).ToString()
+                        );
+                }
+            });
+        }
+
         // Erabiltziale baten partida famatuena datu baseari eskaera
         public static async Task<PartidaStats> ErabiltzailePartidaFamatua(string user)
         {
             return await DBRequest(async dataSource => {
                 await using var cmd = dataSource.CreateCommand(
                     "SELECT * FROM \"PartidakStats\" " +
-                    $"WHERE erabiltzailea_id = ( " +
-                    $"  SELECT erabiltzaile_id " +
-                    $"  FROM \"Erabiltzaileak\" " +
-                    $"  WHERE izena = {user} )" +
-                    $"ORDER BY erabiltzaile_max DESC LIMIT 1"
+                    "WHERE erabiltzaile_id = ( " +
+                    "  SELECT id " +
+                    "  FROM \"Erabiltzaileak\" " +
+                    $" WHERE izena = '{user}' ) " +
+                    "ORDER BY erabiltzaile_max DESC LIMIT 1"
                     );
                 await using var reader = await cmd.ExecuteReaderAsync();
                 {
                     await reader.ReadAsync();
-
                     return new PartidaStats(
                         reader.GetInt16(0),
                         reader.GetInt16(1),
@@ -122,12 +147,12 @@ namespace HizkitzaServer.util.db
         }
 
         // Top 10 partida famatuenak datu baseari eskaera
-        public static async Task<List<PartidaStats>> Top10Partidak(string user)
+        public static async Task<List<PartidaStats>> Top10Partidak()
         {
             return await DBRequest(async dataSource => {
                 await using var cmd = dataSource.CreateCommand(
                     "SELECT * FROM \"PartidakStats\" " +
-                    $"ORDER BY erabiltzaile_max DESC LIMIT 10"
+                    "ORDER BY erabiltzaile_max DESC LIMIT 10"
                     );
                 await using var reader = await cmd.ExecuteReaderAsync();
                 {
@@ -145,6 +170,64 @@ namespace HizkitzaServer.util.db
                             ));
 
                     return list;
+                }
+            });
+        }
+
+        // Mapa famatuena datu baseari eskaera
+        public static async Task<string> MapaFamatuena()
+        {
+            return await DBRequest(async dataSource => {
+                await using var cmd = dataSource.CreateCommand(
+                    "SELECT mapa FROM \"PartidakStats\" " +
+                    "GROUP BY mapa " +
+                    "ORDER BY SUM(erabiltzaile_max) DESC LIMIT 1"
+                    );
+                await using var reader = await cmd.ExecuteReaderAsync();
+                {
+                    await reader.ReadAsync();
+                    return reader.GetString(0).Trim();
+                }
+            });
+        }
+
+        // Partida luzeena datu baseari eskaera
+        public static async Task<PartidaStats> PartidaLuzeena()
+        {
+            return await DBRequest(async dataSource => {
+                await using var cmd = dataSource.CreateCommand(
+                    "SELECT * FROM \"PartidakStats\" " +
+                    "ORDER BY iraupena DESC LIMIT 1"
+                    );
+                await using var reader = await cmd.ExecuteReaderAsync();
+                {
+                    await reader.ReadAsync();
+                    return new PartidaStats(
+                        reader.GetInt16(0),
+                        reader.GetInt16(1),
+                        reader.GetString(2).Trim(),
+                        reader.GetString(3).Trim(),
+                        reader.GetInt16(4),
+                        reader.GetString(5).Trim(),
+                        reader.GetString(6).Trim()
+                        );
+                }
+            });
+        }
+
+        // Data aktiboena datu baseari eskaera
+        public static async Task<string> DataAktiboena()
+        {
+            return await DBRequest(async dataSource => {
+                await using var cmd = dataSource.CreateCommand(
+                    "SELECT sorkuntza_data FROM \"PartidakStats\" " +
+                    "GROUP BY sorkuntza_data " +
+                    "ORDER BY COUNT(sortkuntza_data) DESC LIMIT 1"
+                    );
+                await using var reader = await cmd.ExecuteReaderAsync();
+                {
+                    await reader.ReadAsync();
+                    return reader.GetString(0).Trim();
                 }
             });
         }

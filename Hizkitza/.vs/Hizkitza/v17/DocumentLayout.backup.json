@@ -3,12 +3,10 @@
   "WorkspaceRootPath": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{264C1536-55AA-42A1-B395-1D098839E8AF}|HizkitzaTests\\HizkitzaTests.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitza\\hizkitzatests\\unittests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{264C1536-55AA-42A1-B395-1D098839E8AF}|HizkitzaTests\\HizkitzaTests.csproj|solutionrelative:hizkitzatests\\unittests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaserver\\util\\db\\hizkitzadb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{264C1536-55AA-42A1-B395-1D098839E8AF}|HizkitzaTests\\HizkitzaTests.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitza\\hizkitzatests\\hizkitzatests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{264C1536-55AA-42A1-B395-1D098839E8AF}|HizkitzaTests\\HizkitzaTests.csproj|solutionrelative:hizkitzatests\\hizkitzatests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|d:\\psp\\2. erronka\\aplikazioa\\hizkitzaserver\\launcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,27 +25,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "HizkitzaTests",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\HizkitzaTests.csproj",
-              "RelativeDocumentMoniker": "HizkitzaTests\\HizkitzaTests.csproj",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\HizkitzaTests.csproj",
-              "RelativeToolTip": "HizkitzaTests\\HizkitzaTests.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-02-06T09:16:14.908Z",
+              "Title": "Launcher.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\Launcher.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaServer\\Launcher.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\Launcher.cs",
+              "RelativeToolTip": "..\\HizkitzaServer\\Launcher.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAWwBIAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-06T12:20:35.152Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UnitTests.cs",
-              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\UnitTests.cs",
-              "RelativeDocumentMoniker": "HizkitzaTests\\UnitTests.cs",
-              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\Hizkitza\\HizkitzaTests\\UnitTests.cs",
-              "RelativeToolTip": "HizkitzaTests\\UnitTests.cs",
-              "ViewState": "AgIAAHkAAAAAAAAAAAAwwJkAAAAAAAAAAAAAAA==",
+              "Title": "HizkitzaDB.cs",
+              "DocumentMoniker": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\db\\HizkitzaDB.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\db\\HizkitzaDB.cs",
+              "ToolTip": "D:\\PSP\\2. Erronka\\Aplikazioa\\HizkitzaServer\\util\\db\\HizkitzaDB.cs",
+              "RelativeToolTip": "..\\HizkitzaServer\\util\\db\\HizkitzaDB.cs",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAUwGgAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T08:48:49.515Z",
+              "WhenOpened": "2026-02-06T11:55:14.164Z",
               "EditorCaption": ""
             }
           ]

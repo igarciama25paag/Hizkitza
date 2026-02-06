@@ -11,6 +11,13 @@ namespace HizkitzaServer.util.data
         int Id,
         string Izena,
         string Pasahitza,
-        ConnectionType Mota
-        );
+        ConnectionType Mota,
+        string Sorkuntza_data
+        )
+    {
+        public override string ToString()
+        {
+            return $"{Id} {Izena} {Pasahitza} {Mota} {Sorkuntza_data}";
+        }
+    }
 }

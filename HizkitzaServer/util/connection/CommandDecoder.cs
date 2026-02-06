@@ -104,9 +104,9 @@ public static class CommandDecoder
                 // Kredentzialak egiaztatu eta erabiltzailea sortu
                 //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
                 if (args[0] == "admin" && args[1] == "admin")
-                    client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin);
+                    client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin, "");
                 else if (args[0] == "user" && args[1] == "user")
-                    client.Erabiltzailea = new Erabiltzailea(0, "user", "user", ConnectionType.user);
+                    client.Erabiltzailea = new Erabiltzailea(0, "user", "user", ConnectionType.user, "");
                 else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
             }
             catch (Exception e) when (e is IndexOutOfRangeException || e is InvalidOperationException)

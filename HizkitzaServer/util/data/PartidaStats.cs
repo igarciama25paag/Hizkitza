@@ -14,5 +14,11 @@ namespace HizkitzaServer.util.data
         int Erabiltzaile_max,
         string Mapa,
         string Sorkuntza_data
-        );
+        )
+    {
+        public override string ToString()
+        {
+            return $"{Partida_id} {Erabiltzaile_id} {Izena} {Iraupena} {Erabiltzaile_max} {Mapa} {Sorkuntza_data}";
+        }
+    }
 }
