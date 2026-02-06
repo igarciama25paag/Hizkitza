@@ -2,14 +2,6 @@ name: .NET Test (Hizkitza)
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-name: .NET CI
-
-on:
-  push:
     branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main" ]
