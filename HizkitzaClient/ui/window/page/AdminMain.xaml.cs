@@ -27,14 +27,13 @@ namespace HizkitzaClient.ui.window.page
         public AdminMain()
         {
             DataContext = this;
-            CommandDecoder.ClearEvents();
             InitializeComponent();
             Unloaded += Page_Unloaded;
             Loaded += Page_Loaded;
-            CommandDecoder.NewLogEvent += NewLog;
+            CommandDecoder.DataEvent += Data;
             CommandDecoder.DeniedEvent += Denied;
 
-            Client.MezuaBidali("ActivateLogSender");
+            Client.MezuaBidali("LogSender true");
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e) => Window.GetWindow(this).Closing += Window_Closing;
@@ -45,26 +44,30 @@ namespace HizkitzaClient.ui.window.page
 
         private void Denied(object? sender, CommandDecoder.DeniedEventArgs e)
         {
-            Dispatcher?.Invoke(() => new HizkitzaInfoMessageBox($"DENIED {e.Reason}").ShowDialog());
+            Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}"));
         }
 
-        private void NewLog(object? sender, CommandDecoder.NewLogEventArgs e)
+        private void Data(object? sender, CommandDecoder.DataEventArgs e)
         {
-            Dispatcher.Invoke(() =>
-            {
-                lock (logLock)
+            if (e.Mota == CommandDecoder.DataType.Log)
+                Dispatcher.Invoke(() =>
                 {
-                    Logs.Add(e.Log);
-                    logs.ScrollIntoView(logs.Items[^1]);
-                }
-            });
+                    lock (logLock)
+                    {
+                        var newLog = "";
+                        foreach (string str in e.Data)
+                            newLog += str + " ";
+                        Logs.Add(newLog.Trim());
+                        logs.ScrollIntoView(logs.Items[^1]);
+                    }
+                });
         }
 
         private void Close()
         {
             if (Client.Alive)
-                Client.MezuaBidali("DeactivateLogSender");
-            CommandDecoder.NewLogEvent -= NewLog;
+                Client.MezuaBidali("LogSender false");
+            CommandDecoder.DataEvent -= Data;
             CommandDecoder.DeniedEvent -= Denied;
         }
 

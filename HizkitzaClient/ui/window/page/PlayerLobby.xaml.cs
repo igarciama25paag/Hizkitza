@@ -47,10 +47,10 @@ namespace HizkitzaClient.ui.window.page
             InitializeComponent();
             Loaded += Page_Loaded;
             Unloaded += Page_Unloaded;
-            CommandDecoder.GamesEvent += Games;
+            CommandDecoder.DataEvent += Data;
             CommandDecoder.DeniedEvent += Denied;
 
-            Client.MezuaBidali("ActivateGameUpdater");
+            Client.MezuaBidali("GameUpdater true");
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e) => Window.GetWindow(this).Closing += Window_Closing;
@@ -61,30 +61,31 @@ namespace HizkitzaClient.ui.window.page
 
         private void Denied(object? sender, CommandDecoder.DeniedEventArgs e)
         {
-            Dispatcher?.Invoke(() => new HizkitzaInfoMessageBox($"DENIED {e.Reason}").ShowDialog());
+            Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}"));
         }
 
-        private void Games(object? sender, CommandDecoder.GameEventArgs e)
+        private void Data(object? sender, CommandDecoder.DataEventArgs e)
         {
-            Dispatcher?.Invoke(() =>
-            {
-                lock (gamesLock)
+            if (e.Mota == CommandDecoder.DataType.Games)
+                Dispatcher?.Invoke(() =>
                 {
-                    partidak.Items.Clear();
-                    foreach (var item in e.Games)
-                        partidak.Items.Add(new ListBoxItem()
-                        {
-                            Content = item
-                        });
-                }
-            });
+                    lock (gamesLock)
+                    {
+                        partidak.Items.Clear();
+                        foreach (var item in e.Data)
+                            partidak.Items.Add(new ListBoxItem()
+                            {
+                                Content = item
+                            });
+                    }
+                });
         }
 
         private void Close()
         {
             if (Client.Alive)
-                Client.MezuaBidali("DeactivateGameUpdater");
-            CommandDecoder.GamesEvent -= Games;
+                Client.MezuaBidali("GameUpdater false");
+            CommandDecoder.DataEvent -= Data;
             CommandDecoder.DeniedEvent -= Denied;
         }
 

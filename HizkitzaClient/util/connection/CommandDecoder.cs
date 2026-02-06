@@ -1,6 +1,7 @@
 using HizkitzaClient.ui.messagebox;
 using HizkitzaClient.util.connection;
 using HizkitzaClient.util.game;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -16,8 +17,7 @@ public static class CommandDecoder
     {
         ["Logged"] = new LoggedCommand(),
         ["Denied"] = new DeniedCommand(),
-        ["NewLog"] = new NewLogCommand(),
-        ["Games"] = new GamesCommand()
+        ["Data"] = new DataCommand()
     };
 
     // Komandoa ez dela existzen salbuespena
@@ -34,53 +34,50 @@ public static class CommandDecoder
     {
         if (command != null)
         {
+            // Komandoa lortu
             var splitCommand = command.Trim().Split(" ");
             var commandName = splitCommand[0];
+
+            // Komandoaren argumentuak lortu
             var args = splitCommand.ToList();
             args.RemoveAt(0);
-
             try
             {
-                Commands[commandName].Execute(args.ToArray());
-                Debug.WriteLine($"Command: '{commandName}' with args: '{string.Join(" ", args)}'");
+                // Komandoa existitzen den egiaztatu
+                var commandExe = Commands[commandName];
+
+                // Komandoaren formatu egokia egiaztatu
+                var splitFormat = commandExe.Format.Split(' ');
+                if (!(splitFormat[^1] == "..." && args.Count >= splitFormat.Length - 1) &&
+                    args.Count != splitFormat.Length - 1)
+                    throw new WrongCommandFormatException(commandExe.Format);
+
+                // Komandoa exekutatu
+                commandExe.Execute([.. args]);
             }
             catch (KeyNotFoundException)
             {
-                var msg = $"'{commandName}' comandoa ez da existitzen";
-                throw new UnexistingCommandException(msg);
+                throw new UnexistingCommandException($"'{commandName}' comandoa ez da existitzen");
             }
             catch (WrongCommandFormatException e)
             {
-                var msg = $"Formatu okerra '{commandName}' comandoarentzat: {e.Message}";
-                throw new WrongCommandFormatException(msg);
+                throw new WrongCommandFormatException($"'{commandName}' formatu okerra: {e.Message}");
             }
         }
     }
 
-    public static void ClearEvents()
-    {
-        NewLogEvent = null;
-    }
-
     private interface ICommand
     {
+        string Format { get; }
         void Execute(string[] args);
-    }
-    
-    // Komandoaren formatua ondo dagoela baieztatzeko
-    private static void CheckCommandFormat(string[] args, string format)
-    {
-        if (args.Length != format.Split(' ').Length - 1) throw new WrongCommandFormatException(format);
     }
 
     // Saioa ondo hasita komandoa
     private class LoggedCommand : ICommand
     {
+        public string Format => "Logged <mota>";
         public void Execute(string[] args)
         {
-            // Komandoaren formatua egiaztatu
-            CheckCommandFormat(args, "Logged <mota>");
-
             try { Client.Mota = (ConnectionType)Enum.Parse(typeof(ConnectionType), args[0]); }
             catch
             {
@@ -98,6 +95,7 @@ public static class CommandDecoder
     }
     private class DeniedCommand : ICommand
     {
+        public string Format => "Denied ...";
         public void Execute(string[] args)
         {
             DeniedEvent?.Invoke(null, new()
@@ -108,39 +106,43 @@ public static class CommandDecoder
         }
     }
 
-
-    // Log berria iritsi den komandoa eta gertaera
-    public static event EventHandler<NewLogEventArgs>? NewLogEvent;
-    public class NewLogEventArgs : EventArgs
+    // Datu berriko gertaera
+    public static event EventHandler<DataEventArgs>? DataEvent;
+    public class DataEventArgs : EventArgs
     {
-        public required string Log { get; set; }
+        public required DataType Mota { get; set; }
+        public required string[] Data { get; set; }
     }
-    private class NewLogCommand : ICommand
+
+    // Datu motak
+    public enum DataType
     {
+        Log,
+        Games
+    }
+
+    // Datu berriko komandoa
+    private class DataCommand : ICommand
+    {
+        public string Format => "Data <mota> ...";
         public void Execute(string[] args)
         {
-            NewLogEvent?.Invoke(null, new()
+            try
             {
-                Log = string.Join(" ", args)
-            });
-        }
-    }
-
-
-    // Partida gehitzeko komandoa eta gertaera
-    public static event EventHandler<GameEventArgs>? GamesEvent;
-    public class GameEventArgs : EventArgs
-    {
-        public required string[] Games { get; set; }
-    }
-    private class GamesCommand : ICommand
-    {
-        public void Execute(string[] args)
-        {
-            GamesEvent?.Invoke(null, new()
+                DataType mota = (DataType)Enum.Parse(typeof(DataType), args[0]);
+                var data = new string[args.Length - 1];
+                for (int i = 0; i < data.Length; i++)
+                    data[i] = args[i + 1];
+                DataEvent?.Invoke(null, new()
+                {
+                    Mota = mota,
+                    Data = data
+                });
+            }
+            catch
             {
-                Games = args
-            });
+                throw new WrongCommandFormatException($"{args[0]} mota ez da existitzen");
+            }
         }
     }
 }

@@ -19,9 +19,6 @@ using System.Windows.Shapes;
 
 namespace HizkitzaClient.ui.window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public string Username { get; set; } = Client.Izena ?? "null";
@@ -47,38 +44,37 @@ namespace HizkitzaClient.ui.window
         {
             Dispatcher.Invoke(() =>
             {
-                var dialog = HizkitzaBooleanMessageBox.ShowDialog("Zerbitzariarekin konexioa galdu da. Aplikazioa itxi nahi al duzu?");
-                if (dialog.DialogResult == false) new LoginWindow().Show();
+                if (HizkitzaBooleanMessageBox
+                .ShowDialog("Zerbitzariarekin konexioa galdu da. Aplikazioa itxi nahi al duzu?")
+                .DialogResult == false)
+                    new LoginWindow().Show();
                 Close();
             });
         }
 
         public void LogSent(object? sender, Client.LogSentEventArgs e)
         {
-            Dispatcher.Invoke(() =>
-            {
-                HizkitzaInfoMessageBox.ShowDialog($"[{e.Mota}] {e.Log}");
-            });
+            Dispatcher.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"[{e.Mota}] {e.Log}"));
         }
 
         private void MessageArrived(object? sender, Client.MessageArrivedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
-            {
-                HizkitzaInfoMessageBox.ShowDialog($"(MSG) {e.Mezua}");
-            });
+            Dispatcher.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"(MSG) {e.Mezua}"));
         }
 
         private void Itxi_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = HizkitzaBooleanMessageBox.ShowDialog("Aplikazioa itxi nahi al duzu?");
-            if (dialog.DialogResult == true) Close();
+            if (HizkitzaBooleanMessageBox
+                .ShowDialog("Aplikazioa itxi nahi al duzu?")
+                .DialogResult == true)
+                Close();
         }
 
         private void SaioaItxi_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = HizkitzaBooleanMessageBox.ShowDialog("Saioa itxi nahi al duzu?");
-            if (dialog.DialogResult == true)
+            if (HizkitzaBooleanMessageBox
+                .ShowDialog("Saioa itxi nahi al duzu?")
+                .DialogResult == true)
             {
                 new LoginWindow().Show();
                 Close();
