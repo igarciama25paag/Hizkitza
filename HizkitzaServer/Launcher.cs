@@ -9,19 +9,19 @@ namespace HizkitzaServer
         {
             Server.MessageArrivedEvent += (sender, args) =>
             {
-                Server.LogBerria($"{args.Client} {args.Mezua}", Server.LogType.INFO);
+                Server.NewLog($"{args.Client} {args.Mezua}", Server.LogType.INFO);
             };
             Server.LogSentEvent += (sender, args) =>
             {
                 Console.WriteLine($"[{DateTime.Now:t}] [{args.Mota}] {args.Log}");
             };
-            Server.Piztu();
+            Server.TurnOn();
             Tests();
         }
 
         private static async void Tests()
         {
-            Console.WriteLine("Ane stats: " + (await HizkitzaDB.ErabiltzaileStats("Ane")).ToString());
+            /*Console.WriteLine("Ane stats: " + (await HizkitzaDB.ErabiltzaileStats("Ane")).ToString());
             /*Console.WriteLine("Aneren partida famatuena: " + await HizkitzaDB.ErabiltzailePartidaFamatua("Ane"));
             Console.WriteLine("Data aktiboena: " + await HizkitzaDB.DataAktiboena());
             Console.WriteLine("Partida luzeena: " + await HizkitzaDB.PartidaLuzeena());

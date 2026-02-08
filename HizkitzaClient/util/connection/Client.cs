@@ -4,29 +4,32 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HizkitzaClient.util.connection
 {
     public static class Client
     {
-        // Portua
-        private const int PORT = 5000;
+        // Konexio datuak
+        public static IPAddress ip { get; private set; } = IPAddress.Parse("127.0.0.1");
+        public static int port { get; private set; } = 5000;
 
         // Bezero objektuak
         private static TcpClient? client;
-        private static NetworkStream? Stream;
-        private static StreamReader? Reader;
-        private static StreamWriter? Writer;
+        private static NetworkStream? stream;
+        private static StreamReader? reader;
+        private static StreamWriter? writer;
 
         // Bezeroa funtzionatzen ari den
-        public static bool Alive { get; private set; }
+        public static bool alive { get; private set; }
 
         // Bezeroaren izena eta mota
-        public static string? Izena;
-        public static ConnectionType? Mota;
+        public static string? izena;
+        public static ConnectionType? mota;
 
         // Konektatuta gertara
         public static event EventHandler<EventArgs>? ConnectedEvent;
@@ -58,50 +61,45 @@ namespace HizkitzaClient.util.connection
         }
 
         // Bezeroa zerbitzarira konektatu eta saioa hasten saiatu
-        public static void Konektatu(string ip, string izena, string pasahitza)
+        public static void Connect(IPAddress ip, int port, string izena, string pasahitza)
         {
             client = new();
-            Alive = true;
+            alive = true;
+            Client.ip = ip;
+            Client.port = port;
             try
             {
-                client.Connect(ip, PORT);
+                client.Connect(Client.ip, Client.port);
 
-                Stream = client.GetStream();
-                Reader = new StreamReader(Stream);
-                Writer = new StreamWriter(Stream) { AutoFlush = true };
+                stream = client.GetStream();
+                reader = new StreamReader(stream);
+                writer = new StreamWriter(stream) { AutoFlush = true };
 
-                MezuaBidali($"Login {izena} {pasahitza}");
-                try
+                Send($"Login {izena} {pasahitza}");
+                var result = WaitMessage();
+                if (result == null && mota != null)
                 {
-                    CommandDecoder.ExecuteCommand(Reader.ReadLine());
-                    Izena = izena;
-                    LogBerria("Zerbitzarira konektatuta", LogType.INFO);
+                    Client.izena = izena;
+                    NewLog("Zerbitzarira konektatuta", LogType.INFO);
                     ConnectedEvent?.Invoke(null, new());
 
                     CreateConnectionChecker();
                     CreateReceiverThread();
                 }
-                catch (CommandDecoder.DeniedException e)
-                {
-                    BezeroaItxi("Saioa ezeztatuta: " + e.Message);
-                }
-                catch (Exception e)
-                {
-                    BezeroaItxi("Konexio errorea: " + e.Message);
-                }
+                else CloseClient(result?.Message ?? "Mota null");
             }
-            catch { BezeroaItxi("Ezin izan da zerbitzaria atzitu"); }
+            catch { CloseClient("Ezin izan da zerbitzaria atzitu"); }
         }
 
-        // 
+        // Zerbitzariarekin konexioa dabilela segunduro egiaztatzen duen haria, deskonektatuta badago bezeroa itxi
         private static void CreateConnectionChecker()
         {
             new Thread(() =>
             {
-                while (Alive)
+                while (alive)
                 {
                     if (client!.Client.Poll(0, SelectMode.SelectRead) && client.Client.Available == 0)
-                        BezeroaItxi("Konexioa amaitu da");
+                        CloseClient("Konexioa amaitu da");
                     Thread.Sleep(1000);
                 }
             }).Start();
@@ -111,33 +109,57 @@ namespace HizkitzaClient.util.connection
         {
             new Thread(() =>
             {
-                try
-                {
-                    while (Alive)
-                    {
-                        var mezua = Reader?.ReadLine();
-                        if (mezua != null)
-                        {
-                            try
-                            {
-                                MessageArrivedEvent?.Invoke(null, new()
-                                {
-                                    Mezua = mezua
-                                });
-                                CommandDecoder.ExecuteCommand(mezua);
-                            }
-                            catch (Exception e)
-                            {
-                                LogBerria(e.Message, LogType.ERROR);
-                            }
-                        }
-                    }
-                }
-                catch { BezeroaItxi("Konexioa amaitu da"); }
+                while (alive) WaitMessage();
             }).Start();
         }
 
-        private static void LogBerria(string log, LogType mota)
+        // Zerbitzariko mezu bat itxaron eta erroreren bat egon den itxaron.
+        private static Exception? WaitMessage()
+        {
+            try
+            {
+                var mezua = reader?.ReadLine();
+                if (mezua != null)
+                {
+                    MessageArrivedEvent?.Invoke(null, new()
+                    {
+                        Mezua = mezua
+                    });
+                    CommandDecoder.ExecuteCommand(mezua);
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                if (e.GetType() == typeof(IOException))
+                    NewLog("Konexioa amaitu da", LogType.ERROR);
+                else
+                    NewLog(e.Message, LogType.ERROR);
+                return e;
+            }
+        }
+
+        public static void Send(string mezua)
+        {
+            try { writer?.WriteLine(mezua); }
+            catch { CloseClient("Konexioa amaitu da"); }
+        }
+
+        public static void CloseClient(string? log)
+        {
+            if (!alive) return;
+            alive = false;
+            mota = null;
+            izena = null;
+            client?.Close();
+            stream?.Close();
+            reader?.Close();
+            writer?.Close();
+            DisconnectedEvent?.Invoke(null, new());
+            if (log != null) NewLog(log, LogType.ERROR);
+        }
+
+        public static void NewLog(string log, LogType mota)
         {
             LogSentEvent?.Invoke(null, new()
             {
@@ -146,23 +168,9 @@ namespace HizkitzaClient.util.connection
             });
         }
 
-        public static void MezuaBidali(string mezua)
+        public static void Download(string file)
         {
-            try { Writer?.WriteLine(mezua); }
-            catch { BezeroaItxi("Konexioa amaitu da"); }
-        }
-
-        public static void BezeroaItxi(string? log)
-        {
-            Alive = false;
-            Mota = null;
-            Izena = null;
-            client?.Close();
-            Stream?.Close();
-            Reader?.Close();
-            Writer?.Close();
-            DisconnectedEvent?.Invoke(null, new());
-            if (log != null) LogBerria(log, LogType.ERROR);
+            DownloadClient.DownloadBytes(ip, port, file);
         }
     }
 }

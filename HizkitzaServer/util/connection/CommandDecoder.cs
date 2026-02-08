@@ -1,6 +1,8 @@
 using HizkitzaServer.util.data;
 using HizkitzaServer.util.db;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using static HizkitzaServer.util.connection.Server;
@@ -15,7 +17,8 @@ public static class CommandDecoder
         ["Login"] = new LoginCommand(),
         ["LogSender"] = new LogSenderCommand(),
         ["NewGame"] = new NewGameCommand(),
-        ["GameUpdater"] = new GameUpdaterCommand()
+        ["GameUpdater"] = new GameUpdaterCommand(),
+        ["Download"] = new DownloadCommand()
     };
 
     // Komando baimenak
@@ -23,7 +26,8 @@ public static class CommandDecoder
     {
         ["LogSender"] = [ConnectionType.admin],
         ["GameUpdater"] = [ConnectionType.admin, ConnectionType.user],
-        ["NewGame"] = [ConnectionType.admin, ConnectionType.user]
+        ["NewGame"] = [ConnectionType.admin, ConnectionType.user],
+        ["Download"] = [ConnectionType.download]
     };
 
     // Komandoa ez dela existzen salbuespena
@@ -60,7 +64,7 @@ public static class CommandDecoder
 
                 // Komandoaren baimenak ikusi
                 if (Perms.TryGetValue(commandName, out Collection<ConnectionType>? value) &&
-                    (client.Erabiltzailea == null || !value.Contains(client.Erabiltzailea.Mota)))
+                    (client.erabiltzailea == null || !value.Contains(client.erabiltzailea.Mota)))
                     throw new DeniedException("Baimenik gabe");
 
                 // Komandoa exekutatu
@@ -77,6 +81,7 @@ public static class CommandDecoder
         }
     }
 
+
     // Komando interfaze orokorra
     private interface ICommand
     {
@@ -87,6 +92,7 @@ public static class CommandDecoder
         Task Execute(string[] args, ServersideClient client);
     }
 
+
     // Saioa hasteko komandoa
     private class LoginCommand : ICommand
     {
@@ -96,18 +102,28 @@ public static class CommandDecoder
         {
             try
             {
-                // Erabiltzailea dagoeneko saio batean dagoen egiaztatu
-                foreach (var list in Server.Clients.Values)
-                    if (list.Any(c => c.ToString() == args[0]))
-                        throw new DeniedException($"'{args[0]}' saioa okupatuta");
+                // Bezeroaren saioa hasita ez dagoela egiaztatu
+                if (client.erabiltzailea != null)
+                    throw new DeniedException("Iada saioa hasita");
 
-                // Kredentzialak egiaztatu eta erabiltzailea sortu
-                //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
-                if (args[0] == "admin" && args[1] == "admin")
-                    client.Erabiltzailea = new Erabiltzailea(0, "admin", "admin", ConnectionType.admin, "");
-                else if (args[0] == "user" && args[1] == "user")
-                    client.Erabiltzailea = new Erabiltzailea(0, "user", "user", ConnectionType.user, "");
-                else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                // Deskargak egiteko saioa ez dela egiaztatu
+                if (args[0] == "download" && args[1] == "download")
+                    client.erabiltzailea = new(0, "download", "download", ConnectionType.download, "");
+                else
+                {
+                    // Erabiltzailea dagoeneko saio batean dagoen egiaztatu
+                    foreach (var list in Server.clients.Values)
+                        if (list.Any(c => c.ToString() == args[0]))
+                            throw new DeniedException($"'{args[0]}' saioa okupatuta");
+
+                    // Kredentzialak egiaztatu eta erabiltzailea sortu
+                    //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
+                    if (args[0] == "admin" && args[1] == "admin")
+                        client.erabiltzailea = new(0, "admin", "admin", ConnectionType.admin, "");
+                    else if (args[0] == "user" && args[1] == "user")
+                        client.erabiltzailea = new(0, "user", "user", ConnectionType.user, "");
+                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                }
             }
             catch (Exception e) when (e is IndexOutOfRangeException || e is InvalidOperationException)
             {
@@ -194,7 +210,7 @@ public static class CommandDecoder
                     if (clients.Contains(client))
                         throw new DeniedException("GameUpdater iada true");
                     clients.Add(client);
-                    client.Send($"Data Games {string.Join(" ", Server.Partidak)}");
+                    client.Send($"Data Games {string.Join(" ", Server.partidak)}");
                 }
                 else
                 {
@@ -213,7 +229,7 @@ public static class CommandDecoder
         private void GamesUpdate(object? sender, EventArgs e)
         {
             foreach (var client in clients)
-                client.Send($"Data Games {string.Join(" ", Server.Partidak)}");
+                client.Send($"Data Games {string.Join(" ", Server.partidak)}");
         }
 
         // Bezeroa deskonektatzen denean desuskribatu
@@ -229,8 +245,54 @@ public static class CommandDecoder
         {
             if (args.Length > 2) throw new IndexOutOfRangeException();
             var newGame = new Game(args[0], args[1]);
-            if (Server.Partidak.Contains(newGame)) throw new DeniedException($"'{args[0]}' izena okupatuta");
+            if (Server.partidak.Contains(newGame)) throw new DeniedException($"'{args[0]}' izena okupatuta");
             Server.NewGame(newGame);
+        }
+    }
+
+    // Fitxategi bat bidaltzeko komandoa
+    private class DownloadCommand : ICommand
+    {
+        public string Format => "Download <file> ...";
+        private readonly Dictionary<string, string> Files = new()
+        {
+            ["informea1"] = "C:\\Users\\user\\Desktop\\IkerGarcia - Txostenak.pdf"
+        };
+        public async Task Execute(string[] args, ServersideClient client)
+        {
+            try
+            {
+                var filePath = Files[args[0]];
+                using FileStream fileStream = File.OpenRead(filePath);
+
+                // Enviar tamaño primero
+                byte[] sizeBytes = BitConverter.GetBytes(fileStream.Length);
+                client.SendBytes(sizeBytes, 8);
+
+                // Enviar en chunks de 4KB
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+
+                while ((bytesRead = await fileStream.ReadAsync(buffer)) > 0)
+                {
+                    client.SendBytes(buffer, bytesRead);
+                }
+            }
+            catch(KeyNotFoundException)
+            {
+                Server.NewLog($"Download error: file not found", LogType.ERROR);
+                client.SendBytes([0], 8);
+            }
+            catch (FileNotFoundException)
+            {
+                Server.NewLog($"Download error: file not found", LogType.ERROR);
+                client.SendBytes([0], 8);
+            }
+            catch (Exception e)
+            {
+                Server.NewLog($"Download error: {e.GetType()}", LogType.ERROR);
+                client.SendBytes([0], 8);
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ namespace HizkitzaServer.util.db
                 }
                 catch (NpgsqlException e)
                 {
-                    Server.LogBerria("SQL:" + e.Message, Server.LogType.ERROR);
+                    Server.NewLog("SQL:" + e.Message, Server.LogType.ERROR);
                 }
             });
         }
@@ -56,7 +56,7 @@ namespace HizkitzaServer.util.db
             }
             catch (NpgsqlException e)
             {
-                Server.LogBerria("SQL:" + e.Message, Server.LogType.ERROR);
+                Server.NewLog("SQL:" + e.Message, Server.LogType.ERROR);
                 return default!;
             }
         }

@@ -50,7 +50,7 @@ namespace HizkitzaClient.ui.window.page
             CommandDecoder.DataEvent += Data;
             CommandDecoder.DeniedEvent += Denied;
 
-            Client.MezuaBidali("GameUpdater true");
+            Client.Send("GameUpdater true");
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e) => Window.GetWindow(this).Closing += Window_Closing;
@@ -83,8 +83,8 @@ namespace HizkitzaClient.ui.window.page
 
         private void Close()
         {
-            if (Client.Alive)
-                Client.MezuaBidali("GameUpdater false");
+            if (Client.alive)
+                Client.Send("GameUpdater false");
             CommandDecoder.DataEvent -= Data;
             CommandDecoder.DeniedEvent -= Denied;
         }
@@ -96,7 +96,7 @@ namespace HizkitzaClient.ui.window.page
             else if (mapa.SelectedItem == null)
                 new HizkitzaInfoMessageBox("Partidak mapa bat behar du").ShowDialog();
             else
-                Client.MezuaBidali($"NewGame {izena.Text.Trim()} {mapa.Text.Trim()}");
+                Client.Send($"NewGame {izena.Text.Trim()} {mapa.Text.Trim()}");
         }
 
         private void Kolorea_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -1,10 +1,12 @@
-﻿using HizkitzaClient.ui.window.page;
+﻿using HizkitzaClient.ui.messagebox;
+using HizkitzaClient.ui.window.page;
 using HizkitzaClient.util.connection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +25,7 @@ namespace HizkitzaClient.ui.window
         public LoginWindow()
         {
             InitializeComponent();
+            serverip.Text = $"{Client.ip}:{Client.port}";
             Closing += Window_Closing;
             Client.ConnectedEvent += Connected;
             Client.DisconnectedEvent += Disconnected;
@@ -39,7 +42,7 @@ namespace HizkitzaClient.ui.window
         private void Connected(object? sender, EventArgs e)
         {
             MainWindow mainWindow = new();
-            switch (Client.Mota)
+            switch (Client.mota)
             {
                 case ConnectionType.admin:
                     mainWindow.MainFrame.Navigate(new AdminMain());
@@ -86,13 +89,24 @@ namespace HizkitzaClient.ui.window
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Client.BezeroaItxi(null);
+            Client.CloseClient(null);
             Close();
         }
 
         private void SaioaHasi()
         {
-            Client.Konektatu(serverip.Text, user.Text, pass.Password);
+            try
+            {
+                var helb = serverip.Text.Split(':');
+                if (helb.Length != 2) throw new Exception();
+                var ip = IPAddress.Parse(helb[0]);
+                var port = int.Parse(helb[1]);
+                Client.Connect(ip, port, user.Text, pass.Password);
+            }
+            catch
+            {
+                Client.NewLog("Helbide formatu ezegokia", Client.LogType.WARN);
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace HizkitzaClient.ui.window
 {
     public partial class MainWindow : Window
     {
-        public string Username { get; set; } = Client.Izena ?? "null";
+        public string Username { get; set; } = Client.izena ?? "null";
         public MainWindow()
         {
             DataContext = this;
@@ -37,7 +37,7 @@ namespace HizkitzaClient.ui.window
             Client.DisconnectedEvent -= Disconnected;
             Client.LogSentEvent -= LogSent;
             Client.MessageArrivedEvent -= MessageArrived;
-            if (Client.Alive) Client.BezeroaItxi(null);
+            Client.CloseClient(null);
         }
 
         public void Disconnected(object? sender, EventArgs e)

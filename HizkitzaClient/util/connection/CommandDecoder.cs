@@ -72,13 +72,14 @@ public static class CommandDecoder
         void Execute(string[] args);
     }
 
+
     // Saioa ondo hasita komandoa
     private class LoggedCommand : ICommand
     {
         public string Format => "Logged <mota>";
         public void Execute(string[] args)
         {
-            try { Client.Mota = (ConnectionType)Enum.Parse(typeof(ConnectionType), args[0]); }
+            try { Client.mota = (ConnectionType)Enum.Parse(typeof(ConnectionType), args[0]); }
             catch
             {
                 throw new WrongCommandFormatException("Logged <ConnectionType>");
@@ -105,6 +106,7 @@ public static class CommandDecoder
             throw new DeniedException(string.Join(" ", args));
         }
     }
+
 
     // Datu berriko gertaera
     public static event EventHandler<DataEventArgs>? DataEvent;

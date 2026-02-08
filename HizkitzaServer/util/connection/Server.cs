@@ -13,7 +13,7 @@ namespace HizkitzaServer.util.connection
         private static TcpListener? listener;
         
         // Zerbitzaria funtzionatzen ari den
-        public static bool Alive { get; private set; }
+        public static bool alive { get; private set; }
 
         public static readonly object bezeroakLock = new();
 
@@ -55,22 +55,23 @@ namespace HizkitzaServer.util.connection
         }
 
         // Log-ak
-        public static readonly List<string> Logs = [];
+        public static readonly List<string> logs = [];
 
         // Partidak
-        public static readonly List<Game> Partidak = [];
+        public static readonly List<Game> partidak = [];
 
         // Bezeroak mota bakoitzaren arabera
-        public static readonly Dictionary<ConnectionType, HashSet<ServersideClient>> Clients = new()
+        public static readonly Dictionary<ConnectionType, HashSet<ServersideClient>> clients = new()
         {
             [ConnectionType.admin] = [],
-            [ConnectionType.user] = []
+            [ConnectionType.user] = [],
+            [ConnectionType.download] = []
         };
 
         // Zerbitzaria piztu eta bezeroak entzuten hasi
-        public static void Piztu()
+        public static void TurnOn()
         {
-            Alive = true;
+            alive = true;
             new Thread(() =>
             {
                 try
@@ -84,28 +85,28 @@ namespace HizkitzaServer.util.connection
                             ip => ip.AddressFamily == AddressFamily.InterNetworkV6
                             );
 
-                    LogBerria($"ZERBITZARIA hasi da {ipAddress?.ToString() ?? "null"}:{PORT}", LogType.INFO);
+                    NewLog($"ZERBITZARIA hasi da {ipAddress?.ToString() ?? "null"}:{PORT}", LogType.INFO);
 
-                    while (Alive) BezeroBerriaItxaron(listener);
+                    while (alive) WaitNewClient(listener);
                 }
                 catch
                 {
-                    LogBerria("Zerbitzari errorea", LogType.ERROR);
-                    Itzali();
+                    NewLog("Zerbitzari errorea", LogType.ERROR);
+                    TurnOff();
                 }
             }).Start();
         }
 
         // Bezero berria itxaron eta bezeroen zerrendan gehitu
-        private static void BezeroBerriaItxaron(TcpListener listener)
+        private static void WaitNewClient(TcpListener listener)
         {
             try
             {
                 var bezeroBerria = new ServersideClient(listener.AcceptTcpClient());
-                if (bezeroBerria.Erabiltzailea != null)
+                if (bezeroBerria.erabiltzailea != null)
                     lock (bezeroakLock)
                     {
-                        Clients[bezeroBerria.Erabiltzailea.Mota].Add(bezeroBerria);
+                        clients[bezeroBerria.erabiltzailea.Mota].Add(bezeroBerria);
                         ClientConnectedEvent?.Invoke(null, new()
                         {
                             Client = bezeroBerria
@@ -113,27 +114,27 @@ namespace HizkitzaServer.util.connection
                     }
             }
             catch (SocketException) { }
-            catch (Exception e) { LogBerria("Unhandled Exception on BezeroBerriaItxaron: " + e.Message, LogType.ERROR); }
+            catch (Exception e) { NewLog("Unhandled Exception on BezeroBerriaItxaron: " + e.Message, LogType.ERROR); }
         }
 
         // Zerbitzaria itzali eta bezero guztiak bota
-        public static void Itzali()
+        public static void TurnOff()
         {
-            Alive = false;
+            alive = false;
             lock (bezeroakLock)
             {
                 listener?.Stop();
-                foreach (var list in Clients.Values)
+                foreach (var list in clients.Values)
                     foreach (var bezero in list)
                         bezero.CloseClient(false);
             }
-            LogBerria("ZERBITZARIA itzali da", LogType.INFO);
+            NewLog("ZERBITZARIA itzali da", LogType.INFO);
         }
 
         // Log berria erregistratu eta gertaera deitu
-        public static void LogBerria(string log, LogType mota)
+        public static void NewLog(string log, LogType mota)
         {
-            Logs.Add($"[{DateTime.Now:t}] [{mota}] {log}");
+            logs.Add($"[{DateTime.Now:t}] [{mota}] {log}");
             LogSentEvent?.Invoke(null, new()
             {
                 Log = log,
@@ -142,7 +143,7 @@ namespace HizkitzaServer.util.connection
         }
 
         // Mezu berria gertaera deitu eta CommnandDecoder-en bidez prozesatu
-        public static async Task MezuBerria(string mezua, ServersideClient bezero)
+        public static async Task NewMessage(string mezua, ServersideClient bezero)
         {
             MessageArrivedEvent?.Invoke(null, new()
             {
@@ -157,8 +158,8 @@ namespace HizkitzaServer.util.connection
         {
             lock (bezeroakLock)
             {
-                if (Client.Erabiltzailea != null)
-                    Server.Clients[Client.Erabiltzailea.Mota].Remove(Client);
+                if (Client.erabiltzailea != null)
+                    Server.clients[Client.erabiltzailea.Mota].Remove(Client);
             }
             ClientDisconnectedEvent?.Invoke(null, new()
             {
@@ -169,14 +170,14 @@ namespace HizkitzaServer.util.connection
         // Partida berri bat gehitu eta gertaera deitu
         public static void NewGame(Game game)
         {
-            Partidak.Add(game);
+            partidak.Add(game);
             GamesUpdateEvent?.Invoke(null, new());
         }
 
         // Partida bat kendu eta gertaera deitu
         public static void RemoveGame(Game game)
         {
-            Partidak.Remove(game);
+            partidak.Remove(game);
             GamesUpdateEvent?.Invoke(null, new());
         }
     }

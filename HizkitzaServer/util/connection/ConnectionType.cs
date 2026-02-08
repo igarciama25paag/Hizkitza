@@ -9,6 +9,7 @@ namespace HizkitzaServer.util.connection
     public enum ConnectionType
     {
         admin,
-        user
+        user,
+        download
     }
 }

@@ -22,7 +22,7 @@
         </DockPanel>
 
         <DockPanel Margin="10" Grid.Column="1">
-            <TextBlock Text="* Jokalari edizioa:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
+            <TextBlock Text="Jokalari edizioa:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
             <Border>
                 <StackPanel>
                     <DockPanel>
@@ -38,7 +38,7 @@
         </DockPanel>
 
         <DockPanel Margin="10" Grid.Column="2">
-            <TextBlock Text="* Partida edizioa:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
+            <TextBlock Text="Partida edizioa:" DockPanel.Dock="Top" Style="{StaticResource Text.Basic}"/>
             <Button Click="PartidaBerria_Click" Content="Partida berria" DockPanel.Dock="Bottom"/>
             <Border Margin="0,0,0,10">
                 <StackPanel>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,13 @@ namespace HizkitzaClient.ui.window.page
     public partial class AdminMain : Page
     {
         private readonly object logLock = new();
-        public ObservableCollection<string> Logs { get; set; } = [];
+        public ObservableCollection<string> Logs { get; } = [];
+
+        public List<string> informeakList { get; } =
+        [
+            "informe1",
+            "informe2"
+        ];
 
         public AdminMain()
         {
@@ -33,7 +40,7 @@ namespace HizkitzaClient.ui.window.page
             CommandDecoder.DataEvent += Data;
             CommandDecoder.DeniedEvent += Denied;
 
-            Client.MezuaBidali("LogSender true");
+            Client.Send("LogSender true");
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e) => Window.GetWindow(this).Closing += Window_Closing;
@@ -65,8 +72,8 @@ namespace HizkitzaClient.ui.window.page
 
         private void Close()
         {
-            if (Client.Alive)
-                Client.MezuaBidali("LogSender false");
+            if (Client.alive)
+                Client.Send("LogSender false");
             CommandDecoder.DataEvent -= Data;
             CommandDecoder.DeniedEvent -= Denied;
         }
@@ -85,9 +92,34 @@ namespace HizkitzaClient.ui.window.page
             {
                 var msg = command.Text;
                 if (msg != null && msg != string.Empty)
-                    Client.MezuaBidali(command.Text);
+                    Client.Send(command.Text);
                 command.Text = null;
             });
+        }
+
+        private void InformeaJaitsi_Click(object sender, RoutedEventArgs e)
+        {
+            var file = informeak.SelectedValue as string;
+            if (!string.IsNullOrEmpty(file))
+            {
+                DownloadClient.DownloadStartedEvent += DownloadStarted;
+                DownloadClient.DownloadEndedEvent += DownloadEnded;
+                Client.Download(file);
+                if (DownloadClient.downloading[file] != null)
+                    File.WriteAllBytes(Directory.GetCurrentDirectory() + "/" + file, DownloadClient.downloading[file]!);
+            }
+            else
+                HizkitzaInfoMessageBox.ShowDialog("Ez da informerik aukeratu");
+        }
+
+        private void DownloadStarted(object? sender, DownloadClient.DownloadStartedEventArgs e)
+        {
+
+        }
+
+        private void DownloadEnded(object? sender, DownloadClient.DownloadEndedEventArgs e)
+        {
+            HizkitzaInfoMessageBox.ShowDialog(e.Reason);
         }
     }
 }
