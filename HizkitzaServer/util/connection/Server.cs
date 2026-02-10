@@ -7,7 +7,7 @@ namespace HizkitzaServer.util.connection
     public static class Server
     {
         // Portua
-        private const int PORT = 5000;
+        public static int PORT = 5000;
 
         // TcpListener objektua
         private static TcpListener? listener;

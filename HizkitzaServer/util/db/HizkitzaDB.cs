@@ -13,13 +13,13 @@ namespace HizkitzaServer.util.db
     static class HizkitzaDB
     {
         // PostgreSQL datu base parametroak
-        private const string HOST = "localhost";
-        private const string PORT = "5432";
-        private const string USERNAME = "admin";
-        private const string PASSWORD = "admin";
-        private const string DATABASE = "hizkitza";
+        public static string HOST = "localhost";
+        public static string PORT = "5432";
+        public static string USERNAME = "admin";
+        public static string PASSWORD = "admin";
+        public static string DATABASE = "hizkitza";
 
-        private const string CONNECTION = "" +
+        private static string CONNECTION = "" +
                 $"Host={HOST};" +
                 $"Port={PORT};" +
                 $"Username={USERNAME};" +

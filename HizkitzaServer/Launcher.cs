@@ -5,6 +5,10 @@ namespace HizkitzaServer
 {
     class Launcher
     {
+        // Konfigurazio fitxategia
+        private const string CONF_FILE = "conf.txt";
+
+        // Zerbitzaria hasi
         public static void Main(string[] args)
         {
             try
@@ -19,38 +23,97 @@ namespace HizkitzaServer
                     Console.WriteLine($"[{DateTime.Now:t}] [{args.Mota}] {args.Log}");
                 };
                 Server.TurnOn();
-                Tests();
             }
-            catch (Exception e)
+            catch (ConfigurationException e)
             {
-                Console.WriteLine("Error ZERBITZARIA hasterakoan: " + e.Message);
+                Console.WriteLine("Configurazio errorea: " + e.Message);
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine("Fitxategi errorea: " + e.Message);
+                CreateDefaultConfFile();
+                Console.WriteLine();
+                Console.WriteLine($"{CONF_FILE} fitxategi berri bat sortu da konfigurazio lehenetsiekin");
             }
         }
 
-        private static async void Tests()
-        {
-            Console.WriteLine(Directory.GetCurrentDirectory() + "\\conf.txt");
-            /*Console.WriteLine("Ane stats: " + (await HizkitzaDB.ErabiltzaileStats("Ane")).ToString());
-            Console.WriteLine("Aneren partida famatuena: " + await HizkitzaDB.ErabiltzailePartidaFamatua("Ane"));
-            Console.WriteLine("Data aktiboena: " + await HizkitzaDB.DataAktiboena());
-            Console.WriteLine("Partida luzeena: " + await HizkitzaDB.PartidaLuzeena());
-            Console.WriteLine("Mapa famatuena: " + await HizkitzaDB.MapaFamatuena());
+        // Konfigurazio salbuespena
+        private class ConfigurationException(string message) : Exception(message);
 
-            Console.WriteLine("Top 10 partidak:");
-            int n = 0;
-            foreach (var item in await HizkitzaDB.Top10Partidak())
-            {
-                n++;
-                Console.WriteLine($"Top {n}: " + item);
-            }*/
-        }
+        // Konfigurazio zerrenda
+        private static readonly List<string> Configurations =
+            [
+            "HizkitzaPort",
+            "PostgresHost",
+            "PostgresPort",
+            "DatabaseUser",
+            "DatabasePass"
+            ];
 
+        // Konfigurazioak lortu CONF_FILE fitxategitik
         private static void GetConf()
         {
-            var confPath = Directory.GetCurrentDirectory() + "\\conf.txt";
-            Console.WriteLine($"{confPath}");
-            if (!Directory.Exists(confPath))
-                throw new FileNotFoundException("conf.txt fitxategia ez da aurkitu");
+            // Fitxategia lortu eta irakurri
+            var confPath = Directory.GetCurrentDirectory() + "\\" + CONF_FILE;
+            var lines = new List<string>();
+            using (StreamReader reader = new(new FileStream(confPath, FileMode.Open, FileAccess.ReadWrite)))
+            {
+                var line = reader.ReadLine();
+                while (line != null)
+                {
+                    lines.Add(line);
+                    line = reader.ReadLine();
+                }
+            }
+
+            // Konfigurazioak lortu
+            foreach (var line in lines)
+            {
+                if (string.IsNullOrEmpty(line)) continue;
+                var conf = line.Split('=');
+                switch (conf[0])
+                {
+                    case "HizkitzaPort":
+                        Server.PORT = int.Parse(conf[1]);
+                        break;
+                    case "PostgresHost":
+                        HizkitzaDB.HOST = conf[1];
+                        break;
+                    case "PostgresPort":
+                        HizkitzaDB.PORT = conf[1];
+                        break;
+                    case "DatabaseUser":
+                        HizkitzaDB.USERNAME = conf[1];
+                        break;
+                    case "DatabasePass":
+                        HizkitzaDB.PASSWORD = conf[1];
+                        break;
+                    default:
+                        throw new ConfigurationException($"{conf[0]} konfigurazioa ez da existitzen");
+                }
+                Configurations.Remove(conf[0]);
+            }
+
+            // Konfigurazioren bat falta bada salbuespena bota
+            foreach (var conf in Configurations)
+                Console.WriteLine($"Konfigurazio falta: {conf}");
+
+            if (Configurations.Count > 0)
+                throw new ConfigurationException("Konfigurazio falta");
+        }
+
+        // CONF_FILE fitxategi berri bat sortu konfigurazio lehenetsiekin
+        private static void CreateDefaultConfFile()
+        {
+            var confPath = Directory.GetCurrentDirectory() + "\\" + CONF_FILE;
+            File.Create(confPath).Close();
+
+            using StreamWriter writer = new(new FileStream(confPath, FileMode.OpenOrCreate, FileAccess.ReadWrite));
+            writer.WriteLine("HizkitzaPort=5000");
+            writer.WriteLine("PostgresHost=localhost");
+            writer.WriteLine("PostgresPort=5432");
+            writer.WriteLine("DatabaseUser=admin");
+            writer.WriteLine("DatabasePass=admin");
         }
     } 
 }
