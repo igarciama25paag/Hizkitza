@@ -8,7 +8,7 @@ namespace HizkitzaServer.util.data
 {
     public record class PartidaStats(
         int Partida_id,
-        int Erabiltzaile_id,
+        string Erabiltzailea,
         string Izena,
         string Iraupena,
         int Erabiltzaile_max,
@@ -18,7 +18,7 @@ namespace HizkitzaServer.util.data
     {
         public override string ToString()
         {
-            return $"{Partida_id} {Erabiltzaile_id} {Izena} {Iraupena} {Erabiltzaile_max} {Mapa} {Sorkuntza_data}";
+            return $"{Partida_id} {Erabiltzailea} {Izena} {Iraupena} {Erabiltzaile_max} {Mapa} {Sorkuntza_data}";
         }
     }
 }

@@ -82,7 +82,7 @@ namespace HizkitzaServer.util.db
                         reader.GetString(1).Trim(),
                         reader.GetString(2).Trim(),
                         Enum.Parse<ConnectionType>(reader.GetString(3).Trim()),
-                        reader.GetDateTime(5).ToString()
+                        reader.GetDateTime(4).ToString(@"yyyy-MM-dd")
                         );
                 }
             });
@@ -97,11 +97,14 @@ namespace HizkitzaServer.util.db
         {
             return await DBRequest(async dataSource => {
                 await using var cmd = dataSource.CreateCommand(
-                    "SELECT * FROM \"ErabiltzaileakStats\" " +
-                    "WHERE erabiltzaile_id = ( " +
+                    "SELECT E.erabiltzaile_id, azken_itxura, azken_kolorea, partida_sartu_n, partida_t_max, izena " +
+                    "FROM \"ErabiltzaileakStats\" E " +
+                    "INNER JOIN \"PartidakStats\" " +
+                    "  ON azken_sartu_partida = partida_id " +
+                    "WHERE E.erabiltzaile_id = ( " +
                     "  SELECT id " +
                     "  FROM \"Erabiltzaileak\" " +
-                    $" WHERE izena = '{user}' )"
+                    $"  WHERE izena = '{user}')"
                     );
                 await using var reader = await cmd.ExecuteReaderAsync();
                 {
@@ -111,8 +114,8 @@ namespace HizkitzaServer.util.db
                         reader.GetChar(1),
                         reader.GetString(2).Trim(),
                         reader.GetInt16(3),
-                        reader.GetString(4).Trim(),
-                        reader.GetDateTime(5).ToString()
+                        reader.GetTimeSpan(4).ToString(@"hh\:mm\:ss"),
+                        reader.GetString(5).Trim()
                         );
                 }
             });
@@ -123,11 +126,11 @@ namespace HizkitzaServer.util.db
         {
             return await DBRequest(async dataSource => {
                 await using var cmd = dataSource.CreateCommand(
-                    "SELECT * FROM \"PartidakStats\" " +
-                    "WHERE erabiltzaile_id = ( " +
-                    "  SELECT id " +
-                    "  FROM \"Erabiltzaileak\" " +
-                    $" WHERE izena = '{user}' ) " +
+                    "SELECT partida_id, E.izena, P.izena, iraupena, erabiltzaile_max, mapa, P.sorkuntza_data " +
+                    "FROM \"PartidakStats\" P " +
+                    "INNER JOIN \"Erabiltzaileak\" E " +
+                    "  ON P.erabiltzaile_id = E.id " +
+                    $"WHERE E.izena = '{user}' " +
                     "ORDER BY erabiltzaile_max DESC LIMIT 1"
                     );
                 await using var reader = await cmd.ExecuteReaderAsync();
@@ -135,12 +138,12 @@ namespace HizkitzaServer.util.db
                     await reader.ReadAsync();
                     return new PartidaStats(
                         reader.GetInt16(0),
-                        reader.GetInt16(1),
+                        reader.GetString(1).Trim(),
                         reader.GetString(2).Trim(),
-                        reader.GetString(3).Trim(),
+                        reader.GetTimeSpan(3).ToString(@"hh\:mm\:ss"),
                         reader.GetInt16(4),
                         reader.GetString(5).Trim(),
-                        reader.GetString(6).Trim()
+                        reader.GetDateTime(6).ToString(@"yyyy-MM-dd")
                         );
                 }
             });
@@ -151,7 +154,10 @@ namespace HizkitzaServer.util.db
         {
             return await DBRequest(async dataSource => {
                 await using var cmd = dataSource.CreateCommand(
-                    "SELECT * FROM \"PartidakStats\" " +
+                    "SELECT partida_id, E.izena, P.izena, iraupena, erabiltzaile_max, mapa, P.sorkuntza_data " +
+                    "FROM \"PartidakStats\" P " +
+                    "INNER JOIN \"Erabiltzaileak\" E " +
+                    "  ON P.erabiltzaile_id = E.id " +
                     "ORDER BY erabiltzaile_max DESC LIMIT 10"
                     );
                 await using var reader = await cmd.ExecuteReaderAsync();
@@ -161,12 +167,12 @@ namespace HizkitzaServer.util.db
                     while (await reader.ReadAsync())
                         list.Add(new(
                             reader.GetInt16(0),
-                            reader.GetInt16(1),
+                            reader.GetString(1).Trim(),
                             reader.GetString(2).Trim(),
-                            reader.GetString(3).Trim(),
+                            reader.GetTimeSpan(3).ToString(@"hh\:mm\:ss"),
                             reader.GetInt16(4),
                             reader.GetString(5).Trim(),
-                            reader.GetString(6).Trim()
+                        reader.GetDateTime(6).ToString(@"yyyy-MM-dd")
                             ));
 
                     return list;
@@ -196,7 +202,10 @@ namespace HizkitzaServer.util.db
         {
             return await DBRequest(async dataSource => {
                 await using var cmd = dataSource.CreateCommand(
-                    "SELECT * FROM \"PartidakStats\" " +
+                    "SELECT partida_id, E.izena, P.izena, iraupena, erabiltzaile_max, mapa, P.sorkuntza_data " +
+                    "FROM \"PartidakStats\" P " +
+                    "INNER JOIN \"Erabiltzaileak\" E " +
+                    "  ON P.erabiltzaile_id = E.id " +
                     "ORDER BY iraupena DESC LIMIT 1"
                     );
                 await using var reader = await cmd.ExecuteReaderAsync();
@@ -204,12 +213,12 @@ namespace HizkitzaServer.util.db
                     await reader.ReadAsync();
                     return new PartidaStats(
                         reader.GetInt16(0),
-                        reader.GetInt16(1),
+                        reader.GetString(1).Trim(),
                         reader.GetString(2).Trim(),
-                        reader.GetString(3).Trim(),
+                        reader.GetTimeSpan(3).ToString(@"hh\:mm\:ss"),
                         reader.GetInt16(4),
                         reader.GetString(5).Trim(),
-                        reader.GetString(6).Trim()
+                        reader.GetDateTime(6).ToString(@"yyyy-MM-dd")
                         );
                 }
             });
@@ -222,12 +231,12 @@ namespace HizkitzaServer.util.db
                 await using var cmd = dataSource.CreateCommand(
                     "SELECT sorkuntza_data FROM \"PartidakStats\" " +
                     "GROUP BY sorkuntza_data " +
-                    "ORDER BY COUNT(sortkuntza_data) DESC LIMIT 1"
+                    "ORDER BY COUNT(sorkuntza_data) DESC LIMIT 1"
                     );
                 await using var reader = await cmd.ExecuteReaderAsync();
                 {
                     await reader.ReadAsync();
-                    return reader.GetString(0).Trim();
+                    return reader.GetDateTime(0).ToString(@"yyyy-MM-dd");
                 }
             });
         }

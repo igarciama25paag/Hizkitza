@@ -72,26 +72,39 @@ namespace HizkitzaServer.util.connection
         public static void TurnOn()
         {
             alive = true;
+            try
+            {
+                listener = new(IPAddress.Any, PORT);
+                listener.Start();
+                var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
+                var ipAddress = hostEntry.AddressList.FirstOrDefault(
+                    ip => ip.AddressFamily == AddressFamily.InterNetwork
+                    ) ?? hostEntry.AddressList.FirstOrDefault(
+                        ip => ip.AddressFamily == AddressFamily.InterNetworkV6
+                        );
+
+                NewLog($"ZERBITZARIA hasi da {ipAddress?.ToString() ?? "null"}:{PORT}", LogType.INFO);
+                CreateClientWaiter();
+            }
+            catch
+            {
+                NewLog("Zerbitzari errorea", LogType.ERROR);
+                TurnOff();
+            }
+        }
+
+        // Bezeroak itxaroteko haria sortu
+        private static void CreateClientWaiter()
+        {
             new Thread(() =>
             {
                 try
                 {
-                    listener = new(IPAddress.Any, PORT);
-                    listener.Start();
-                    var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-                    var ipAddress = hostEntry.AddressList.FirstOrDefault(
-                        ip => ip.AddressFamily == AddressFamily.InterNetwork
-                        ) ?? hostEntry.AddressList.FirstOrDefault(
-                            ip => ip.AddressFamily == AddressFamily.InterNetworkV6
-                            );
-
-                    NewLog($"ZERBITZARIA hasi da {ipAddress?.ToString() ?? "null"}:{PORT}", LogType.INFO);
-
-                    while (alive) WaitNewClient(listener);
+                    while (alive) WaitNewClient(listener!);
                 }
                 catch
                 {
-                    NewLog("Zerbitzari errorea", LogType.ERROR);
+                    NewLog("Bezeroak itxarotean errorea", LogType.ERROR);
                     TurnOff();
                 }
             }).Start();
@@ -114,7 +127,6 @@ namespace HizkitzaServer.util.connection
                     }
             }
             catch (SocketException) { }
-            catch (Exception e) { NewLog("Unhandled Exception on BezeroBerriaItxaron: " + e.Message, LogType.ERROR); }
         }
 
         // Zerbitzaria itzali eta bezero guztiak bota
