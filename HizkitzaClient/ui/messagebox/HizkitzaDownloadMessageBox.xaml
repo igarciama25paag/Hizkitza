@@ -13,33 +13,27 @@
         ResizeMode="NoResize">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <!-- Mezua -->
         <StackPanel Margin="20" VerticalAlignment="Center">
 
-            <TextBlock Grid.Row="0"
-                       VerticalAlignment="Center"
+            <TextBlock VerticalAlignment="Center"
                        Text="{Binding Message}"
                        Style="{StaticResource Text.Basic}"
                        TextWrapping="Wrap"/>
-            
-            <TextBlock DockPanel.Dock="Top"
-                       Text="{Binding Bytes}"
+
+            <TextBlock x:Name="downBytes" 
+                       Margin="0,10,0,0"
+                       DockPanel.Dock="Top"
                        VerticalAlignment="Center"
                        Style="{StaticResource Text.Basic}"/>
 
             <Border>
-                <TextBlock Grid.Row="0"
+                <TextBlock x:Name="progressBar"
                            Padding="5"
-                       VerticalAlignment="Center"
-                       Text="{Binding Percentage}"
-                       Style="{StaticResource Text.Basic.Positive}"
-                       TextWrapping="Wrap"/>
+                           VerticalAlignment="Center"
+                           Style="{StaticResource Text.Basic.Positive}"
+                           TextWrapping="Wrap"/>
             </Border>
+            <Button Click="Cancel_Click" Content="Cancel" Margin="0,10,0,0" Style="{StaticResource Button.Negative}"/>
         </StackPanel>
     </Grid>
 </Window>

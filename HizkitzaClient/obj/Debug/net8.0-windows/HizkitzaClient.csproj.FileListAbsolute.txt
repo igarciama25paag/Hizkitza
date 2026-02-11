@@ -110,3 +110,7 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messageb
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaArgMessageBox.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaDownloadMessageBox.baml
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaDownloadMessageBox.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaDownloadMessageBox.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaArgMessageBox.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaDownloadMessageBox.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\messagebox\HizkitzaArgMessageBox.baml

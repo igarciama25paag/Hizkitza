@@ -4,6 +4,8 @@ using HizkitzaServer.util.pdf;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using static HizkitzaServer.util.connection.Server;
@@ -117,19 +119,31 @@ public static class CommandDecoder
                         if (list.Any(c => c.ToString() == args[0]))
                             throw new DeniedException($"'{args[0]}' saioa okupatuta");
 
+                    // Pasahitza enkriptatu
+                    //var pass = GetSHA256(args[1]);
+
                     // Kredentzialak egiaztatu eta erabiltzailea sortu
-                    client.erabiltzailea = await HizkitzaDB.LoginErabiltzailea(args[0], args[1]);
-                    /*if (args[0] == "admin" && args[1] == "admin")
+                    //client.erabiltzailea = await HizkitzaDB.LoginErabiltzailea(args[0], pass);
+                    if (args[0] == "admin" && args[1] == "admin")
                         client.erabiltzailea = new(0, "admin", "admin", ConnectionType.admin, "");
                     else if (args[0] == "user" && args[1] == "user")
                         client.erabiltzailea = new(0, "user", "user", ConnectionType.user, "");
-                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");*/
+                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
                 }
             }
             catch (Exception e) when (e is IndexOutOfRangeException || e is InvalidOperationException)
             {
                 throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
             }
+        }
+
+        // Enkriptatu
+        public static string GetSHA256(string str)
+        {
+            StringBuilder sb = new();
+            byte[]? stream = SHA256.HashData(new ASCIIEncoding().GetBytes(str));
+            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            return sb.ToString();
         }
     }
 
@@ -280,7 +294,7 @@ public static class CommandDecoder
                 int bytesRead;
                 while ((bytesRead = await fileStream.ReadAsync(buffer)) > 0)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(250);
                     client.SendBytes(buffer, bytesRead);
                 }
             }

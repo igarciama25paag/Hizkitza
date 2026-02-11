@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Shapes;
-using static HizkitzaClient.util.connection.Client;
 
 namespace HizkitzaClient.util.connection
 {
@@ -20,11 +12,14 @@ namespace HizkitzaClient.util.connection
         private static StreamReader? reader;
         private static StreamWriter? writer;
 
+        // Deskarga hasi gertaera
         public static event EventHandler<DownloadStartedEventArgs>? DownloadStartedEvent;
         public class DownloadStartedEventArgs : EventArgs
         {
             public required string FileName { get; set; }
         }
+
+        // Deskarga bukatu gertaera
         public static event EventHandler<DownloadEndedEventArgs>? DownloadEndedEvent;
         public class DownloadEndedEventArgs : EventArgs
         {
@@ -33,6 +28,7 @@ namespace HizkitzaClient.util.connection
             public required string File { get; set; }
         }
 
+        // Byte berriak deskargatu gertaera
         public static event EventHandler<DownloadNewBytesEventArgs>? DownloadNewBytesEvent;
         public class DownloadNewBytesEventArgs : EventArgs
         {
@@ -40,11 +36,14 @@ namespace HizkitzaClient.util.connection
             public required long TotalBytes { get; set; }
         }
 
+        // Jaisten ari diren fitxategi Byte-ak
         public readonly static Dictionary<string, byte[]?> downloading = [];
+        private static readonly object downloadingLock = new();
 
         public class DownloadException(string message) : Exception(message);
 
-        public static async void DownloadBytes(IPAddress ip, int port, string fileName, string arg)
+        // Fitxaregiaren Byte.ak zerbitzairari eskatu
+        public static async Task DownloadBytes(IPAddress ip, int port, string fileName, string arg)
         {
             try
             {
@@ -72,7 +71,10 @@ namespace HizkitzaClient.util.connection
                     throw new DownloadException("Fitxategia ez da existitzen");
 
                 // Redimensionar array
-                downloading.Add(fileName, new byte[fileSize]);
+                lock (downloadingLock)
+                {
+                    downloading.Add(fileName, new byte[fileSize]);
+                }
                 DownloadStartedEvent?.Invoke(null, new()
                 {
                     FileName = fileName
