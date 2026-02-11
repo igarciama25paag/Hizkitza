@@ -76,19 +76,17 @@ namespace HizkitzaServer.util.connection
             {
                 listener = new(IPAddress.Any, PORT);
                 listener.Start();
-                var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-                var ipAddress = hostEntry.AddressList.FirstOrDefault(
-                    ip => ip.AddressFamily == AddressFamily.InterNetwork
-                    ) ?? hostEntry.AddressList.FirstOrDefault(
-                        ip => ip.AddressFamily == AddressFamily.InterNetworkV6
-                        );
-
-                NewLog($"ZERBITZARIA hasi da {ipAddress?.ToString() ?? "null"}:{PORT}", LogType.INFO);
+                using (Socket socket = new(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+                {
+                    socket.Connect("10.0.1.20", PORT);
+                    IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                    NewLog($"ZERBITZARIA hasi da {endPoint.Address}:{PORT}", LogType.INFO);
+                }
                 CreateClientWaiter();
             }
-            catch
+            catch (Exception e)
             {
-                NewLog("Zerbitzari errorea", LogType.ERROR);
+                NewLog($"Zerbitzari errorea: {e.Message}", LogType.ERROR);
                 TurnOff();
             }
         }

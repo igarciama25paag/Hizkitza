@@ -27,6 +27,10 @@
         <Setter Property="Foreground" Value="Pink"/>
     </Style>
 
+    <Style TargetType="TextBlock" x:Key="Text.Basic.Positive" BasedOn="{StaticResource Text.Basic}">
+        <Setter Property="Foreground" Value="PaleGreen"/>
+    </Style>
+
     <Style TargetType="TextBlock" x:Key="Text.Huge.Negative" BasedOn="{StaticResource Text.Huge}">
         <Setter Property="Foreground" Value="Pink"/>
     </Style>

@@ -105,6 +105,7 @@ namespace HizkitzaClient.util.connection
             }).Start();
         }
 
+        // Zerbitzariko mezu hartzailea sortu
         private static void CreateReceiverThread()
         {
             new Thread(() =>
@@ -139,12 +140,14 @@ namespace HizkitzaClient.util.connection
             }
         }
 
+        // Zerbitzariari mezua/komandoa bidali
         public static void Send(string mezua)
         {
             try { writer?.WriteLine(mezua); }
             catch { CloseClient("Konexioa amaitu da"); }
         }
 
+        // Bezeroa itxi
         public static void CloseClient(string? log)
         {
             if (!alive) return;
@@ -155,6 +158,7 @@ namespace HizkitzaClient.util.connection
             stream?.Close();
             reader?.Close();
             writer?.Close();
+            DownloadClient.CloseClient();
             DisconnectedEvent?.Invoke(null, new());
             if (log != null) NewLog(log, LogType.ERROR);
         }
@@ -168,9 +172,9 @@ namespace HizkitzaClient.util.connection
             });
         }
 
-        public static void Download(string file)
+        public static void Download(string file, string arg)
         {
-            DownloadClient.DownloadBytes(ip, port, file);
+            DownloadClient.DownloadBytes(ip, port, file, arg);
         }
     }
 }

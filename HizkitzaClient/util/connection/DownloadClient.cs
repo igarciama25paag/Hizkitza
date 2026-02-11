@@ -30,13 +30,21 @@ namespace HizkitzaClient.util.connection
         {
             public required bool Successfully { get; set; }
             public required string Reason { get; set; }
+            public required string File { get; set; }
+        }
+
+        public static event EventHandler<DownloadNewBytesEventArgs>? DownloadNewBytesEvent;
+        public class DownloadNewBytesEventArgs : EventArgs
+        {
+            public required long TotalReceivedBytes { get; set; }
+            public required long TotalBytes { get; set; }
         }
 
         public readonly static Dictionary<string, byte[]?> downloading = [];
 
         public class DownloadException(string message) : Exception(message);
 
-        public static async void DownloadBytes(IPAddress ip, int port, string fileName)
+        public static async void DownloadBytes(IPAddress ip, int port, string fileName, string arg)
         {
             try
             {
@@ -52,7 +60,8 @@ namespace HizkitzaClient.util.connection
                 if (mezua != "Logged download")
                     throw new DownloadException("Ezin izan da saioa hasi");
 
-                Send($"Download {fileName}");
+                Send($"Download {fileName} {arg}");
+                fileName += (arg == "null" ? "" : "-" + arg);
 
                 // Recibir tamaño
                 byte[] sizeBytes = new byte[8];
@@ -83,12 +92,18 @@ namespace HizkitzaClient.util.connection
                     // Copiar chunk al array principal
                     Buffer.BlockCopy(buffer, 0, downloading[fileName]!, (int)totalReceived, bytesRead);
                     totalReceived += bytesRead;
+                    DownloadNewBytesEvent?.Invoke(null, new()
+                    {
+                        TotalReceivedBytes = totalReceived,
+                        TotalBytes = fileSize
+                    });
                 }
 
                 DownloadEndedEvent?.Invoke(null, new()
                 {
                     Successfully = true,
-                    Reason = $"'{fileName}' fitxategia jaitsi da"
+                    Reason = $"'{fileName}' fitxategia jaitsi da",
+                    File = fileName
                 });
             }
             catch (Exception e)
@@ -96,7 +111,8 @@ namespace HizkitzaClient.util.connection
                 DownloadEndedEvent?.Invoke(null, new()
                 {
                     Successfully = false,
-                    Reason = e.Message
+                    Reason = e.Message,
+                    File = fileName
                 });
             }
             finally
@@ -112,6 +128,13 @@ namespace HizkitzaClient.util.connection
             stream?.Close();
             reader?.Close();
             writer?.Close();
+        }
+
+        // Zerbitzariari mezua/komandoa bidali
+        private static void Send(string mezua)
+        {
+            try { writer?.WriteLine(mezua); }
+            catch { CloseClient(); }
         }
     }
 }

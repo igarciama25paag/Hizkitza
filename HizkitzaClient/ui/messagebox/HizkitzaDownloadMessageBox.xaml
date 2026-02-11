@@ -1,0 +1,45 @@
+﻿<Window x:Class="HizkitzaClient.ui.messagebox.HizkitzaDownloadMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Height="200" Width="400"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        BorderThickness="2"
+        BorderBrush="White"
+        Background="Black"
+        ResizeMode="NoResize">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Mezua -->
+        <StackPanel Margin="20" VerticalAlignment="Center">
+
+            <TextBlock Grid.Row="0"
+                       VerticalAlignment="Center"
+                       Text="{Binding Message}"
+                       Style="{StaticResource Text.Basic}"
+                       TextWrapping="Wrap"/>
+            
+            <TextBlock DockPanel.Dock="Top"
+                       Text="{Binding Bytes}"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource Text.Basic}"/>
+
+            <Border>
+                <TextBlock Grid.Row="0"
+                           Padding="5"
+                       VerticalAlignment="Center"
+                       Text="{Binding Percentage}"
+                       Style="{StaticResource Text.Basic.Positive}"
+                       TextWrapping="Wrap"/>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

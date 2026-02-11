@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql" Version="10.0.1" />
+    <PackageReference Include="QuestPDF" Version="2025.12.4" />
   </ItemGroup>
 
 </Project>

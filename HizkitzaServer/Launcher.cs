@@ -1,5 +1,7 @@
 ﻿using HizkitzaServer.util.connection;
 using HizkitzaServer.util.db;
+using HizkitzaServer.util.pdf;
+using QuestPDF.Infrastructure;
 
 namespace HizkitzaServer
 {
@@ -11,6 +13,7 @@ namespace HizkitzaServer
         // Zerbitzaria hasi
         public static void Main(string[] args)
         {
+            QuestPDF.Settings.License = LicenseType.Community;
             try
             {
                 GetConf();
@@ -32,8 +35,7 @@ namespace HizkitzaServer
             {
                 Console.WriteLine("Fitxategi errorea: " + e.Message);
                 CreateDefaultConfFile();
-                Console.WriteLine();
-                Console.WriteLine($"{CONF_FILE} fitxategi berri bat sortu da konfigurazio lehenetsiekin");
+                Console.WriteLine($"\n{CONF_FILE} fitxategi berri bat sortu da konfigurazio lehenetsiekin");
             }
         }
 
@@ -46,8 +48,8 @@ namespace HizkitzaServer
             "HizkitzaPort",
             "PostgresHost",
             "PostgresPort",
-            "DatabaseUser",
-            "DatabasePass"
+            "PostgresUser",
+            "PostgresPass"
             ];
 
         // Konfigurazioak lortu CONF_FILE fitxategitik
@@ -82,10 +84,10 @@ namespace HizkitzaServer
                     case "PostgresPort":
                         HizkitzaDB.PORT = conf[1];
                         break;
-                    case "DatabaseUser":
+                    case "PostgresUser":
                         HizkitzaDB.USERNAME = conf[1];
                         break;
-                    case "DatabasePass":
+                    case "PostgresPass":
                         HizkitzaDB.PASSWORD = conf[1];
                         break;
                     default:
@@ -112,8 +114,8 @@ namespace HizkitzaServer
             writer.WriteLine("HizkitzaPort=5000");
             writer.WriteLine("PostgresHost=localhost");
             writer.WriteLine("PostgresPort=5432");
-            writer.WriteLine("DatabaseUser=admin");
-            writer.WriteLine("DatabasePass=admin");
+            writer.WriteLine("PostgresUser=admin");
+            writer.WriteLine("PostgresPass=admin");
         }
     } 
 }

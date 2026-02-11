@@ -1,5 +1,6 @@
 using HizkitzaServer.util.data;
 using HizkitzaServer.util.db;
+using HizkitzaServer.util.pdf;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -117,12 +118,12 @@ public static class CommandDecoder
                             throw new DeniedException($"'{args[0]}' saioa okupatuta");
 
                     // Kredentzialak egiaztatu eta erabiltzailea sortu
-                    //client.Erabiltzailea = await HizkitzaDB.GetErabiltzailea(args[0], args[1]);
-                    if (args[0] == "admin" && args[1] == "admin")
+                    client.erabiltzailea = await HizkitzaDB.LoginErabiltzailea(args[0], args[1]);
+                    /*if (args[0] == "admin" && args[1] == "admin")
                         client.erabiltzailea = new(0, "admin", "admin", ConnectionType.admin, "");
                     else if (args[0] == "user" && args[1] == "user")
                         client.erabiltzailea = new(0, "user", "user", ConnectionType.user, "");
-                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");*/
                 }
             }
             catch (Exception e) when (e is IndexOutOfRangeException || e is InvalidOperationException)
@@ -253,44 +254,39 @@ public static class CommandDecoder
     // Fitxategi bat bidaltzeko komandoa
     private class DownloadCommand : ICommand
     {
-        public string Format => "Download <file> ...";
-        private readonly Dictionary<string, string> Files = new()
-        {
-            ["informea1"] = "C:\\Users\\user\\Desktop\\IkerGarcia - Txostenak.pdf"
-        };
+        public string Format => "Download <file> <arg>";
         public async Task Execute(string[] args, ServersideClient client)
         {
             try
             {
-                var filePath = Files[args[0]];
+                // Fitxategia sortu eta hartu
+                var filePath = "";
+                if (args[0] == "ErabiltzaileInforme")
+                    filePath = await PDFGenerator.ErabiltzaileTxostena(args[1]);
+                else if (args[0] == "PartidakInforme")
+                    filePath = await PDFGenerator.PartidakTxostena();
+
                 using FileStream fileStream = File.OpenRead(filePath);
 
-                // Enviar tamaño primero
+                // Fitxategiaren tamaina bidali
                 byte[] sizeBytes = BitConverter.GetBytes(fileStream.Length);
                 client.SendBytes(sizeBytes, 8);
 
-                // Enviar en chunks de 4KB
+                // Utzik badago itzuli
+                if (sizeBytes.Length == 0) return;
+
+                // 4 KB-eko zatietan bidali
                 byte[] buffer = new byte[4096];
                 int bytesRead;
-
                 while ((bytesRead = await fileStream.ReadAsync(buffer)) > 0)
                 {
+                    Thread.Sleep(1000);
                     client.SendBytes(buffer, bytesRead);
                 }
             }
-            catch(KeyNotFoundException)
+            catch
             {
                 Server.NewLog($"Download error: file not found", LogType.ERROR);
-                client.SendBytes([0], 8);
-            }
-            catch (FileNotFoundException)
-            {
-                Server.NewLog($"Download error: file not found", LogType.ERROR);
-                client.SendBytes([0], 8);
-            }
-            catch (Exception e)
-            {
-                Server.NewLog($"Download error: {e.GetType()}", LogType.ERROR);
                 client.SendBytes([0], 8);
             }
         }

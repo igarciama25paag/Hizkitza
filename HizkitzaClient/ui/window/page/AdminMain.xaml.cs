@@ -27,8 +27,8 @@ namespace HizkitzaClient.ui.window.page
 
         public List<string> informeakList { get; } =
         [
-            "informe1",
-            "informe2"
+            "ErabiltzaileInforme",
+            "PartidakInforme"
         ];
 
         public AdminMain()
@@ -100,26 +100,44 @@ namespace HizkitzaClient.ui.window.page
         private void InformeaJaitsi_Click(object sender, RoutedEventArgs e)
         {
             var file = informeak.SelectedValue as string;
+            var arg = "null";
             if (!string.IsNullOrEmpty(file))
             {
+                if (file == "ErabiltzaileInforme")
+                {
+                    arg = HizkitzaArgMessageBox.ShowDialog("Sartu erabiltzaile bat:");
+                    if (arg == null)
+                    {
+                        HizkitzaInfoMessageBox.ShowDialog("Ez da informerik jaitsi");
+                        return;
+                    }
+                }
+
                 DownloadClient.DownloadStartedEvent += DownloadStarted;
                 DownloadClient.DownloadEndedEvent += DownloadEnded;
-                Client.Download(file);
-                if (DownloadClient.downloading[file] != null)
-                    File.WriteAllBytes(Directory.GetCurrentDirectory() + "/" + file, DownloadClient.downloading[file]!);
+                Client.Download(file, arg);
             }
-            else
-                HizkitzaInfoMessageBox.ShowDialog("Ez da informerik aukeratu");
+            else HizkitzaInfoMessageBox.ShowDialog("Ez da informerik aukeratu");
         }
 
         private void DownloadStarted(object? sender, DownloadClient.DownloadStartedEventArgs e)
         {
-
+            jaitsi.IsEnabled = false;
+            HizkitzaDownloadMessageBox.ShowDialog($"'{e.FileName}' fitxategia jaisten...");
         }
 
         private void DownloadEnded(object? sender, DownloadClient.DownloadEndedEventArgs e)
         {
             HizkitzaInfoMessageBox.ShowDialog(e.Reason);
+            if (e.Successfully)
+            {
+                Directory.CreateDirectory("downloads");
+                File.WriteAllBytes("downloads\\" + e.File + ".pdf", DownloadClient.downloading[e.File]);
+            }
+            DownloadClient.downloading.Remove(e.File);
+            DownloadClient.DownloadStartedEvent -= DownloadStarted;
+            DownloadClient.DownloadEndedEvent -= DownloadEnded;
+            jaitsi.IsEnabled = true;
         }
     }
 }

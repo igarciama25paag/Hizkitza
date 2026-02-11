@@ -66,7 +66,7 @@ namespace HizkitzaServer.util.db
          * */
 
         // Datu baseari erabiltzailea eta pasahitza bidali eta erabiltzailea bueltatu
-        public static async Task<Erabiltzailea> GetErabiltzailea(string user, string pass)
+        public static async Task<Erabiltzailea> LoginErabiltzailea(string user, string pass)
         {
             return await DBRequest(async dataSource => {
                 await using var cmd = dataSource.CreateCommand(
@@ -91,6 +91,28 @@ namespace HizkitzaServer.util.db
         /**
          * TXOSTENAK
          * */
+
+        // Erabiltzailea datu baseari eskaera
+        public static async Task<Erabiltzailea> GetErabiltzailea(string user)
+        {
+            return await DBRequest(async dataSource => {
+                await using var cmd = dataSource.CreateCommand(
+                    "SELECT * FROM \"Erabiltzaileak\" " +
+                    $"WHERE izena = '{user}'"
+                    );
+                await using var reader = await cmd.ExecuteReaderAsync();
+                {
+                    await reader.ReadAsync();
+                    return new Erabiltzailea(
+                        reader.GetInt16(0),
+                        reader.GetString(1).Trim(),
+                        reader.GetString(2).Trim(),
+                        Enum.Parse<ConnectionType>(reader.GetString(3).Trim()),
+                        reader.GetDateTime(4).ToString(@"yyyy-MM-dd")
+                        );
+                }
+            });
+        }
 
         // Erabiltzaile estatistikak datu baseari eskaera
         public static async Task<ErabiltzaileStats> ErabiltzaileStats(string user)
@@ -122,7 +144,7 @@ namespace HizkitzaServer.util.db
         }
 
         // Erabiltziale baten partida famatuena datu baseari eskaera
-        public static async Task<PartidaStats> ErabiltzailePartidaFamatua(string user)
+        public static async Task<PartidaStats> ErabiltzailePartidaFamatuena(string user)
         {
             return await DBRequest(async dataSource => {
                 await using var cmd = dataSource.CreateCommand(
