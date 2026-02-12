@@ -30,12 +30,19 @@ namespace HizkitzaServer
             catch (ConfigurationException e)
             {
                 Console.WriteLine("Configurazio errorea: " + e.Message);
+                Console.ReadLine();
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine("Fitxategi errorea: " + e.Message);
                 CreateDefaultConfFile();
                 Console.WriteLine($"\n{CONF_FILE} fitxategi berri bat sortu da konfigurazio lehenetsiekin");
+                Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Launch errorea: " + e.Message);
+                Console.ReadLine();
             }
         }
 

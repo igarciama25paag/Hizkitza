@@ -19,13 +19,6 @@ namespace HizkitzaServer.util.db
         public static string PASSWORD = "admin";
         public static string DATABASE = "hizkitza";
 
-        private static string CONNECTION = "" +
-                $"Host={HOST};" +
-                $"Port={PORT};" +
-                $"Username={USERNAME};" +
-                $"Password={PASSWORD};" +
-                $"Database={DATABASE}";
-
         // Datu baseari komando bat bidali bueltan ezer itxaron gabe
         private static void DBDispatch(string query)
         {
@@ -33,6 +26,13 @@ namespace HizkitzaServer.util.db
             {
                 try
                 {
+                    string CONNECTION = "" +
+                        $"Host={HOST};" +
+                        $"Port={PORT};" +
+                        $"Username={USERNAME};" +
+                        $"Password={PASSWORD};" +
+                        $"Database={DATABASE}";
+
                     await using var dataSource = NpgsqlDataSource.Create(CONNECTION);
                     dataSource.CreateCommand(query).ExecuteNonQuery();
                 }
@@ -51,6 +51,13 @@ namespace HizkitzaServer.util.db
         {
             try
             {
+                string CONNECTION = "" +
+                    $"Host={HOST};" +
+                    $"Port={PORT};" +
+                    $"Username={USERNAME};" +
+                    $"Password={PASSWORD};" +
+                    $"Database={DATABASE}";
+
                 await using var dataSource = NpgsqlDataSource.Create(CONNECTION);
                 return await request(dataSource);
             }

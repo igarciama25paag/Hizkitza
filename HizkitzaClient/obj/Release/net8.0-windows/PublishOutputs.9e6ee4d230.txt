@@ -1,0 +1,5 @@
+D:\PSP\2. Erronka\Intalatzaileak\Client\HizkitzaClient.exe
+D:\PSP\2. Erronka\Intalatzaileak\Client\HizkitzaClient.dll
+D:\PSP\2. Erronka\Intalatzaileak\Client\HizkitzaClient.deps.json
+D:\PSP\2. Erronka\Intalatzaileak\Client\HizkitzaClient.runtimeconfig.json
+D:\PSP\2. Erronka\Intalatzaileak\Client\HizkitzaClient.pdb

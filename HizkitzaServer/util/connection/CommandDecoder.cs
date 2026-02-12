@@ -120,15 +120,16 @@ public static class CommandDecoder
                             throw new DeniedException($"'{args[0]}' saioa okupatuta");
 
                     // Pasahitza enkriptatu
-                    //var pass = GetSHA256(args[1]);
+                    var pass = GetSHA256(args[1]);
 
                     // Kredentzialak egiaztatu eta erabiltzailea sortu
-                    //client.erabiltzailea = await HizkitzaDB.LoginErabiltzailea(args[0], pass);
-                    if (args[0] == "admin" && args[1] == "admin")
+                    client.erabiltzailea = await HizkitzaDB.LoginErabiltzailea(args[0], pass);
+
+                    /*if (args[0] == "admin" && args[1] == "admin")
                         client.erabiltzailea = new(0, "admin", "admin", ConnectionType.admin, "");
                     else if (args[0] == "user" && args[1] == "user")
                         client.erabiltzailea = new(0, "user", "user", ConnectionType.user, "");
-                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                    else throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");*/
                 }
             }
             catch (Exception e) when (e is IndexOutOfRangeException || e is InvalidOperationException)

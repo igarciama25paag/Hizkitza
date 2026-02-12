@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\App.xaml
-13167522407
-
-13-1309524374
+151297835926
+1-707450513
+16-113816863
 198-2136442823
-style\ButtonStyle.xaml;style\ComboBoxStyle.xaml;style\FontStyle.xaml;style\ListBoxStyle.xaml;style\OtherStyle.xaml;style\TextBlockStyle.xaml;style\TextBoxStyle.xaml;ui\messagebox\HizkitzaBooleanMessageBox.xaml;ui\messagebox\HizkitzaInfoMessageBox.xaml;ui\window\LoginWindow.xaml;ui\window\MainWindow.xaml;ui\window\page\AdminMain.xaml;ui\window\page\PlayerLobby.xaml;
+style\ButtonStyle.xaml;style\ComboBoxStyle.xaml;style\FontStyle.xaml;style\ListBoxStyle.xaml;style\OtherStyle.xaml;style\TextBlockStyle.xaml;style\TextBoxStyle.xaml;ui\messagebox\HizkitzaArgMessageBox.xaml;ui\messagebox\HizkitzaBooleanMessageBox.xaml;ui\messagebox\HizkitzaDownloadMessageBox.xaml;ui\messagebox\HizkitzaInfoMessageBox.xaml;ui\window\LoginWindow.xaml;ui\window\MainWindow.xaml;ui\window\page\AdminMain.xaml;ui\window\page\PlayerLobby.xaml;
 
-True
+False
 
