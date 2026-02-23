@@ -117,3 +117,5 @@ C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\m
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient_Content.g.cs
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\GamePage.g.cs
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\GamePage.baml
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\ui\window\page\GamePage.g.cs
+C:\Users\user\source\repos\Hizkitza\HizkitzaClient\obj\Debug\net8.0-windows\HizkitzaClient_Content.g.cs

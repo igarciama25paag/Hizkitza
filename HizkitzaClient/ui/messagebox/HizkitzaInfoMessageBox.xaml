@@ -22,11 +22,11 @@
         <DockPanel Margin="20,10,20,0">
             
             <TextBlock DockPanel.Dock="Left"
-                       Text="(!)"
+                       x:Name="sign"
                        TextAlignment="Center"
                        VerticalAlignment="Center"
                        Width="80"
-                       Style="{StaticResource Text.Huge.Negative}"/>
+                       Style="{StaticResource Text.Huge}"/>
             
             <TextBlock Grid.Row="0"
                        VerticalAlignment="Center"

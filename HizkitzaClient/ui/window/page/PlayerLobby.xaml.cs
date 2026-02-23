@@ -61,7 +61,7 @@ namespace HizkitzaClient.ui.window.page
 
         private void Denied(object? sender, CommandDecoder.DeniedEventArgs e)
         {
-            Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}"));
+            Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}", false));
         }
 
         // Datu berriak ailatzerakoan partidak eguneratu
@@ -100,9 +100,9 @@ namespace HizkitzaClient.ui.window.page
         private void PartidaBerria_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(izena.Text))
-                HizkitzaInfoMessageBox.ShowDialog("Partidak izen bat behar du");
+                HizkitzaInfoMessageBox.ShowDialog("Partidak izen bat behar du", false);
             else if (mapa.SelectedItem == null)
-                HizkitzaInfoMessageBox.ShowDialog("Partidak mapa bat behar du");
+                HizkitzaInfoMessageBox.ShowDialog("Partidak mapa bat behar du", false);
             else
                 Client.Send($"NewGame {izena.Text.Trim()} {mapa.Text.Trim()}");
         }
@@ -121,11 +121,11 @@ namespace HizkitzaClient.ui.window.page
         private void PartidanSartu_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(itxura.Text))
-                HizkitzaInfoMessageBox.ShowDialog("Itxura bat aukeratu behar da");
+                HizkitzaInfoMessageBox.ShowDialog("Itxura bat aukeratu behar da", false);
             else if (string.IsNullOrEmpty(kolorea.Text))
-                HizkitzaInfoMessageBox.ShowDialog("Kolore bat aukeratu behar da");
+                HizkitzaInfoMessageBox.ShowDialog("Kolore bat aukeratu behar da", false);
             else if (partidak.SelectedItem == null)
-                HizkitzaInfoMessageBox.ShowDialog("Partida bat aukeratu behar da");
+                HizkitzaInfoMessageBox.ShowDialog("Partida bat aukeratu behar da", false);
             else
                 Client.Send($"JoinGame {partidak.SelectedItem} {itxura.Text} {kolorea.Text}");
         }

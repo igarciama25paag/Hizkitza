@@ -51,7 +51,7 @@ namespace HizkitzaClient.ui.window.page
 
         private void Denied(object? sender, CommandDecoder.DeniedEventArgs e)
         {
-            Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}"));
+            Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}", false));
         }
 
         private void Data(object? sender, CommandDecoder.DataEventArgs e)
@@ -108,7 +108,7 @@ namespace HizkitzaClient.ui.window.page
                     arg = HizkitzaArgMessageBox.ShowDialog("Sartu erabiltzaile bat:");
                     if (arg == null)
                     {
-                        HizkitzaInfoMessageBox.ShowDialog("Ez da informerik jaitsi");
+                        HizkitzaInfoMessageBox.ShowDialog("Ez da informerik jaitsi", false);
                         return;
                     }
                 }
@@ -117,7 +117,7 @@ namespace HizkitzaClient.ui.window.page
                 DownloadClient.DownloadEndedEvent += DownloadEnded;
                 Client.Download(file, arg);
             }
-            else HizkitzaInfoMessageBox.ShowDialog("Ez da informerik aukeratu");
+            else HizkitzaInfoMessageBox.ShowDialog("Ez da informerik aukeratu", false);
         }
 
         private void DownloadStarted(object? sender, DownloadClient.DownloadStartedEventArgs e)
@@ -128,7 +128,7 @@ namespace HizkitzaClient.ui.window.page
 
         private void DownloadEnded(object? sender, DownloadClient.DownloadEndedEventArgs e)
         {
-            HizkitzaInfoMessageBox.ShowDialog(e.Reason);
+            HizkitzaInfoMessageBox.ShowDialog(e.Reason, e.Successfully);
             if (e.Successfully)
             {
                 Directory.CreateDirectory("downloads");

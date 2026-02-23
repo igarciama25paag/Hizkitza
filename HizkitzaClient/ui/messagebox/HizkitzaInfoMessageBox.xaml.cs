@@ -17,9 +17,19 @@ namespace HizkitzaClient.ui.messagebox
 {
     public partial class HizkitzaInfoMessageBox : Window
     {
-        public HizkitzaInfoMessageBox(string message)
+        public HizkitzaInfoMessageBox(string message, bool good)
         {
             InitializeComponent();
+            if (good)
+            {
+                sign.Text = "(O)";
+                sign.Foreground = Brushes.PaleGreen;
+            }
+            else
+            {
+                sign.Text = "(!)";
+                sign.Foreground = Brushes.Pink;
+            }
             DataContext = new MessageBoxViewModel(message, this);
         }
 
@@ -30,9 +40,9 @@ namespace HizkitzaClient.ui.messagebox
             public ICommand OkCommand { get; } = new RelayCommand(window.Close);
         }
 
-        public static void ShowDialog(string msg)
+        public static void ShowDialog(string msg, bool good)
         {
-            new HizkitzaInfoMessageBox(msg).ShowDialog();
+            new HizkitzaInfoMessageBox(msg, good).ShowDialog();
         }
     }
 }

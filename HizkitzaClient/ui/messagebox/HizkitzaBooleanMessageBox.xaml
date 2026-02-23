@@ -23,11 +23,12 @@
         <DockPanel Margin="20,10,20,0">
 
             <TextBlock DockPanel.Dock="Left"
-               Text="(?)"
-               TextAlignment="Center"
-               VerticalAlignment="Center"
-               Width="80"
-               Style="{StaticResource Text.Huge.Positive}"/>
+                       Text="(?)"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"
+                       Width="80"
+                       Foreground="Turquoise"
+                       Style="{StaticResource Text.Huge}"/>
             
             <TextBlock Grid.Row="0"
                    VerticalAlignment="Center"

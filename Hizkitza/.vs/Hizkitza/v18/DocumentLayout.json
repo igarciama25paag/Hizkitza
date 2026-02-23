@@ -3,13 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\user\\source\\repos\\Hizkitza\\Hizkitza\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{56159ACD-5D1E-4793-A3DE-0484DBC12248}|..\\HizkitzaClient\\HizkitzaClient.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaclient\\ui\\window\\page\\playerlobby.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\util\\connection\\commanddecoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\launcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9ED1965C-C06B-47AB-A6DE-F5D9C2686942}|..\\HizkitzaServer\\HizkitzaServer.csproj|c:\\users\\user\\source\\repos\\hizkitza\\hizkitzaserver\\util\\connection\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,44 +16,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 222,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "CommandDecoder.cs",
               "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
               "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
               "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
               "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\CommandDecoder.cs",
-              "ViewState": "AgIAAHEAAAAAAAAAAAAgwHcAAABWAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADUAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-11T17:10:38.93Z",
+              "WhenOpened": "2026-02-23T15:38:46.696Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Launcher.cs",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\Launcher.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaServer\\Launcher.cs",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\Launcher.cs",
-              "RelativeToolTip": "..\\HizkitzaServer\\Launcher.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAgwDEAAAAbAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "PlayerLobby.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml.cs",
+              "RelativeDocumentMoniker": "..\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml.cs",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml.cs",
+              "RelativeToolTip": "..\\HizkitzaClient\\ui\\window\\page\\PlayerLobby.xaml.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAAiwHUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T16:03:17.216Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Server.cs",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\Server.cs",
-              "RelativeDocumentMoniker": "..\\HizkitzaServer\\util\\connection\\Server.cs",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\Hizkitza\\HizkitzaServer\\util\\connection\\Server.cs",
-              "RelativeToolTip": "..\\HizkitzaServer\\util\\connection\\Server.cs",
-              "ViewState": "AgIAAH8AAAAAAAAAAAAUwAgAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T06:59:54.773Z"
+              "WhenOpened": "2026-02-23T15:37:52.747Z",
+              "EditorCaption": ""
             }
           ]
         }

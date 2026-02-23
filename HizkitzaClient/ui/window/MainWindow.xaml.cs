@@ -54,12 +54,12 @@ namespace HizkitzaClient.ui.window
 
         public void LogSent(object? sender, Client.LogSentEventArgs e)
         {
-            Dispatcher.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"[{e.Mota}] {e.Log}"));
+            Dispatcher.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"[{e.Mota}] {e.Log}", e.Mota == Client.LogType.INFO));
         }
 
         private void MessageArrived(object? sender, Client.MessageArrivedEventArgs e)
         {
-            Dispatcher.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"(MSG) {e.Mezua}"));
+            Dispatcher.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"(MSG) {e.Mezua}", true));
         }
 
         private void Itxi_Click(object sender, RoutedEventArgs e)

@@ -26,8 +26,9 @@ public static class CommandDecoder
     };
 
     // Komando baimenak
-    private readonly static Dictionary<string, Collection<ConnectionType>> Perms = new()
+    private readonly static Dictionary<string, Collection<ConnectionType?>> Perms = new()
     {
+        ["Login"] = [null],
         ["LogSender"] = [ConnectionType.admin],
         ["GameUpdater"] = [ConnectionType.admin, ConnectionType.user],
         ["NewGame"] = [ConnectionType.admin, ConnectionType.user],
@@ -60,16 +61,16 @@ public static class CommandDecoder
                 // Komandoa existitzen den egiaztatu
                 var commandExe = Commands[commandName];
 
+                // Komandoaren baimenak ikusi
+                if (Perms.TryGetValue(commandName, out Collection<ConnectionType?>? value) &&
+                    !value.Contains(client.erabiltzailea?.Mota))
+                    throw new DeniedException("Baimenik gabe");
+
                 // Komandoaren formatu egokia egiaztatu
                 var splitFormat = commandExe.Format.Split(' ');
                 if (!(splitFormat[^1] == "..." && args.Count >= splitFormat.Length - 1) &&
                     args.Count != splitFormat.Length - 1)
-                    throw new WrongCommandFormatException(commandExe.Format);
-
-                // Komandoaren baimenak ikusi
-                if (Perms.TryGetValue(commandName, out Collection<ConnectionType>? value) &&
-                    (client.erabiltzailea == null || !value.Contains(client.erabiltzailea.Mota)))
-                    throw new DeniedException("Baimenik gabe");
+                    throw new WrongCommandFormatException($"'{commandName}' formatu okerra: {commandExe.Format}");
 
                 // Komandoa exekutatu
                 await commandExe.Execute([.. args], client);
@@ -77,10 +78,6 @@ public static class CommandDecoder
             catch (KeyNotFoundException)
             {
                 throw new UnexistingCommandException($"'{commandName}' comandoa ez da existitzen");
-            }
-            catch (WrongCommandFormatException e)
-            {
-                throw new WrongCommandFormatException($"'{commandName}' formatu okerra: {e.Message}");
             }
         }
     }
