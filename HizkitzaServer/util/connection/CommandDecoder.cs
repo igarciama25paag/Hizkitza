@@ -17,6 +17,7 @@ public static class CommandDecoder
     // Komando zerrenda
     private readonly static Dictionary<string, ICommand> Commands = new()
     {
+        ["Register"] = new RegisterCommand(),
         ["Login"] = new LoginCommand(),
         ["LogSender"] = new LogSenderCommand(),
         ["NewGame"] = new NewGameCommand(),
@@ -95,6 +96,36 @@ public static class CommandDecoder
         Task Execute(string[] args, ServersideClient client);
     }
 
+    private class RegisterCommand : ICommand
+    {
+        public string Format => "Register <erabiltzailea> <pasahitza>";
+
+        public async Task Execute(string[] args, ServersideClient client)
+        {
+            try
+            {
+                await HizkitzaDB.GetErabiltzailea(args[0]);
+                throw new DeniedException($"'{args[0]}' erabiltzailea iada existitzen da");
+            }
+            catch (InvalidOperationException)
+            {
+                await HizkitzaDB.RegisterErabiltzailea(args[0], args[1]);
+                await HizkitzaDB.NewErabiltzaileakStats(args[0]);
+                Server.NewLog($"'{args[0]}' erabiltzaile berria sortu da", LogType.INFO);
+
+                try
+                {
+                    if (client.erabiltzailea == null)
+                        client.erabiltzailea = await HizkitzaDB.LoginErabiltzailea(args[0], args[1]);
+                }
+                catch (InvalidOperationException)
+                {
+                    throw new DeniedException($"Erabiltzaile edo pasahitz ezegokia");
+                }
+            }
+        }
+    }
+
 
     // Saioa hasteko komandoa
     private class LoginCommand : ICommand
@@ -119,11 +150,8 @@ public static class CommandDecoder
                         if (list.Any(c => c.ToString() == args[0]))
                             throw new DeniedException($"'{args[0]}' saioa okupatuta");
 
-                    // Pasahitza enkriptatu
-                    var pass = GetSHA256(args[1]);
-
                     // Kredentzialak egiaztatu eta erabiltzailea sortu
-                    client.erabiltzailea = await HizkitzaDB.LoginErabiltzailea(args[0], pass);
+                    client.erabiltzailea = await HizkitzaDB.LoginErabiltzailea(args[0], args[1]);
 
                     /*if (args[0] == "admin" && args[1] == "admin")
                         client.erabiltzailea = new(0, "admin", "admin", ConnectionType.admin, "");
@@ -138,14 +166,7 @@ public static class CommandDecoder
             }
         }
 
-        // Enkriptatu
-        public static string GetSHA256(string str)
-        {
-            StringBuilder sb = new();
-            byte[]? stream = SHA256.HashData(new ASCIIEncoding().GetBytes(str));
-            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
-            return sb.ToString();
-        }
+        
     }
 
 

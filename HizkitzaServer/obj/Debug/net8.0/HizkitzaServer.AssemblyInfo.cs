@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HizkitzaServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+47233ed8f987c2a38bedcd95a1be24a3987160b2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+483588962ce73ebad5639dbf2bd3e3468de15a4d")]
 [assembly: System.Reflection.AssemblyProductAttribute("HizkitzaServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HizkitzaServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

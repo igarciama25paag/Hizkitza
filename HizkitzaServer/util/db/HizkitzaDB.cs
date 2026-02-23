@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,27 +21,25 @@ namespace HizkitzaServer.util.db
         public static string DATABASE = "hizkitza";
 
         // Datu baseari komando bat bidali bueltan ezer itxaron gabe
-        private static void DBDispatch(string query)
+        private static async Task DBDispatch(string query)
         {
-            _ = Task.Run(async () =>
+            try
             {
-                try
-                {
-                    string CONNECTION = "" +
-                        $"Host={HOST};" +
-                        $"Port={PORT};" +
-                        $"Username={USERNAME};" +
-                        $"Password={PASSWORD};" +
-                        $"Database={DATABASE}";
+                string CONNECTION = "" +
+                    $"Host={HOST};" +
+                    $"Port={PORT};" +
+                    $"Username={USERNAME};" +
+                    $"Password={PASSWORD};" +
+                    $"Database={DATABASE}";
 
-                    await using var dataSource = NpgsqlDataSource.Create(CONNECTION);
-                    dataSource.CreateCommand(query).ExecuteNonQuery();
-                }
-                catch (NpgsqlException e)
-                {
-                    Server.NewLog("SQL:" + e.Message, Server.LogType.ERROR);
-                }
-            });
+                await using var dataSource = NpgsqlDataSource.Create(CONNECTION);
+                await using var reader = await dataSource.CreateCommand(query).ExecuteReaderAsync();
+                await reader.ReadAsync();
+            }
+            catch (NpgsqlException e)
+            {
+                Server.NewLog("SQL:" + e.Message, Server.LogType.ERROR);
+            }
         }
 
         // Eskaera prozesua atributu bezala
@@ -68,9 +67,36 @@ namespace HizkitzaServer.util.db
             }
         }
 
+        // Enkriptatu
+        public static string GetSHA256(string str)
+        {
+            StringBuilder sb = new();
+            byte[]? stream = SHA256.HashData(new ASCIIEncoding().GetBytes(str));
+            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            return sb.ToString();
+        }
+
         /**
          * LOGIN
          * */
+
+        // Datu baseari erabiltzailea eta pasahitza bidali eta erabiltzaile berria sortu
+        public static async Task RegisterErabiltzailea(string user, string pass)
+        {
+            await DBDispatch(
+                   "INSERT INTO \"Erabiltzaileak\" (izena, pasahitza, mota, sorkuntza_data) " +
+                   $"VALUES ('{user}', '{GetSHA256(pass)}', 'user', '{DateTime.Now:yyyy-MM-dd}')"
+                   );
+        }
+
+        // Datu baseari erabiltzailea bidali eta erabiltzaile estatistika berriak sortu
+        public static async Task NewErabiltzaileakStats(string user)
+        {
+            await DBDispatch(
+                "INSERT INTO \"ErabiltzaileakStats\" (erabiltzaile_id) " +
+                $"VALUES ((SELECT id FROM \"Erabiltzaileak\" WHERE izena = '{user}'))"
+                );
+        }
 
         // Datu baseari erabiltzailea eta pasahitza bidali eta erabiltzailea bueltatu
         public static async Task<Erabiltzailea> LoginErabiltzailea(string user, string pass)
@@ -79,7 +105,7 @@ namespace HizkitzaServer.util.db
                 await using var cmd = dataSource.CreateCommand(
                     "SELECT * FROM \"Erabiltzaileak\" " +
                     $"WHERE izena = '{user}' " +
-                    $"AND pasahitza = '{pass}'"
+                    $"AND pasahitza = '{GetSHA256(pass)}'"
                     );
                 await using var reader = await cmd.ExecuteReaderAsync();
                 {

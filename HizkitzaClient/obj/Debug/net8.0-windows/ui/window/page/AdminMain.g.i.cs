@@ -85,7 +85,7 @@ namespace HizkitzaClient.ui.window.page {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/HizkitzaClient;V1.0.0.0;component/ui/window/page/adminmain.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HizkitzaClient;component/ui/window/page/adminmain.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\ui\window\page\AdminMain.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -93,7 +93,7 @@ namespace HizkitzaClient.ui.window.page {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/HizkitzaClient;V1.0.0.0;component/ui/window/page/playerlobby.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HizkitzaClient;component/ui/window/page/playerlobby.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\ui\window\page\PlayerLobby.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

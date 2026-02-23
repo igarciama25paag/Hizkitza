@@ -61,7 +61,7 @@ namespace HizkitzaClient.util.connection
         }
 
         // Bezeroa zerbitzarira konektatu eta saioa hasten saiatu
-        public static void Connect(IPAddress ip, int port, string izena, string pasahitza)
+        public static void Connect(IPAddress ip, int port, string izena, string pasahitza, bool register)
         {
             client = new();
             alive = true;
@@ -75,9 +75,10 @@ namespace HizkitzaClient.util.connection
                 reader = new StreamReader(stream);
                 writer = new StreamWriter(stream) { AutoFlush = true };
 
-                Send($"Login {izena} {pasahitza}");
-                var result = WaitMessage();
-                if (result == null && mota != null)
+                if (register) Send($"Register {izena} {pasahitza}");
+                else Send($"Login {izena} {pasahitza}");
+                WaitMessage();
+                if (mota != null)
                 {
                     Client.izena = izena;
                     NewLog("Zerbitzarira konektatuta", LogType.INFO);
@@ -86,7 +87,6 @@ namespace HizkitzaClient.util.connection
                     CreateConnectionChecker();
                     CreateReceiverThread();
                 }
-                else CloseClient(result?.Message ?? "Mota null");
             }
             catch { CloseClient("Ezin izan da zerbitzaria atzitu"); }
         }
@@ -115,7 +115,7 @@ namespace HizkitzaClient.util.connection
         }
 
         // Zerbitzariko mezu bat itxaron eta erroreren bat egon den itxaron.
-        private static Exception? WaitMessage()
+        private static void WaitMessage()
         {
             try
             {
@@ -128,7 +128,6 @@ namespace HizkitzaClient.util.connection
                     });
                     CommandDecoder.ExecuteCommand(mezua);
                 }
-                return null;
             }
             catch (Exception e)
             {
@@ -136,7 +135,6 @@ namespace HizkitzaClient.util.connection
                     NewLog("Konexioa amaitu da", LogType.ERROR);
                 else
                     NewLog(e.Message, LogType.ERROR);
-                return e;
             }
         }
 

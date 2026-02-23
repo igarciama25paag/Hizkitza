@@ -39,6 +39,7 @@ namespace HizkitzaClient.ui.window
             Client.LogSentEvent -= LogSent;
         }
 
+        // Konektatzen denean erabiltzaile leihoara eraman
         private void Connected(object? sender, EventArgs e)
         {
             MainWindow mainWindow = new();
@@ -75,16 +76,19 @@ namespace HizkitzaClient.ui.window
             });
         }
 
-        private void SaioaHasi_Click(object sender, RoutedEventArgs e) => SaioaHasi();
+        private void SaioaHasi_Click(object sender, RoutedEventArgs e) => SaioaHasi(false);
 
         private void SaioaHasi_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) SaioaHasi();
+            if (e.Key == Key.Enter) SaioaHasi(false);
         }
 
         private void SaioBerria_Click(object sender, RoutedEventArgs e)
         {
-
+            if (HizkitzaArgMessageBox.ShowDialog("Sartu pasahitza berriro:") == pass.Password)
+                SaioaHasi(true);
+            else
+                Client.NewLog("Pasahitza ez da zuzena", Client.LogType.ERROR);
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -93,7 +97,8 @@ namespace HizkitzaClient.ui.window
             Close();
         }
 
-        private void SaioaHasi()
+        // Saioa hasi
+        private void SaioaHasi(bool register)
         {
             try
             {
@@ -101,7 +106,7 @@ namespace HizkitzaClient.ui.window
                 if (helb.Length != 2) throw new Exception();
                 var ip = IPAddress.Parse(helb[0]);
                 var port = int.Parse(helb[1]);
-                Client.Connect(ip, port, user.Text, pass.Password);
+                Client.Connect(ip, port, user.Text, pass.Password, register);
             }
             catch
             {
