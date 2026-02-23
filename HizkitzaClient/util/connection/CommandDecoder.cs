@@ -17,7 +17,8 @@ public static class CommandDecoder
     {
         ["Logged"] = new LoggedCommand(),
         ["Denied"] = new DeniedCommand(),
-        ["Data"] = new DataCommand()
+        ["Data"] = new DataCommand(),
+        ["InGame"] = new InGameCommand()
     };
 
     // Komandoa ez dela existzen salbuespena
@@ -50,7 +51,7 @@ public static class CommandDecoder
                 var splitFormat = commandExe.Format.Split(' ');
                 if (!(splitFormat[^1] == "..." && args.Count >= splitFormat.Length - 1) &&
                     args.Count != splitFormat.Length - 1)
-                    throw new WrongCommandFormatException(commandExe.Format);
+                    throw new WrongCommandFormatException($"'{commandName}' formatu okerra: {commandExe.Format}");
 
                 // Komandoa exekutatu
                 commandExe.Execute([.. args]);
@@ -58,10 +59,6 @@ public static class CommandDecoder
             catch (KeyNotFoundException)
             {
                 throw new UnexistingCommandException($"'{commandName}' comandoa ez da existitzen");
-            }
-            catch (WrongCommandFormatException e)
-            {
-                throw new WrongCommandFormatException($"'{commandName}' formatu okerra: {e.Message}");
             }
         }
     }
@@ -145,6 +142,26 @@ public static class CommandDecoder
             {
                 throw new WrongCommandFormatException($"{args[0]} mota ez da existitzen");
             }
+        }
+    }
+
+    // Partidan sartzerakoaren gertaera
+    public static event EventHandler<InGameEventArgs>? InGameEvent;
+    public class InGameEventArgs : EventArgs
+    {
+        public required string Izena { get; set; }
+    }
+
+    // Partida satzerakoaren komandoa
+    private class InGameCommand : ICommand
+    {
+        public string Format => "InGame <izena>";
+        public void Execute(string[] args)
+        {
+            InGameEvent?.Invoke(null, new()
+            {
+                Izena = args[0]
+            });
         }
     }
 }

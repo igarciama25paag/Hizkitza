@@ -141,8 +141,9 @@ namespace HizkitzaClient.util.connection
         // Zerbitzariari mezua/komandoa bidali
         public static void Send(string mezua)
         {
-            try { writer?.WriteLine(mezua); }
-            catch { CloseClient("Konexioa amaitu da"); }
+            if (alive)
+                try { writer?.WriteLine(mezua); }
+                catch { CloseClient("Konexioa amaitu da"); }
         }
 
         // Bezeroa itxi

@@ -64,6 +64,7 @@ namespace HizkitzaClient.ui.window.page
             Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}"));
         }
 
+        // Datu berriak ailatzerakoan partidak eguneratu
         private void Data(object? sender, CommandDecoder.DataEventArgs e)
         {
             if (e.Mota == CommandDecoder.DataType.Games)
@@ -81,24 +82,32 @@ namespace HizkitzaClient.ui.window.page
                 });
         }
 
+        // Partida baten sartzerakoan orria aldatu
+        private void InGame(object? sender, CommandDecoder.InGameEventArgs e)
+        {
+            NavigationService.Navigate(new GamePage());
+        }
+
+        // Orritik ateratzerakoan desuskribatu
         private void Close()
         {
-            if (Client.alive)
-                Client.Send("GameUpdater false");
+            Client.Send("GameUpdater false");
             CommandDecoder.DataEvent -= Data;
             CommandDecoder.DeniedEvent -= Denied;
         }
 
+        // Partida berria sortu
         private void PartidaBerria_Click(object sender, RoutedEventArgs e)
         {
-            if (izena.Text == null || izena.Text.Trim() == string.Empty)
-                new HizkitzaInfoMessageBox("Partidak izen bat behar du").ShowDialog();
+            if (string.IsNullOrEmpty(izena.Text))
+                HizkitzaInfoMessageBox.ShowDialog("Partidak izen bat behar du");
             else if (mapa.SelectedItem == null)
-                new HizkitzaInfoMessageBox("Partidak mapa bat behar du").ShowDialog();
+                HizkitzaInfoMessageBox.ShowDialog("Partidak mapa bat behar du");
             else
                 Client.Send($"NewGame {izena.Text.Trim()} {mapa.Text.Trim()}");
         }
 
+        // Kolorea aukeratzerakoan itxura eta kolorearen koloreak aldatu
         private void Kolorea_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var col = ((ComboBoxItem)kolorea.SelectedItem).Foreground ?? Brushes.White;
@@ -106,6 +115,19 @@ namespace HizkitzaClient.ui.window.page
             kolorea.Foreground = col;
             foreach (var item in itxura.Items)
                 ((ComboBoxItem)item).Foreground = col;
+        }
+
+        // Aukeratutako partidan sartu
+        private void PartidanSartu_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(itxura.Text))
+                HizkitzaInfoMessageBox.ShowDialog("Itxura bat aukeratu behar da");
+            else if (string.IsNullOrEmpty(kolorea.Text))
+                HizkitzaInfoMessageBox.ShowDialog("Kolore bat aukeratu behar da");
+            else if (partidak.SelectedItem == null)
+                HizkitzaInfoMessageBox.ShowDialog("Partida bat aukeratu behar da");
+            else
+                Client.Send($"JoinGame {partidak.SelectedItem} {itxura.Text} {kolorea.Text}");
         }
     }
 }

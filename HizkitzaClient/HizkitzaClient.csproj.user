@@ -25,6 +25,9 @@
     <Compile Update="ui\window\page\AdminMain.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="ui\window\page\GamePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ui\window\page\PlayerLobby.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
