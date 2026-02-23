@@ -1,6 +1,7 @@
 ﻿using HizkitzaServer.game;
 using System.Net;
 using System.Net.Sockets;
+using static HizkitzaServer.util.connection.ServersideClient;
 
 namespace HizkitzaServer.util.connection
 {
@@ -20,8 +21,6 @@ namespace HizkitzaServer.util.connection
         // Bezero konektatu gertaera
         public static event EventHandler<ClientEventArgs>? ClientConnectedEvent;
 
-        // Bezero deskonektatu gertaera
-        public static event EventHandler<ClientEventArgs>? ClientDisconnectedEvent;
         public class ClientEventArgs : EventArgs
         {
             public required ServersideClient Client { get; set; }
@@ -33,14 +32,6 @@ namespace HizkitzaServer.util.connection
         {
             public required string Log { get; set; }
             public required LogType Mota { get; set; }
-        }
-
-        // Mezu berria iritsi gertaera
-        public static event EventHandler<MessageArrivedEventArgs>? MessageArrivedEvent;
-        public class MessageArrivedEventArgs : EventArgs
-        {
-            public required ServersideClient Client { get; set; }
-            public required string Mezua { get; set; }
         }
 
         // Partidak eguneratu gertaera
@@ -149,31 +140,6 @@ namespace HizkitzaServer.util.connection
             {
                 Log = log,
                 Mota = mota
-            });
-        }
-
-        // Mezu berria gertaera deitu eta CommnandDecoder-en bidez prozesatu
-        public static async Task NewMessage(string mezua, ServersideClient bezero)
-        {
-            MessageArrivedEvent?.Invoke(null, new()
-            {
-                Client = bezero,
-                Mezua = mezua
-            });
-            await CommandDecoder.ExecuteCommand(mezua, bezero);
-        }
-
-        // Deskonektatutako bezeroa bezeroen zerrendatik kendu eta gertaera deitu
-        public static void ClientDisconnect(ServersideClient Client)
-        {
-            lock (bezeroakLock)
-            {
-                if (Client.erabiltzailea != null)
-                    Server.clients[Client.erabiltzailea.Mota].Remove(Client);
-            }
-            ClientDisconnectedEvent?.Invoke(null, new()
-            {
-                Client = Client
             });
         }
 

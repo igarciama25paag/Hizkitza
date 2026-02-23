@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using static HizkitzaServer.util.connection.Server;
+using static HizkitzaServer.util.connection.ServersideClient;
 
 namespace HizkitzaServer.util.connection;
 
@@ -21,6 +22,7 @@ public static class CommandDecoder
         ["Login"] = new LoginCommand(),
         ["LogSender"] = new LogSenderCommand(),
         ["NewGame"] = new NewGameCommand(),
+        ["JoinGame"] = new JoinGameCommand(),
         ["GameUpdater"] = new GameUpdaterCommand(),
         ["Download"] = new DownloadCommand()
     };
@@ -28,10 +30,12 @@ public static class CommandDecoder
     // Komando baimenak
     private readonly static Dictionary<string, Collection<ConnectionType?>> Perms = new()
     {
+        ["Register"] = [null, ConnectionType.admin],
         ["Login"] = [null],
         ["LogSender"] = [ConnectionType.admin],
-        ["GameUpdater"] = [ConnectionType.admin, ConnectionType.user],
+        ["GameUpdater"] = [ConnectionType.user],
         ["NewGame"] = [ConnectionType.admin, ConnectionType.user],
+        ["JoinGame"] = [ConnectionType.user],
         ["Download"] = [ConnectionType.download]
     };
 
@@ -182,7 +186,6 @@ public static class CommandDecoder
             if (!subscribed)
             {
                 Server.LogSentEvent += SendLog;
-                Server.ClientDisconnectedEvent += ClientDisconnected;
                 subscribed = true;
             }
 
@@ -192,12 +195,14 @@ public static class CommandDecoder
                 {
                     if (clients.Contains(client))
                         throw new DeniedException("LogSender iada true");
+                    client.DisconnectedEvent += ClientDisconnected;
                     clients.Add(client);
                 }
                 else
                 {
                     if (!clients.Contains(client))
                         throw new DeniedException("LogSender iada false");
+                    client.DisconnectedEvent -= ClientDisconnected;
                     clients.Remove(client);
                 }
             } catch (FormatException)
@@ -214,7 +219,12 @@ public static class CommandDecoder
         }
 
         // Bezeroa deskonektatzen denean desuskribatu
-        private void ClientDisconnected(object? sender, Server.ClientEventArgs e) => clients.Remove(e.Client);
+        private void ClientDisconnected(object? sender, EventArgs e)
+        {
+            var client = sender as ServersideClient;
+            client.DisconnectedEvent -= ClientDisconnected;
+            clients.Remove(client);
+        }
     }
 
 
@@ -233,7 +243,6 @@ public static class CommandDecoder
             if (!subscribed)
             {
                 Server.GamesUpdateEvent += GamesUpdate;
-                Server.ClientDisconnectedEvent += ClientDisconnected;
                 subscribed = true;
             }
 
@@ -244,12 +253,14 @@ public static class CommandDecoder
                     if (clients.Contains(client))
                         throw new DeniedException("GameUpdater iada true");
                     clients.Add(client);
+                    client.DisconnectedEvent += ClientDisconnected;
                     client.Send($"Data Games {string.Join(" ", Server.partidak)}");
                 }
                 else
                 {
                     if (!clients.Contains(client))
                         throw new DeniedException("GameUpdater iada false");
+                    client.DisconnectedEvent -= ClientDisconnected;
                     clients.Remove(client);
                 }
             }
@@ -267,7 +278,12 @@ public static class CommandDecoder
         }
 
         // Bezeroa deskonektatzen denean desuskribatu
-        private void ClientDisconnected(object? sender, Server.ClientEventArgs e) => clients.Remove(e.Client);
+        private void ClientDisconnected(object? sender, EventArgs e)
+        {
+            var client = sender as ServersideClient;
+            client.DisconnectedEvent -= ClientDisconnected;
+            clients.Remove(client);
+        }
     }
 
 
@@ -283,6 +299,18 @@ public static class CommandDecoder
             Server.NewGame(newGame);
         }
     }
+
+
+    // Partida berria sortzeko komandoa
+    private class JoinGameCommand : ICommand
+    {
+        public string Format => "JoinGame <izena>";
+        public async Task Execute(string[] args, ServersideClient client)
+        {
+
+        }
+    }
+
 
     // Fitxategi bat bidaltzeko komandoa
     private class DownloadCommand : ICommand

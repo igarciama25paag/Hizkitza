@@ -17,10 +17,6 @@ namespace HizkitzaServer
             try
             {
                 GetConf();
-                Server.MessageArrivedEvent += (sender, args) =>
-                {
-                    Server.NewLog($"{args.Client} {args.Mezua}", Server.LogType.INFO);
-                };
                 Server.LogSentEvent += (sender, args) =>
                 {
                     Console.WriteLine($"[{DateTime.Now:t}] [{args.Mota}] {args.Log}");

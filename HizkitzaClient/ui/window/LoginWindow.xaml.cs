@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static HizkitzaClient.util.connection.Client;
 
 namespace HizkitzaClient.ui.window
 {
@@ -113,5 +114,8 @@ namespace HizkitzaClient.ui.window
                 Client.NewLog("Helbide formatu ezegokia", Client.LogType.WARN);
             }
         }
+
+        // Leihoa mugitu
+        private void Drag_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => DragMove();
     }
 }

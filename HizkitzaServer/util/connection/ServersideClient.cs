@@ -22,11 +22,29 @@ namespace HizkitzaServer.util.connection
 
         public readonly static object sendLock = new();
 
+        // Erabiltzaile motak
+        public enum ConnectionType
+        {
+            admin,
+            user,
+            download
+        }
+
         // Erabiltzaile parametroak
         public Erabiltzailea? erabiltzailea;
 
         // Bezeroa funtzionatzen dabilen
         public bool alive { get; private set; }
+
+        // Bezero deskonektatu gertaera
+        public event EventHandler<EventArgs>? DisconnectedEvent;
+
+        // Mezu berria iritsi gertaera
+        public event EventHandler<MessageArrivedEventArgs>? MessageArrivedEvent;
+        public class MessageArrivedEventArgs : EventArgs
+        {
+            public required string Mezua { get; set; }
+        }
 
         // Bezero bakoitzaren kudeatzailea sortu
         public ServersideClient(TcpClient bezero)
@@ -41,22 +59,25 @@ namespace HizkitzaServer.util.connection
         // Login komandoa itxaron eta bezeroa autentikatu
         public async void Login()
         {
-            var result = await WaitMessage();
-            if (result == null && erabiltzailea != null)
+            await WaitMessage();
+            if (erabiltzailea != null)
             {
                 alive = true;
                 Server.clients[erabiltzailea.Mota].Add(this);
                 Server.NewLog($"Bezero berria {this}", LogType.INFO);
+                DisconnectedEvent += Disconnect;
                 Send($"Logged {erabiltzailea.Mota}");
 
                 CreateConnectionChecker();
                 CreateReceiverThread();
             }
-            else
-            {
-                Send($"Denied {result?.Message ?? "Erabiltzaile null"}");
-                CloseClient(false);
-            }
+        }
+
+        // Bezeroa deskonektatzerakoan
+        private void Disconnect(object? sender, EventArgs e)
+        {
+            if (erabiltzailea != null)
+                Server.clients[erabiltzailea.Mota].Remove(this);
         }
 
         // Bezeroarekin konexioa dabilela segunduro egiaztatzen duen haria, deskonektatuta badago bezeroa itxi
@@ -84,19 +105,25 @@ namespace HizkitzaServer.util.connection
         }
 
         // Bezeroko mezu bat itxaron eta erroreren bat egon den itxaron.
-        private async Task<Exception?> WaitMessage()
+        private async Task WaitMessage()
         {
             try
             {
                 var mezua = reader?.ReadLine();
-                if (mezua != null) await Server.NewMessage(mezua, this);
-                return null;
+                if (mezua != null)
+                {
+                    MessageArrivedEvent?.Invoke(this, new()
+                    {
+                        Mezua = mezua
+                    });
+                    Server.NewLog($"{this} {mezua}", Server.LogType.INFO);
+                    await CommandDecoder.ExecuteCommand(mezua, this);
+                }
             }
             catch (Exception e)
             {
                 Send("Denied " + e.Message);
                 NewLog(e.Message, LogType.ERROR);
-                return e;
             }
         }
 
@@ -134,7 +161,7 @@ namespace HizkitzaServer.util.connection
             stream?.Close();
             reader?.Close();
             writer?.Close();
-            Server.ClientDisconnect(this);
+            DisconnectedEvent?.Invoke(this, new());
             if (msg) Server.NewLog($"{this} bezeroa deskonektatu da", LogType.INFO);
         }
 

@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR
 C:\Users\user\source\repos\Hizkitza\HizkitzaClient\App.xaml
 161309112660
 1-707450513
-19342667036
+18-263494209
 198717675157
 style\ButtonStyle.xaml;style\ComboBoxStyle.xaml;style\FontStyle.xaml;style\ListBoxStyle.xaml;style\OtherStyle.xaml;style\TextBlockStyle.xaml;style\TextBoxStyle.xaml;ui\messagebox\HizkitzaArgMessageBox.xaml;ui\messagebox\HizkitzaBooleanMessageBox.xaml;ui\messagebox\HizkitzaDownloadMessageBox.xaml;ui\messagebox\HizkitzaInfoMessageBox.xaml;ui\window\LoginWindow.xaml;ui\window\MainWindow.xaml;ui\window\page\AdminMain.xaml;ui\window\page\GamePage.xaml;ui\window\page\PlayerLobby.xaml;
 
-False
+True
 

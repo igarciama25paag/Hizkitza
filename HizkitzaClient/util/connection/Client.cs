@@ -27,6 +27,13 @@ namespace HizkitzaClient.util.connection
         // Bezeroa funtzionatzen ari den
         public static bool alive { get; private set; }
 
+        // Erabiltzaile motak
+        public enum ConnectionType
+        {
+            admin,
+            user
+        }
+
         // Bezeroaren izena eta mota
         public static string? izena;
         public static ConnectionType? mota;

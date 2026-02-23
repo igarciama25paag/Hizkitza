@@ -60,7 +60,7 @@ namespace HizkitzaClient.ui.messagebox {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/HizkitzaClient;component/ui/messagebox/hizkitzainfomessagebox.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HizkitzaClient;V1.0.0.0;component/ui/messagebox/hizkitzainfomessagebox.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\ui\messagebox\HizkitzaInfoMessageBox.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

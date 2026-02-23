@@ -18,12 +18,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <TextBlock Text="{Binding Username}" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
-            <Button Click="SaioaItxi_Click" Content="Saioa Itxi" Margin="20,0,0,0" Style="{StaticResource Button.Negative}" Width="120"/>
-            <Button Click="Itxi_Click" Content="X" Margin="10,0,0,0" Style="{StaticResource Button.Negative}" Width="40"/>
-        </StackPanel>
-        
+        <Grid Background="Black" MouseLeftButtonDown="Drag_MouseLeftButtonDown">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <TextBlock Text="{Binding Username}" VerticalAlignment="Center" Style="{StaticResource Text.Basic}"/>
+                <Button Click="SaioaItxi_Click" Content="Saioa Itxi" Margin="20,0,0,0" Style="{StaticResource Button.Negative}" Width="120"/>
+                <Button Click="Itxi_Click" Content="X" Margin="10,0,0,0" Style="{StaticResource Button.Negative}" Width="40"/>
+            </StackPanel>
+        </Grid>
+
         <Frame x:Name="MainFrame"
                Grid.Row="1"
                NavigationUIVisibility="Hidden"/>

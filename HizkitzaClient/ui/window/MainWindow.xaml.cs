@@ -80,5 +80,8 @@ namespace HizkitzaClient.ui.window
                 Close();
             }
         }
+
+        // Leihoa mugitu
+        private void Drag_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => DragMove();
     }
 }
