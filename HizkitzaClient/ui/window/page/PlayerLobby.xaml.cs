@@ -49,6 +49,7 @@ namespace HizkitzaClient.ui.window.page
             Unloaded += Page_Unloaded;
             CommandDecoder.DataEvent += Data;
             CommandDecoder.DeniedEvent += Denied;
+            CommandDecoder.InGameEvent += InGame;
 
             Client.Send("GameUpdater true");
         }
@@ -85,7 +86,7 @@ namespace HizkitzaClient.ui.window.page
         // Partida baten sartzerakoan orria aldatu
         private void InGame(object? sender, CommandDecoder.InGameEventArgs e)
         {
-            NavigationService.Navigate(new GamePage());
+            if (e.Sartu) Dispatcher?.Invoke(() => NavigationService.Navigate(new GamePage()));
         }
 
         // Orritik ateratzerakoan desuskribatu
@@ -94,6 +95,7 @@ namespace HizkitzaClient.ui.window.page
             Client.Send("GameUpdater false");
             CommandDecoder.DataEvent -= Data;
             CommandDecoder.DeniedEvent -= Denied;
+            CommandDecoder.InGameEvent -= InGame;
         }
 
         // Partida berria sortu
@@ -127,7 +129,7 @@ namespace HizkitzaClient.ui.window.page
             else if (partidak.SelectedItem == null)
                 HizkitzaInfoMessageBox.ShowDialog("Partida bat aukeratu behar da", false);
             else
-                Client.Send($"JoinGame {partidak.SelectedItem} {itxura.Text} {kolorea.Text}");
+                Client.Send($"JoinGame true {((ListBoxItem)partidak.SelectedItem).Content} {itxura.Text} {kolorea.Text}");
         }
     }
 }

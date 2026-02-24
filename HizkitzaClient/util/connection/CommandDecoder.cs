@@ -3,6 +3,7 @@ using HizkitzaClient.util.connection;
 using HizkitzaClient.util.game;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Markup;
 using static HizkitzaClient.util.connection.Client;
@@ -149,19 +150,28 @@ public static class CommandDecoder
     public static event EventHandler<InGameEventArgs>? InGameEvent;
     public class InGameEventArgs : EventArgs
     {
+        public required bool Sartu { get; set; }
         public required string Izena { get; set; }
     }
 
     // Partida satzerakoaren komandoa
     private class InGameCommand : ICommand
     {
-        public string Format => "InGame <izena>";
+        public string Format => "InGame <bool> <izena>";
         public void Execute(string[] args)
         {
-            InGameEvent?.Invoke(null, new()
+            try
             {
-                Izena = args[0]
-            });
+                InGameEvent?.Invoke(null, new()
+                {
+                    Sartu = bool.Parse(args[0]),
+                    Izena = args[1]
+                });
+            }
+            catch
+            {
+                throw new WrongCommandFormatException(Format);
+            }
         }
     }
 }

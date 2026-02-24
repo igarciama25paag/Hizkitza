@@ -20,7 +20,7 @@ namespace HizkitzaClient.ui.window.page
     /// </summary>
     public partial class GamePage : Page
     {
-        public GamePage()
+        public GamePage(string izena, string itxura, string kolorea)
         {
             InitializeComponent();
         }

@@ -1,5 +1,5 @@
 HizkitzaPort=5000
 PostgresHost=localhost
 PostgresPort=5432
-PostgresUser=postgres
-PostgresPass=postgres
+PostgresUser=admin
+PostgresPass=admin

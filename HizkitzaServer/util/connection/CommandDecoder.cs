@@ -301,13 +301,41 @@ public static class CommandDecoder
     }
 
 
-    // Partida berria sortzeko komandoa
+    // Partida batean sartzeko komandoa
     private class JoinGameCommand : ICommand
     {
-        public string Format => "JoinGame <izena>";
+        public string Format => "JoinGame <bool> <izena> <itxura> <kolorea>";
         public async Task Execute(string[] args, ServersideClient client)
         {
+            var partida = Server.partidak.FirstOrDefault(p => p.Izena == args[1]) ?? throw new DeniedException($"'{args[1]}' izeneko partida ez da existitzen");
+            try
+            {
+                if (bool.Parse(args[0]))
+                {
+                    client.currentGame = partida;
+                    partida.Players.Add(client);
+                    client.DisconnectedEvent += Disconnect;
+                    client.Send($"InGame true {args[1]}");
+                }
+                else
+                {
+                    client.currentGame = null;
+                    client.currentGame?.Players.Remove(client);
+                    client.DisconnectedEvent -= Disconnect;
+                    client.Send($"InGame false {args[1]}");
+                }
+            }
+            catch (FormatException)
+            {
+                throw new WrongCommandFormatException(Format);
+            }
+        }
 
+        private void Disconnect(object? sender, EventArgs e)
+        {
+            var client = sender as ServersideClient;
+            client.DisconnectedEvent -= Disconnect;
+            client.currentGame?.Players.Remove(client);
         }
     }
 
