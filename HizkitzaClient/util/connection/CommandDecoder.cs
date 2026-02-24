@@ -118,7 +118,8 @@ public static class CommandDecoder
     public enum DataType
     {
         Log,
-        Games
+        Games,
+        Message
     }
 
     // Datu berriko komandoa

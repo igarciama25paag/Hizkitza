@@ -1,5 +1,8 @@
-﻿using System;
+﻿using HizkitzaClient.ui.messagebox;
+using HizkitzaClient.util.connection;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,24 +18,82 @@ using System.Windows.Shapes;
 
 namespace HizkitzaClient.ui.window.page
 {
-    /// <summary>
-    /// Interaction logic for GamePage.xaml
-    /// </summary>
     public partial class GamePage : Page
     {
-        public GamePage(string izena, string itxura, string kolorea)
+        public GamePage(string izena, string itxura, Brush kolorea)
         {
             InitializeComponent();
-        }
+            partidaIzena.Text = izena;
+            jokalariItxura.Text = itxura;
+            jokalariItxura.Foreground = kolorea;
 
-        private void Bidali_Click(object sender, RoutedEventArgs e)
+            Loaded += Page_Loaded;
+            Unloaded += Page_Unloaded;
+            CommandDecoder.DataEvent += Data;
+            CommandDecoder.DeniedEvent += Denied;
+            CommandDecoder.InGameEvent += InGame;
+        }
+        private void Page_Loaded(object sender, RoutedEventArgs e) => Window.GetWindow(this).Closing += Window_Closing;
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e) => Close();
+
+        private void Window_Closing(object? sender, CancelEventArgs e) => Close();
+
+        private void Denied(object? sender, CommandDecoder.DeniedEventArgs e)
         {
-
+            Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}", false));
         }
+        
+        // Datu berriak ailatzerakoan partidak eguneratu
+        private void Data(object? sender, CommandDecoder.DataEventArgs e)
+        {
+            if (e.Mota == CommandDecoder.DataType.Message)
+                Dispatcher?.Invoke(() =>
+                {
+                    messages.Items.Add(new ListBoxItem()
+                    {
+                        Content = string.Join(" ", e.Data[1..]),
+                        Foreground = new BrushConverter().ConvertFromString(e.Data[0]) as Brush
+                    });
+                });
+        }
+
+        // Partidatik ateratzerakoan lobby-ra itzuli
+        private void InGame(object? sender, CommandDecoder.InGameEventArgs e)
+        {
+            if (!e.Sartu) Dispatcher?.Invoke(() => NavigationService.Navigate(new PlayerLobby()));
+        }
+
+        // Orritik ateratzerakoan desuskribatu
+        private void Close()
+        {
+            CommandDecoder.DataEvent -= Data;
+            CommandDecoder.DeniedEvent -= Denied;
+            CommandDecoder.InGameEvent -= InGame;
+        }
+
+        private void Bidali_Click(object sender, RoutedEventArgs e) => Send();
 
         private void Message_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Enter) Send();
+        }
 
+        // Mezua bidali
+        private void Send()
+        {
+            if (!string.IsNullOrEmpty(message.Text))
+            {
+                Client.Send($"GameMessage {jokalariItxura.Foreground} {Client.izena}_{jokalariItxura.Text}: {message.Text}");
+                message.Text = string.Empty;
+            }
+        }
+
+        // Partida utzi
+        private void PartidaUtzi_Click(object sender, RoutedEventArgs e)
+        {
+            if (HizkitzaBooleanMessageBox.ShowDialog("Partidatik atera nahi al duzu?").DialogResult == true)
+                Client.Send("LeaveGame");
         }
     }
 }

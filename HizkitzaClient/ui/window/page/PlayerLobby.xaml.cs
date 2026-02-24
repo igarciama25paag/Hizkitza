@@ -86,7 +86,7 @@ namespace HizkitzaClient.ui.window.page
         // Partida baten sartzerakoan orria aldatu
         private void InGame(object? sender, CommandDecoder.InGameEventArgs e)
         {
-            if (e.Sartu) Dispatcher?.Invoke(() => NavigationService.Navigate(new GamePage()));
+            if (e.Sartu) Dispatcher?.Invoke(() => NavigationService.Navigate(new GamePage(e.Izena, itxura.Text, kolorea.Foreground)));
         }
 
         // Orritik ateratzerakoan desuskribatu
@@ -129,7 +129,7 @@ namespace HizkitzaClient.ui.window.page
             else if (partidak.SelectedItem == null)
                 HizkitzaInfoMessageBox.ShowDialog("Partida bat aukeratu behar da", false);
             else
-                Client.Send($"JoinGame true {((ListBoxItem)partidak.SelectedItem).Content} {itxura.Text} {kolorea.Text}");
+                Client.Send($"JoinGame {((ListBoxItem)partidak.SelectedItem).Content} {itxura.Text} {kolorea.Foreground}");
         }
     }
 }

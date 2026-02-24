@@ -21,9 +21,11 @@ public static class CommandDecoder
         ["Register"] = new RegisterCommand(),
         ["Login"] = new LoginCommand(),
         ["LogSender"] = new LogSenderCommand(),
+        ["GameUpdater"] = new GameUpdaterCommand(),
         ["NewGame"] = new NewGameCommand(),
         ["JoinGame"] = new JoinGameCommand(),
-        ["GameUpdater"] = new GameUpdaterCommand(),
+        ["LeaveGame"] = new LeaveGameCommand(),
+        ["GameMessage"] = new GameMessageCommand(),
         ["Download"] = new DownloadCommand()
     };
 
@@ -36,6 +38,8 @@ public static class CommandDecoder
         ["GameUpdater"] = [ConnectionType.user],
         ["NewGame"] = [ConnectionType.admin, ConnectionType.user],
         ["JoinGame"] = [ConnectionType.user],
+        ["LeaveGame"] = [ConnectionType.user],
+        ["GameMessage"] = [ConnectionType.admin, ConnectionType.user],
         ["Download"] = [ConnectionType.download]
     };
 
@@ -304,31 +308,16 @@ public static class CommandDecoder
     // Partida batean sartzeko komandoa
     private class JoinGameCommand : ICommand
     {
-        public string Format => "JoinGame <bool> <izena> <itxura> <kolorea>";
+        public string Format => "JoinGame <izena> <itxura> <kolorea>";
         public async Task Execute(string[] args, ServersideClient client)
         {
-            var partida = Server.partidak.FirstOrDefault(p => p.Izena == args[1]) ?? throw new DeniedException($"'{args[1]}' izeneko partida ez da existitzen");
-            try
-            {
-                if (bool.Parse(args[0]))
-                {
-                    client.currentGame = partida;
-                    partida.Players.Add(client);
-                    client.DisconnectedEvent += Disconnect;
-                    client.Send($"InGame true {args[1]}");
-                }
-                else
-                {
-                    client.currentGame = null;
-                    client.currentGame?.Players.Remove(client);
-                    client.DisconnectedEvent -= Disconnect;
-                    client.Send($"InGame false {args[1]}");
-                }
-            }
-            catch (FormatException)
-            {
-                throw new WrongCommandFormatException(Format);
-            }
+            client.currentGame = Server.partidak.FirstOrDefault(p => p.Izena == args[0]) ?? throw new DeniedException($"'{args[0]}' izeneko partida ez da existitzen");
+            client.currentGame.Players.Add(client);
+            client.DisconnectedEvent += Disconnect;
+            client.Send($"InGame true {client.currentGame.Izena}");
+            foreach (var player in client.currentGame.Players)
+                player.Send($"Data Players {string.Join(" ", client.currentGame.Players)}");
+            Console.WriteLine($"Data Players {string.Join(" ", client.currentGame.Players)}");
         }
 
         private void Disconnect(object? sender, EventArgs e)
@@ -336,6 +325,42 @@ public static class CommandDecoder
             var client = sender as ServersideClient;
             client.DisconnectedEvent -= Disconnect;
             client.currentGame?.Players.Remove(client);
+        }
+    }
+
+
+    // Partida uzteko komandoa
+    private class LeaveGameCommand : ICommand
+    {
+        public string Format => "LeaveGame";
+        public async Task Execute(string[] args, ServersideClient client)
+        {
+            var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
+            partida.Players.Remove(client);
+            foreach (var player in client.currentGame.Players)
+                player.Send($"Data Players {string.Join(" ", client.currentGame.Players)}");
+            client.currentGame = null;
+            client.Send($"InGame false null");
+        }
+    }
+
+
+    // Partida barruko mezuak bidaltzeko komandoa
+    private class GameMessageCommand : ICommand
+    {
+        public string Format => "GameMessage <kolorea> ...";
+        public async Task Execute(string[] args, ServersideClient client)
+        {
+            var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
+            try
+            {
+                foreach (var player in partida.Players)
+                    player.Send($"Data Message {args[0]} {string.Join(" ", args[1..])}");
+            }
+            catch (FormatException)
+            {
+                throw new WrongCommandFormatException(Format);
+            }
         }
     }
 
