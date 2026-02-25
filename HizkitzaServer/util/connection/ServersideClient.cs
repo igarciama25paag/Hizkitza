@@ -67,7 +67,7 @@ namespace HizkitzaServer.util.connection
             {
                 alive = true;
                 Server.clients[erabiltzailea.Mota].Add(this);
-                Server.NewLog($"Bezero berria {this}", LogType.INFO);
+                Server.NewLog($"Bezero berria ({this})", LogType.INFO);
                 DisconnectedEvent += Disconnect;
                 Send($"Logged {erabiltzailea.Mota}");
 
@@ -119,7 +119,7 @@ namespace HizkitzaServer.util.connection
                     {
                         Mezua = mezua
                     });
-                    Server.NewLog($"{this} {mezua}", Server.LogType.INFO);
+                    Server.NewLog($"({this}) {mezua}", Server.LogType.INFO);
                     await CommandDecoder.ExecuteCommand(mezua, this);
                 }
             }
@@ -165,9 +165,9 @@ namespace HizkitzaServer.util.connection
             reader?.Close();
             writer?.Close();
             DisconnectedEvent?.Invoke(this, new());
-            if (msg) Server.NewLog($"{this} bezeroa deskonektatu da", LogType.INFO);
+            if (msg) Server.NewLog($"({this}) bezeroa deskonektatu da", LogType.INFO);
         }
 
-        public override string? ToString() => $"({erabiltzailea?.Izena ?? "anonymous"})";
+        public override string? ToString() => erabiltzailea?.Izena ?? "anonymous";
     }
 }

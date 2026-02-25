@@ -39,7 +39,7 @@ namespace HizkitzaServer.util.db
             }
             catch (NpgsqlException e)
             {
-                Server.NewLog("SQL:" + e.Message, Server.LogType.ERROR);
+                throw new CommandDecoder.DeniedException("SQL: " + e.Message);
             }
         }
 
@@ -63,8 +63,7 @@ namespace HizkitzaServer.util.db
             }
             catch (NpgsqlException e)
             {
-                Server.NewLog("SQL:" + e.Message, Server.LogType.ERROR);
-                return default!;
+                throw new CommandDecoder.DeniedException("SQL: " + e.Message);
             }
         }
 

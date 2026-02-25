@@ -316,13 +316,17 @@ public static class CommandDecoder
             client.DisconnectedEvent += Disconnect;
             client.Send($"InGame true {client.currentGame.Izena}");
             foreach (var player in client.currentGame.Players)
-                player.Send($"Data Players {string.Join(" ", client.currentGame.Players)}");
-            Console.WriteLine($"Data Players {string.Join(" ", client.currentGame.Players)}");
+                player.Send($"Data Message #ffffff {client} konektatu da");
+            /*foreach (var player in client.currentGame.Players)
+                player.Send($"Data Players {string.Join(" ", client.currentGame.Players)}");*/
         }
 
         private void Disconnect(object? sender, EventArgs e)
         {
             var client = sender as ServersideClient;
+            if (client.currentGame != null) 
+                foreach (var player in client.currentGame.Players)
+                    player.Send($"Data Message #ffffff {client} deskonektatu da");
             client.DisconnectedEvent -= Disconnect;
             client.currentGame?.Players.Remove(client);
         }
@@ -338,7 +342,10 @@ public static class CommandDecoder
             var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
             partida.Players.Remove(client);
             foreach (var player in client.currentGame.Players)
+            {
+                player.Send($"Data Message #ffffff {client} deskonektatu da");
                 player.Send($"Data Players {string.Join(" ", client.currentGame.Players)}");
+            }
             client.currentGame = null;
             client.Send($"InGame false null");
         }
