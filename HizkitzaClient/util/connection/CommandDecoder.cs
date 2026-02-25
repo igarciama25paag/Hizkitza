@@ -119,7 +119,8 @@ public static class CommandDecoder
     {
         Log,
         Games,
-        Message
+        Message,
+        Players
     }
 
     // Datu berriko komandoa

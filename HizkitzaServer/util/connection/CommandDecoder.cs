@@ -312,23 +312,31 @@ public static class CommandDecoder
         public async Task Execute(string[] args, ServersideClient client)
         {
             client.currentGame = Server.partidak.FirstOrDefault(p => p.Izena == args[0]) ?? throw new DeniedException($"'{args[0]}' izeneko partida ez da existitzen");
-            client.currentGame.Players.Add(client);
+            client.itxura = char.Parse(args[1]);
+            client.kolorea = args[2];
+            client.currentGame.AddPlayer(client);
             client.DisconnectedEvent += Disconnect;
             client.Send($"InGame true {client.currentGame.Izena}");
-            foreach (var player in client.currentGame.Players)
-                player.Send($"Data Message #ffffff {client} konektatu da");
-            /*foreach (var player in client.currentGame.Players)
-                player.Send($"Data Players {string.Join(" ", client.currentGame.Players)}");*/
+            foreach (var player in client.currentGame.GetPlayers())
+            {
+                player.Send($"Data Message {client.kolorea} {client} konektatu da");
+                var players = "";
+                foreach (var p in client.currentGame.GetPlayers())
+                    players += $" {p}:{p.kolorea}";
+                player.Send($"Data Players{players}");
+            }
         }
 
         private void Disconnect(object? sender, EventArgs e)
         {
             var client = sender as ServersideClient;
             if (client.currentGame != null) 
-                foreach (var player in client.currentGame.Players)
-                    player.Send($"Data Message #ffffff {client} deskonektatu da");
+                foreach (var player in client.currentGame.GetPlayers())
+                    player.Send($"Data Message {client.kolorea} {client} deskonektatu da");
+            client.itxura = null;
+            client.kolorea = null;
             client.DisconnectedEvent -= Disconnect;
-            client.currentGame?.Players.Remove(client);
+            client.currentGame?.RemovePlayer(client);
         }
     }
 
@@ -340,12 +348,17 @@ public static class CommandDecoder
         public async Task Execute(string[] args, ServersideClient client)
         {
             var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
-            partida.Players.Remove(client);
-            foreach (var player in client.currentGame.Players)
+            partida.RemovePlayer(client);
+            foreach (var player in client.currentGame.GetPlayers())
             {
-                player.Send($"Data Message #ffffff {client} deskonektatu da");
-                player.Send($"Data Players {string.Join(" ", client.currentGame.Players)}");
+                player.Send($"Data Message {client.kolorea} {client} deskonektatu da");
+                var players = "";
+                foreach (var p in client.currentGame.GetPlayers())
+                    players += $" {p}:{p.kolorea}";
+                player.Send($"Data Players{players}");
             }
+            client.itxura = null;
+            client.kolorea = null;
             client.currentGame = null;
             client.Send($"InGame false null");
         }
@@ -355,14 +368,14 @@ public static class CommandDecoder
     // Partida barruko mezuak bidaltzeko komandoa
     private class GameMessageCommand : ICommand
     {
-        public string Format => "GameMessage <kolorea> ...";
+        public string Format => "GameMessage ...";
         public async Task Execute(string[] args, ServersideClient client)
         {
             var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
             try
             {
-                foreach (var player in partida.Players)
-                    player.Send($"Data Message {args[0]} {string.Join(" ", args[1..])}");
+                foreach (var player in partida.GetPlayers())
+                    player.Send($"Data Message {client.kolorea} {client.erabiltzailea!.Izena}_{client.itxura}: {string.Join(" ", args[..])}");
             }
             catch (FormatException)
             {

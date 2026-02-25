@@ -33,8 +33,10 @@ namespace HizkitzaServer.util.connection
         // Erabiltzaile parametroak
         public Erabiltzailea? erabiltzailea;
 
-        // Sartuta dagoen partida
+        // Partida informazioa
         public Game? currentGame;
+        public char? itxura;
+        public string? kolorea;
 
         // Bezeroa funtzionatzen dabilen
         public bool alive { get; private set; }

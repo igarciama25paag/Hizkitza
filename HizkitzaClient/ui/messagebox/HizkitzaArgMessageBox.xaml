@@ -40,6 +40,7 @@
                      Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource TextBox.Medium}"
                      Padding="8"/>
+
         </StackPanel>
 
         <!-- Botoiak -->

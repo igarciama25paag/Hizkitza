@@ -34,7 +34,7 @@ namespace HizkitzaClient.util.connection
             user
         }
 
-        // Bezeroaren izena eta mota
+        // Bezeroaren propietate ezberdinak
         public static string? izena;
         public static ConnectionType? mota;
 

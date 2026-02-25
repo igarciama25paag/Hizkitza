@@ -119,8 +119,12 @@ namespace HizkitzaClient.ui.window.page
                 ((ComboBoxItem)item).Foreground = col;
         }
 
+        private void PartidanSartu_Click(object sender, RoutedEventArgs e) => PartidanSartu();
+
+        private void Partidak_MouseDoubleClick(object sender, MouseButtonEventArgs e) => PartidanSartu();
+
         // Aukeratutako partidan sartu
-        private void PartidanSartu_Click(object sender, RoutedEventArgs e)
+        private void PartidanSartu()
         {
             if (string.IsNullOrEmpty(itxura.Text))
                 HizkitzaInfoMessageBox.ShowDialog("Itxura bat aukeratu behar da", false);

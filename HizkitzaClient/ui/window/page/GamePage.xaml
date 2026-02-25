@@ -10,17 +10,17 @@
 
     <Grid Margin="50,30">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel>
-            <TextBlock Text="Aukerak:" Style="{StaticResource Text.Basic}"/>
-            <Button Click="PartidaUtzi_Click" Content="Partida utzi" Style="{StaticResource Button.Negative}" Margin="0,10,0,0"/>
-        </StackPanel>
-        
-        <DockPanel Grid.Column="1" Margin="10,0">
+        <DockPanel Margin="10">
+            <TextBlock Text="Jokalariak:" Style="{StaticResource Text.Basic}" DockPanel.Dock="Top"/>
+            <Button Click="PartidaUtzi_Click" Content="Partida utzi" Style="{StaticResource Button.Negative}" Margin="0,10,0,0" DockPanel.Dock="Bottom"/>
+            <ListBox ItemsSource="{Binding playersList}"/>
+        </DockPanel>
+
+        <DockPanel Grid.Column="1" Margin="10">
             <DockPanel DockPanel.Dock="Top">
                 <TextBlock x:Name="jokalariItxura" Style="{StaticResource Text.Basic}" DockPanel.Dock="Right"/>
                 <TextBlock x:Name="partidaIzena" Style="{StaticResource Text.Basic}"/>

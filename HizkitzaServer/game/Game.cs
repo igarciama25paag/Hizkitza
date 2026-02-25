@@ -8,9 +8,10 @@ public class Game
 {
     public readonly string Izena;
     public readonly string Mapa;
-    public readonly List<ServersideClient> Players = [];
+    private readonly List<ServersideClient> Players = [];
+    private readonly object playersLock = new();
     //private Timer timer;
-    
+
     public Game(string izena, string mapa)
     {
         Izena = izena;
@@ -20,6 +21,21 @@ public class Game
         {
             
         }).Start();*/
+    }
+
+    public List<ServersideClient> GetPlayers()
+    {
+        lock (playersLock) return Players;
+    }
+
+    public void AddPlayer(ServersideClient client)
+    {
+        lock (playersLock) Players.Add(client);
+    }
+
+    public void RemovePlayer(ServersideClient client)
+    {
+        lock (playersLock) Players.Remove(client);
     }
 
     override public string ToString()

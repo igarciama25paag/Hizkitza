@@ -2,6 +2,7 @@
 using HizkitzaClient.util.connection;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,11 @@ namespace HizkitzaClient.ui.window.page
 {
     public partial class GamePage : Page
     {
+        public ObservableCollection<ListBoxItem> playersList { get; } = [];
+        private readonly object playersLock = new();
         public GamePage(string izena, string itxura, Brush kolorea)
         {
+            DataContext = this;
             InitializeComponent();
             partidaIzena.Text = izena;
             jokalariItxura.Text = itxura;
@@ -44,7 +48,7 @@ namespace HizkitzaClient.ui.window.page
             Dispatcher?.Invoke(() => HizkitzaInfoMessageBox.ShowDialog($"DENIED {e.Reason}", false));
         }
         
-        // Datu berriak ailatzerakoan partidak eguneratu
+        // Datu berriak ailatzerakoan zerrendak eguneratu
         private void Data(object? sender, CommandDecoder.DataEventArgs e)
         {
             if (e.Mota == CommandDecoder.DataType.Message)
@@ -56,6 +60,22 @@ namespace HizkitzaClient.ui.window.page
                         Foreground = new BrushConverter().ConvertFromString(e.Data[0]) as Brush
                     });
                 });
+            else if (e.Mota == CommandDecoder.DataType.Players)
+            {
+                Dispatcher?.Invoke(() =>
+                {
+                    lock (playersLock)
+                    {
+                        playersList.Clear();
+                        foreach (var item in e.Data)
+                            playersList.Add(new()
+                            {
+                                Content = item.Split(':')[0],
+                                Foreground = new BrushConverter().ConvertFromString(item.Split(':')[1]) as Brush,
+                            });
+                    }
+                });
+            }
         }
 
         // Partidatik ateratzerakoan lobby-ra itzuli
@@ -84,7 +104,7 @@ namespace HizkitzaClient.ui.window.page
         {
             if (!string.IsNullOrEmpty(message.Text))
             {
-                Client.Send($"GameMessage {jokalariItxura.Foreground} {Client.izena}_{jokalariItxura.Text}: {message.Text}");
+                Client.Send($"GameMessage {message.Text}");
                 message.Text = string.Empty;
             }
         }
