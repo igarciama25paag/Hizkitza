@@ -117,8 +117,8 @@ namespace HizkitzaServer
             writer.WriteLine("HizkitzaPort=5000");
             writer.WriteLine("PostgresHost=localhost");
             writer.WriteLine("PostgresPort=5432");
-            writer.WriteLine("PostgresUser=admin");
-            writer.WriteLine("PostgresPass=admin");
+            writer.WriteLine("PostgresUser=postgres");
+            writer.WriteLine("PostgresPass=postgres");
         }
     } 
 }

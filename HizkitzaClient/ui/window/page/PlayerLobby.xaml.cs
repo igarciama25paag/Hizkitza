@@ -86,7 +86,7 @@ namespace HizkitzaClient.ui.window.page
         // Partida baten sartzerakoan orria aldatu
         private void InGame(object? sender, CommandDecoder.InGameEventArgs e)
         {
-            if (e.Sartu) Dispatcher?.Invoke(() => NavigationService.Navigate(new GamePage(e.Izena, itxura.Text, kolorea.Foreground)));
+            if (e.Sartu) Dispatcher?.Invoke(() => NavigationService.Navigate(new GamePage(e.Izena, e.Mapa, itxura.Text, kolorea.Foreground)));
         }
 
         // Orritik ateratzerakoan desuskribatu
@@ -106,7 +106,11 @@ namespace HizkitzaClient.ui.window.page
             else if (mapa.SelectedItem == null)
                 HizkitzaInfoMessageBox.ShowDialog("Partidak mapa bat behar du", false);
             else
+            {
                 Client.Send($"NewGame {izena.Text.Trim()} {mapa.Text.Trim()}");
+                izena.Text = null;
+                mapa.SelectedValue = null;
+            }
         }
 
         // Kolorea aukeratzerakoan itxura eta kolorearen koloreak aldatu

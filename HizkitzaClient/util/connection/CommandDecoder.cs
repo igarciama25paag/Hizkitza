@@ -154,12 +154,13 @@ public static class CommandDecoder
     {
         public required bool Sartu { get; set; }
         public required string Izena { get; set; }
+        public required string Mapa { get; set; }
     }
 
     // Partida satzerakoaren komandoa
     private class InGameCommand : ICommand
     {
-        public string Format => "InGame <bool> <izena>";
+        public string Format => "InGame <bool> <izena> <mapa>";
         public void Execute(string[] args)
         {
             try
@@ -167,7 +168,8 @@ public static class CommandDecoder
                 InGameEvent?.Invoke(null, new()
                 {
                     Sartu = bool.Parse(args[0]),
-                    Izena = args[1]
+                    Izena = args[1],
+                    Mapa = args[2]
                 });
             }
             catch

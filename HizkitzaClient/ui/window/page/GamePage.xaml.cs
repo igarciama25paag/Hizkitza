@@ -23,11 +23,11 @@ namespace HizkitzaClient.ui.window.page
     {
         public ObservableCollection<ListBoxItem> playersList { get; } = [];
         private readonly object playersLock = new();
-        public GamePage(string izena, string itxura, Brush kolorea)
+        public GamePage(string izena, string mapa, string itxura, Brush kolorea)
         {
             DataContext = this;
             InitializeComponent();
-            partidaIzena.Text = izena;
+            partidaIzena.Text = $"{izena} | {mapa}";
             jokalariItxura.Text = itxura;
             jokalariItxura.Foreground = kolorea;
 

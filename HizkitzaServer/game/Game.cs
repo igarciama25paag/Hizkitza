@@ -1,3 +1,4 @@
+using HizkitzaServer.game.world.entity;
 using HizkitzaServer.util.connection;
 using System.Timers;
 using Timer = System.Timers.Timer;
@@ -30,18 +31,35 @@ public class Game
 
     public void AddPlayer(ServersideClient client)
     {
-        lock (playersLock) Players.Add(client);
+        lock (playersLock)
+        {
+            Players.Add(client);
+            UpdateToPlayers(client, true);
+        }
     }
 
     public void RemovePlayer(ServersideClient client)
     {
-        lock (playersLock) Players.Remove(client);
+        lock (playersLock)
+        {
+            Players.Remove(client);
+            UpdateToPlayers(client, false);
+        }
     }
 
-    override public string ToString()
+    private void UpdateToPlayers(ServersideClient client, bool connect)
     {
-        return Izena;
+        foreach (var player in Players)
+        {
+            player.Send($"Data Message {client.kolorea} {client} {(connect?"":"des")}konektatu da");
+            var players = "";
+            foreach (var p in Players)
+                players += $" {p}:{p.kolorea}";
+            player.Send($"Data Players{players}");
+        }
     }
+
+    override public string ToString() => Izena;
 
     override public bool Equals(object? obj)
     {

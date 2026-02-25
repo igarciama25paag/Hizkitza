@@ -17,8 +17,8 @@ namespace HizkitzaServer.util.db
         // PostgreSQL datu base parametroak
         public static string HOST = "localhost";
         public static string PORT = "5432";
-        public static string USERNAME = "admin";
-        public static string PASSWORD = "admin";
+        public static string USERNAME = "postgres";
+        public static string PASSWORD = "postgres";
         public static string DATABASE = "hizkitza";
 
         // Datu baseari komando bat bidali bueltan ezer itxaron gabe

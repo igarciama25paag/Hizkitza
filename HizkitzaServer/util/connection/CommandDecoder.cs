@@ -1,3 +1,4 @@
+using HizkitzaServer.game.world.entity;
 using HizkitzaServer.util.data;
 using HizkitzaServer.util.db;
 using HizkitzaServer.util.pdf;
@@ -314,29 +315,18 @@ public static class CommandDecoder
             client.currentGame = Server.partidak.FirstOrDefault(p => p.Izena == args[0]) ?? throw new DeniedException($"'{args[0]}' izeneko partida ez da existitzen");
             client.itxura = char.Parse(args[1]);
             client.kolorea = args[2];
+            client.Send($"InGame true {client.currentGame.Izena} {client.currentGame.Mapa}");
             client.currentGame.AddPlayer(client);
             client.DisconnectedEvent += Disconnect;
-            client.Send($"InGame true {client.currentGame.Izena}");
-            foreach (var player in client.currentGame.GetPlayers())
-            {
-                player.Send($"Data Message {client.kolorea} {client} konektatu da");
-                var players = "";
-                foreach (var p in client.currentGame.GetPlayers())
-                    players += $" {p}:{p.kolorea}";
-                player.Send($"Data Players{players}");
-            }
         }
 
         private void Disconnect(object? sender, EventArgs e)
         {
             var client = sender as ServersideClient;
-            if (client.currentGame != null) 
-                foreach (var player in client.currentGame.GetPlayers())
-                    player.Send($"Data Message {client.kolorea} {client} deskonektatu da");
+            client.currentGame.RemovePlayer(client);
             client.itxura = null;
             client.kolorea = null;
             client.DisconnectedEvent -= Disconnect;
-            client.currentGame?.RemovePlayer(client);
         }
     }
 
@@ -349,18 +339,10 @@ public static class CommandDecoder
         {
             var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
             partida.RemovePlayer(client);
-            foreach (var player in client.currentGame.GetPlayers())
-            {
-                player.Send($"Data Message {client.kolorea} {client} deskonektatu da");
-                var players = "";
-                foreach (var p in client.currentGame.GetPlayers())
-                    players += $" {p}:{p.kolorea}";
-                player.Send($"Data Players{players}");
-            }
             client.itxura = null;
             client.kolorea = null;
             client.currentGame = null;
-            client.Send($"InGame false null");
+            client.Send($"InGame false null null");
         }
     }
 
