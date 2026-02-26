@@ -24,9 +24,9 @@ public static class CommandDecoder
         ["LogSender"] = new LogSenderCommand(),
         ["GameUpdater"] = new GameUpdaterCommand(),
         ["NewGame"] = new NewGameCommand(),
-        ["JoinGame"] = new JoinGameCommand(),
-        ["LeaveGame"] = new LeaveGameCommand(),
-        ["GameMessage"] = new GameMessageCommand(),
+        ["JoinGame"] = new GameCommands.JoinGameCommand(),
+        ["LeaveGame"] = new GameCommands.LeaveGameCommand(),
+        ["GameMessage"] = new GameCommands.GameMessageCommand(),
         ["Download"] = new DownloadCommand()
     };
 
@@ -305,63 +305,66 @@ public static class CommandDecoder
         }
     }
 
-
-    // Partida batean sartzeko komandoa
-    private class JoinGameCommand : ICommand
+    // Patida komandoak
+    private class GameCommands
     {
-        public string Format => "JoinGame <izena> <itxura> <kolorea>";
-        public async Task Execute(string[] args, ServersideClient client)
+        // Partida batean sartzeko komandoa
+        public class JoinGameCommand : ICommand
         {
-            client.currentGame = Server.partidak.FirstOrDefault(p => p.Izena == args[0]) ?? throw new DeniedException($"'{args[0]}' izeneko partida ez da existitzen");
-            client.itxura = char.Parse(args[1]);
-            client.kolorea = args[2];
-            client.Send($"InGame true {client.currentGame.Izena} {client.currentGame.Mapa}");
-            client.currentGame.AddPlayer(client);
-            client.DisconnectedEvent += Disconnect;
+            public string Format => "JoinGame <izena> <itxura> <kolorea>";
+            public async Task Execute(string[] args, ServersideClient client)
+            {
+                client.currentGame = Server.partidak.FirstOrDefault(p => p.Izena == args[0]) ?? throw new DeniedException($"'{args[0]}' izeneko partida ez da existitzen");
+                client.itxura = char.Parse(args[1]);
+                client.kolorea = args[2];
+                client.Send($"InGame true {client.currentGame.Izena} {client.currentGame.Mapa}");
+                client.currentGame.AddPlayer(client);
+                client.DisconnectedEvent += Disconnect;
+            }
         }
 
-        private void Disconnect(object? sender, EventArgs e)
+        // Partida uzteko komandoa
+        public class LeaveGameCommand : ICommand
+        {
+            public string Format => "LeaveGame";
+            public async Task Execute(string[] args, ServersideClient client)
+            {
+                var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
+                partida.RemovePlayer(client);
+                client.itxura = null;
+                client.kolorea = null;
+                client.currentGame = null;
+                client.DisconnectedEvent -= Disconnect;
+                client.Send($"InGame false null null");
+            }
+        }
+
+        private static void Disconnect(object? sender, EventArgs e)
         {
             var client = sender as ServersideClient;
-            client.currentGame.RemovePlayer(client);
+            client.currentGame?.RemovePlayer(client);
             client.itxura = null;
             client.kolorea = null;
             client.DisconnectedEvent -= Disconnect;
         }
-    }
 
 
-    // Partida uzteko komandoa
-    private class LeaveGameCommand : ICommand
-    {
-        public string Format => "LeaveGame";
-        public async Task Execute(string[] args, ServersideClient client)
+        // Partida barruko mezuak bidaltzeko komandoa
+        public class GameMessageCommand : ICommand
         {
-            var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
-            partida.RemovePlayer(client);
-            client.itxura = null;
-            client.kolorea = null;
-            client.currentGame = null;
-            client.Send($"InGame false null null");
-        }
-    }
-
-
-    // Partida barruko mezuak bidaltzeko komandoa
-    private class GameMessageCommand : ICommand
-    {
-        public string Format => "GameMessage ...";
-        public async Task Execute(string[] args, ServersideClient client)
-        {
-            var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
-            try
+            public string Format => "GameMessage ...";
+            public async Task Execute(string[] args, ServersideClient client)
             {
-                foreach (var player in partida.GetPlayers())
-                    player.Send($"Data Message {client.kolorea} {client.erabiltzailea!.Izena}_{client.itxura}: {string.Join(" ", args[..])}");
-            }
-            catch (FormatException)
-            {
-                throw new WrongCommandFormatException(Format);
+                var partida = client.currentGame ?? throw new DeniedException($"Ez zaude partida batean sartuta");
+                try
+                {
+                    foreach (var player in partida.GetPlayers())
+                        player.Send($"Data Message {client.kolorea} {client.erabiltzailea!.Izena}_{client.itxura}: {string.Join(" ", args[..])}");
+                }
+                catch (FormatException)
+                {
+                    throw new WrongCommandFormatException(Format);
+                }
             }
         }
     }

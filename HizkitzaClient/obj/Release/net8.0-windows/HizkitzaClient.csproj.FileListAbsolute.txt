@@ -42,3 +42,5 @@ D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Release\net8.0-windows\refint\Hi
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Release\net8.0-windows\HizkitzaClient.pdb
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Release\net8.0-windows\HizkitzaClient.genruntimeconfig.cache
 D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Release\net8.0-windows\ref\HizkitzaClient.dll
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Release\net8.0-windows\ui\window\page\GamePage.g.cs
+D:\PSP\2. Erronka\Aplikazioa\HizkitzaClient\obj\Release\net8.0-windows\ui\window\page\GamePage.baml
