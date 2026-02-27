@@ -17,6 +17,7 @@ Eta hurrengokoak ez dira lortu eta proiektua berriz hartzearen kasuan, hurrengo 
 
 Hona hemen lortu denaren dokumentazioak:
 - [Dokumentazio teknikoa](/docs/Hizkitza-%20Dokumentazioa%20Teknikoa.pdf)
+- [Probak](/docs/Hizkitza%20-%20Probak.pdf)
 - Hizkitza Server
     - [Instalazioa eta desintalazioa](/docs/HizkitzaServer%20-%20Instalazioa%20eta%20desintalazioa.pdf)
     - [Erabilera](/docs/HizkitzaServer%20-%20Erabilera.pdf)
